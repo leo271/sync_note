@@ -23,4 +23,6 @@ public class Main {
         frame.setVisible(true);
 
     }
+
+    //東野がコメントを追加
 }

@@ -16,4 +16,3 @@ vscodeでMain.javaを開いて、Runボタン(クラスの下に出る)を押す
 解説動画
 <a>https://www.youtube.com/watch?v=i_23KUAEtUM</a>
 
-### わからないことがあったら聞くので聞いてください

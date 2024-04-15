@@ -21,5 +21,6 @@ public class Main {
         frame.setSize(500, 300);
         // Display the window.
         frame.setVisible(true);
+
     }
 }

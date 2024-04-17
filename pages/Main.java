@@ -6,13 +6,13 @@ import javax.swing.JLabel;
 public class Main {
     public static void main(String[] args) {
         // Create and set up the window.
-        JFrame frame = new JFrame("シンクノート(仮)");
+        JFrame frame = new JFrame("シンクノ�?��?(仮)");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // Add contents to the window.
         frame.setLayout(new GridLayout());
 
-        var label = new JLabel("シンクノート(仮)へようこそ！");
+        var label = new JLabel("シンクノ�?��?(仮)へようこそ?�?");
         label.setHorizontalAlignment(JLabel.CENTER);
         label.setVerticalAlignment(JLabel.CENTER);
 
@@ -24,5 +24,7 @@ public class Main {
 
     }
 
-    //東野がコメントを追加
+    //東野がコメントを追�?
+
+    //Hello I'm Risa
 }

@@ -10,23 +10,27 @@ public class Header extends JPanel {
     public Header(/* SceneManager sceneManager */) {
         // this.sceneManager = sceneManager;
 
-        myListButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // MyListViewに遷移
-                // ここで何らかの処理を行う（例：MyListViewへの画面遷移処理）
-                System.out.println("Transitioning to MyListView");
-            }
-        });
+        this.setSize(500, 100);
 
-        searchButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // SearchViewに遷移
-                // ここで何らかの処理を行う（例：SearchViewへの画面遷移処理）
-                System.out.println("Transitioning to SearchView");
-            }
-        });
+        // 動作確認
+        // myListButton.addActionListener(new ActionListener() {
+        // @Override
+        // public void actionPerformed(ActionEvent e) {
+        // // MyListViewに遷移
+        // // ここで何らかの処理を行う（例：MyListViewへの画面遷移処理）
+
+        // System.out.println("Transitioning to MyListView");
+        // }
+        // });
+
+        // searchButton.addActionListener(new ActionListener() {
+        // @Override
+        // public void actionPerformed(ActionEvent e) {
+        // // SearchViewに遷移
+        // // ここで何らかの処理を行う（例：SearchViewへの画面遷移処理）
+        // System.out.println("Transitioning to SearchView");
+        // }
+        // });
 
         // ヘッダーにボタンを追加
         add(myListButton);

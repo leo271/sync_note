@@ -4,12 +4,13 @@ import java.awt.event.ActionListener;
 
 public class Header extends JPanel {
     // private SceneManager sceneManager;
+    private JButton myListButton = new JButton("MyList");
+    private JButton searchButton = new JButton("Search");
 
     public Header(/* SceneManager sceneManager */) {
         // this.sceneManager = sceneManager;
 
-        JButton myListViewButton = new JButton("MyList");
-        myListViewButton.addActionListener(new ActionListener() {
+        myListButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // MyListViewに遷移
@@ -18,8 +19,7 @@ public class Header extends JPanel {
             }
         });
 
-        JButton searchViewButton = new JButton("Search");
-        searchViewButton.addActionListener(new ActionListener() {
+        searchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // SearchViewに遷移
@@ -29,7 +29,16 @@ public class Header extends JPanel {
         });
 
         // ヘッダーにボタンを追加
-        add(myListViewButton);
-        add(searchViewButton);
+        add(myListButton);
+        add(searchButton);
     }
+
+    public JButton getMyListButton() {
+        return myListButton;
+    }
+
+    public JButton getSearchButton() {
+        return searchButton;
+    }
+
 }

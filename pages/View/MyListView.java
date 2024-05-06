@@ -5,48 +5,45 @@ import java.awt.event.ActionListener;
 import java.util.List;
 
 public class MyListView extends JPanel {
-    private List<Head> myList;
-    private SceneManager sceneManager;
+    private static final List<String> testList = List.of("Apple", "Banana1", "Banana2", "Dog", "Eagle", "Fahrenheit1",
+            "Fahrenheit2", "Internet", "Java1", "Java2", "Java3", "KONAMI1", "KONAMI2", "KONAMI3", "KONAMI4", "zzz");
+    private List<String> myList;
+    private JScrollPane myListScrollPanel;
+    private JButton selectButton = new JButton("Select");
 
-    public MyListView(List<Head> myList, SceneManager sceneManager) {
-        this.myList = myList;
-        this.sceneManager = sceneManager;
+    public MyListView(/* List<Head> myList, SceneManager sceneManager */) {
+        this.myList = testList;// 適当に初期化
+        // this.sceneManager = sceneManager;
 
+        this.setSize(getPreferredSize());
         setLayout(new BorderLayout());
 
         // マイリストをリスト形式で表示
-        JList<Head> list = new JList<>(myList.toArray(new Head[0]));
-        add(new JScrollPane(list), BorderLayout.CENTER);
+        JList<String> list = new JList<>(myList.toArray(new String[0]));
+        add(myListScrollPanel = new JScrollPane(list), BorderLayout.CENTER);
 
-        // ヘッダーにドキュメント追加ボタンを追加
-        JButton addDocumentButton = new JButton("Add Document");
-        addDocumentButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // ドキュメント追加の処理
-                // ここではDocumentEditorへの画面遷移処理がないため、その旨を出力
-                System.out.println("Transitioning to DocumentEditor");
-            }
-        });
-        add(addDocumentButton, BorderLayout.NORTH);
-
-        // リストの要素からDocumentViewerへ画面遷移する処理
-        list.addListSelectionListener(e -> {
-            Head selectedHead = list.getSelectedValue();
-            if (selectedHead != null) {
-                sceneManager.goToDocumentViewer(selectedHead);
-            }
-        });
-
-        // リストの要素からHeadGroupExplorerへ画面遷移するボタンを追加
-        JButton exploreButton = new JButton("Explore");
-        exploreButton.addActionListener(new ActionListener() {
+        // 動作確認
+        selectButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // HeadGroupExplorerへの画面遷移処理がないため、その旨を出力
-                System.out.println("Transitioning to HeadGroupExplorer");
+                myList.add("zzzzzzzzzzzzzz");
+                setMyList(myList);
+                System.out.println("Transitioning to Next");
             }
         });
-        add(exploreButton, BorderLayout.SOUTH);
+        add(selectButton, BorderLayout.SOUTH);
     }
+
+    // ここからやる（MyListは直接変得るといけないらしい。myListと中身が同じの、DefaultListModel<String>型のデータが必要だと...）
+    public void setMyList(List<String> newList) {
+        myList = newList;
+        JList<String> list = new JList<>(myList.toArray(new String[0]));
+        myListScrollPanel = new JScrollPane(list);
+    }
+
+    public JButton getSelectButton() {
+        return selectButton;
+    }
+
 }

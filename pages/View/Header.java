@@ -10,7 +10,7 @@ public class Header extends JPanel {
     public Header(/* SceneManager sceneManager */) {
         // this.sceneManager = sceneManager;
 
-        this.setSize(500, 100);
+        this.setSize(getPreferredSize());
 
         // 動作確認
         // myListButton.addActionListener(new ActionListener() {

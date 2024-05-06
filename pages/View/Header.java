@@ -3,12 +3,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class Header extends JPanel {
-    private SceneManager sceneManager;
+    // private SceneManager sceneManager;
 
-    public Header(SceneManager sceneManager) {
-        this.sceneManager = sceneManager;
+    public Header(/* SceneManager sceneManager */) {
+        // this.sceneManager = sceneManager;
 
-        JButton myListViewButton = new JButton("MyListView");
+        JButton myListViewButton = new JButton("MyList");
         myListViewButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -18,7 +18,7 @@ public class Header extends JPanel {
             }
         });
 
-        JButton searchViewButton = new JButton("SearchView");
+        JButton searchViewButton = new JButton("Search");
         searchViewButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

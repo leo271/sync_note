@@ -1,0 +1,14 @@
+{
+    "java.configuration.updateBuildConfiguration": "interactive",
+    "java.format.settings.url": "https://raw.githubusercontent.com/google/styleguide/gh-pages/eclipse-java-google-style.xml",
+    "java.format.settings.profile": "GoogleStyle",
+    "editor.tabSize": 2,
+    "editor.formatOnSave": true,
+    "files.exclude": {
+        "**/*.class": true,
+        "target": true,
+        ".classpath": true,
+        ".project": true,
+        ".settings": true
+    }
+}

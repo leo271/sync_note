@@ -1,22 +1,19 @@
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JPanel;
+import model.data.Head;
+import model.data.HeadGroup;
 
-public class SearchView {
-    private List<Head> heads;
-    private List<HeadGroup> headGroups;
-    private List<Head> myList;
-
-    public SearchView(List<Head> heads, List<HeadGroup> headGroups, List<Head> myList) {
-        this.heads = heads;
-        this.headGroups = headGroups;
-        this.myList = myList;
-    }
+public class SearchView extends JPanel {
+    public List<Head> heads;
+    public List<HeadGroup> headGroups;
+    public List<Head> myList;
 
     // Headを名前で検索するメソッド
     public List<Head> searchHeadsByName(String name) {
         List<Head> results = new ArrayList<>();
         for (Head head : heads) {
-            if (head.getName().equalsIgnoreCase(name)) {
+            if (head.name.equalsIgnoreCase(name)) {
                 results.add(head);
             }
         }
@@ -27,7 +24,7 @@ public class SearchView {
     public List<HeadGroup> searchHeadGroupsByName(String name) {
         List<HeadGroup> results = new ArrayList<>();
         for (HeadGroup group : headGroups) {
-            if (group.getName().equalsIgnoreCase(name)) {
+            if (group.name.equalsIgnoreCase(name)) {
                 results.add(group);
             }
         }
@@ -42,12 +39,12 @@ public class SearchView {
     // HeadGroupExplorerに遷移するメソッド
     public void goToHeadGroupExplorer(HeadGroup group) {
         // 何かしらの遷移処理
-        System.out.println("Navigating to HeadGroupExplorer: " + group.getName());
+        System.out.println("Navigating to HeadGroupExplorer: " + group.name);
     }
 
     // DocumentViewerに遷移するメソッド
     public void goToDocumentViewer(Head head) {
         // 何かしらの遷移処理
-        System.out.println("Navigating to DocumentViewer for: " + head.getName());
+        System.out.println("Navigating to DocumentViewer for: " + head.name);
     }
 }

@@ -1,4 +1,8 @@
 import javax.swing.*;
+
+import model.data.Head;
+import model.data.HeadGroup;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -27,17 +31,16 @@ public class MyListView extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // HeadGroupExplorerへの画面遷移処理がないため、その旨を出力
-                myList.add("zzzzzzzzzzzzzz");
-                setMyList(myList);
                 System.out.println("Transitioning to Next");
             }
         });
         add(selectButton, BorderLayout.SOUTH);
     }
 
-    // ここからやる（MyListは直接変得るといけないらしい。myListと中身が同じの、DefaultListModel<String>型のデータが必要だと...）
-    public void setMyList(List<String> newList) {
-        myList = newList;
+    // マイリストの更新
+    public void updateMyList(Head[] heads, HeadGroup[] headGroups) {
+        String[] headTitles = new String[100];
+
         JList<String> list = new JList<>(myList.toArray(new String[0]));
         myListScrollPanel = new JScrollPane(list);
     }

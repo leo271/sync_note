@@ -1,41 +1,31 @@
-public class SceneManager {
-    private Header header;
-    private MyListView myListView;
-    // private SearchView searchView;
-    // private HeadGroupExplorer headGroupExplorer;
-    // private DocumentsViewer documentsViewer;
+import java.awt.BorderLayout;
+import java.awt.CardLayout;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 
-    public SceneManager(Header header, MyListView myListView) {
-        this.header = header;
-        this.myListView = myListView;
+public class SceneManager extends JFrame {
+    public CardLayout cardLayout;
+    public JPanel cardPanel;
+
+    public SceneManager(Header header, MyListView myListView, SearchView searchView,
+            HeadGroupExplorer headGroupExplorer, DocumentsViewer documentsViewer) {
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setSize(getPreferredSize());
+        var mainPanel = new JPanel(new BorderLayout());
+        mainPanel.add(header, BorderLayout.NORTH);
+        this.cardLayout = new CardLayout();
+        this.cardPanel = new JPanel(cardLayout);
+        cardPanel.add(myListView, "myListView");
+        cardPanel.add(searchView, "searchView");
+        cardPanel.add(headGroupExplorer, "headGroupExplorer");
+        cardPanel.add(documentsViewer, "documentsViewer");
+        mainPanel.add(cardPanel, BorderLayout.CENTER);
+        cardLayout.show(cardPanel, "myListView"); // デフォルトでMyListViewを表示
+
+        this.add(mainPanel);
     }
 
-    public void goToMyList() {
-
+    public void switchPanel(String panelName) {
+        cardLayout.show(cardPanel, panelName);
     }
-
-    /*
-     * // HeadGroupExplorerに遷移するメソッド
-     * public void goToHeadGroupExplorer(HeadGroup group) {
-     * headGroupExplorer.showElements(group);
-     * // 何かしらの遷移処理
-     * }
-     * 
-     * // DocumentViewerに遷移するメソッド
-     * public void goToDocumentViewer(Head head) {
-     * documentsViewer.viewDocument(head);
-     * // 何かしらの遷移処理
-     * }
-     * 
-     * // HeadGroupの削除メソッド
-     * public void deleteHeadGroup(HeadGroup group) {
-     * headGroupExplorer.deleteHeadGroup(group);
-     * }
-     * 
-     * // HeadGroupに新しい要素を追加するメソッド
-     * public void addElementToHeadGroup(String name, HeadGroup group) {
-     * headGroupExplorer.addElementToHeadGroup(name, group);
-     * }
-     * 
-     */
 }

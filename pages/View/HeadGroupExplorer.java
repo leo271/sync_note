@@ -1,27 +1,24 @@
-import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JPanel;
+import model.data.Head;
+import model.data.HeadGroup;
 
-public class HeadGroupExplorer {
-    private List<HeadGroup> headGroups;
-    private SearchView searchView;
-
-    public HeadGroupExplorer(List<HeadGroup> headGroups, SearchView searchView) {
-        this.headGroups = headGroups;
-        this.searchView = searchView;
-    }
+public class HeadGroupExplorer extends JPanel {
+    public List<HeadGroup> headGroups;
+    public SearchView searchView;
 
     // 指定されたHeadGroup内の要素を表示するメソッド
     public void showHead(HeadGroup group) {
-        System.out.println("Head " + group.getName() + ":");
-        for (Head head : group.getHeads()) {
-            System.out.println("- " + head.getName());
+        System.out.println("Head " + group.name + ":");
+        for (Head head : group.heads) {
+            System.out.println("- " + head.name);
         }
     }
 
     // 指定されたHeadGroupを削除するメソッド
     public void deleteHeadGroup(HeadGroup group) {
         headGroups.remove(group);
-        System.out.println("Deleted HeadGroup: " + group.getName());
+        System.out.println("Deleted HeadGroup: " + group.name);
     }
 
     // HeadGroupに新しい要素を追加するメソッド
@@ -31,7 +28,7 @@ public class HeadGroupExplorer {
         if (!results.isEmpty()) {
             Head newHead = results.get(0);
             group.addHead(newHead);
-            System.out.println("Added " + newHead.getName() + " to " + group.getName());
+            System.out.println("Added " + newHead.name + " to " + group.name);
         } else {
             System.out.println("Head not found: " + name);
         }

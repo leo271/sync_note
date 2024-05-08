@@ -1,13 +1,14 @@
 import javax.swing.*;
+import model.data.Document;
 import java.awt.*;
 import java.util.List;
 
 public class DocumentsViewer extends JPanel {
-    private List<Document> documents;
-    private JLabel titleLabel;
-    private JTextArea documentsArea;
+    public List<Document> documents;
+    public JLabel titleLabel;
+    public JTextArea documentsArea;
 
-    public DocumentsViewer(List<Document> documents) {
+    public void setDocuments(List<Document> documents) {
         this.documents = documents;
 
         setLayout(new BorderLayout());
@@ -25,9 +26,9 @@ public class DocumentsViewer extends JPanel {
         titleLabel.setText("Documents for " + headName);
         StringBuilder sb = new StringBuilder();
         for (Document doc : documents) {
-            if (doc.getHeadName().equals(headName)) {
-                sb.append(doc.getTitle()).append("\n");
-                sb.append(doc.getContent()).append("\n\n");
+            if (doc.head.equals(headName)) {
+                sb.append(doc.head).append("\n");
+                sb.append(doc.content).append("\n\n");
             }
         }
         documentsArea.setText(sb.toString());

@@ -17,11 +17,12 @@ public class DocumentsViewer extends JPanel {
         add(titleLabel, BorderLayout.NORTH);
 
         documentsArea = new JTextArea();
-        documentsArea.setEditable(false); // 編集不可
+        documentsArea.setEditable(false);
         add(new JScrollPane(documentsArea), BorderLayout.CENTER);
     }
 
-    // Head名を受け取り、それに属するドキュメントを表示するメソッド
+
+
     public void showDocuments(String headName) {
         titleLabel.setText("Documents for " + headName);
         StringBuilder sb = new StringBuilder();

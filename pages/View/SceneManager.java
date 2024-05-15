@@ -20,7 +20,7 @@ public class SceneManager extends JFrame {
         cardPanel.add(headGroupExplorer, "headGroupExplorer");
         cardPanel.add(documentsViewer, "documentsViewer");
         mainPanel.add(cardPanel, BorderLayout.CENTER);
-        cardLayout.show(cardPanel, "myListView"); // デフォルトでMyListViewを表示
+        cardLayout.show(cardPanel, "myListView");
 
         this.add(mainPanel);
     }

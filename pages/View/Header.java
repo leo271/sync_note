@@ -10,7 +10,7 @@ public class Header extends JPanel {
 
         this.setSize(getPreferredSize());
 
-        // ヘッダーにボタンを追加
+
         add(myListButton);
         add(searchButton);
     }

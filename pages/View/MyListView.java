@@ -15,17 +15,17 @@ public class MyListView extends JPanel {
     public JButton selectButton = new JButton("Select");
 
     public MyListView() {
-        this.myList = testList;// 適当に初期化
+        this.myList = testList;
 
         setLayout(new BorderLayout());
 
-        // マイリストをリスト形式で表示
+
         JList<String> list = new JList<>(myList.toArray(new String[0]));
         add(myListScrollPanel = new JScrollPane(list), BorderLayout.CENTER);
         add(selectButton, BorderLayout.SOUTH);
     }
 
-    // マイリストの更新
+
     public void updateMyList(Head[] heads, HeadGroup[] headGroups) {
         JList<String> list = new JList<>(myList.toArray(new String[0]));
         myListScrollPanel = new JScrollPane(list);

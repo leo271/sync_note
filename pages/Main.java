@@ -10,8 +10,9 @@ public class Main {
     SearchView searchView = new SearchView();
     HeadGroupExplorer headGroupExplorer = new HeadGroupExplorer();
     DocumentsViewer documentsViewer = new DocumentsViewer();
-    JFrame frame =
-        new SceneManager(header, myListView, searchView, headGroupExplorer, documentsViewer);
+    DocumentEditor documentEditor = new DocumentEditor();
+    JFrame frame = new SceneManager(header, myListView, searchView, headGroupExplorer,
+        documentsViewer, documentEditor);
     frame.setSize(800, 600);
 
     // Display the window.

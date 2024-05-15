@@ -1,5 +1,4 @@
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -9,8 +8,8 @@ import java.awt.GridLayout;
 public class DocumentEditor extends JPanel {
 
   public JTextArea textArea;
-  public JButton deleteButton = new JButton("Delete");
-  public JButton quitButton = new JButton("Quit");
+  public JButton deleteButton = new JButton("Delete"); // 自身のドキュメントを削除
+  public JButton quitButton = new JButton("Quit"); // 編集やめるボタン
 
   // コンストラクタ
   public DocumentEditor() {
@@ -42,13 +41,23 @@ public class DocumentEditor extends JPanel {
     this.add(buttonPanel, BorderLayout.SOUTH);
   }
 
-  // メインメソッド（テスト用）
-  public static void main(String[] args) {
-    // JFrameを作成してDocumentEditorを表示
-    JFrame frame = new JFrame("Document Editor Test");
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    frame.setSize(800, 600);
-    frame.add(new DocumentEditor());
-    frame.setVisible(true);
+
+  // ドキュメント削除ボタンを取得
+  public JButton getDeleteButton() {
+    return deleteButton;
   }
+
+  // 編集終了ボタンを取得
+  public JButton getQuitButton() {
+    return quitButton;
+  }
+
+
+
+  // メインメソッド（テスト用）
+  /*
+   * public static void main(String[] args) { // JFrameを作成してDocumentEditorを表示 JFrame frame = new
+   * JFrame("Document Editor Test"); frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+   * frame.setSize(800, 600); frame.add(new DocumentEditor()); frame.setVisible(true); }
+   */
 }

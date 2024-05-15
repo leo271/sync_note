@@ -66,4 +66,9 @@ public class MyListView extends JPanel {
     return addButton;
   }
 
+  // マイリストの取得
+  public JScrollPane getScrollPanel() {
+    return myListScrollPanel;
+  }
+
 }

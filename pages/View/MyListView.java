@@ -56,19 +56,4 @@ public class MyListView extends JPanel {
   }
 
 
-  // 選択ボタンの取得
-  public JButton getSelectButton() {
-    return selectButton;
-  }
-
-  // ドキュメント追加ボタンの取得
-  public JButton getAddButton() {
-    return addButton;
-  }
-
-  // マイリストの取得
-  public JScrollPane getScrollPanel() {
-    return myListScrollPanel;
-  }
-
 }

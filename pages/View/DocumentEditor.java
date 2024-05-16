@@ -15,11 +15,11 @@ public class DocumentEditor extends JPanel {
   public DocumentEditor() {
     // パネルのレイアウト設定
     this.setLayout(new BorderLayout());
-    createAndShowGUI();
+    built();
   }
 
   // GUIの作成
-  private void createAndShowGUI() {
+  private void built() {
     // JTextAreaの作成
     textArea = new JTextArea(10, 30); // 10行30列のテキストエリア
     textArea.setText("ここに入力してください");
@@ -39,17 +39,6 @@ public class DocumentEditor extends JPanel {
 
     // ボタンパネルを下部に追加
     this.add(buttonPanel, BorderLayout.SOUTH);
-  }
-
-
-  // ドキュメント削除ボタンを取得
-  public JButton getDeleteButton() {
-    return deleteButton;
-  }
-
-  // 編集終了ボタンを取得
-  public JButton getQuitButton() {
-    return quitButton;
   }
 
 

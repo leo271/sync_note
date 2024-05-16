@@ -14,4 +14,24 @@ public class Document {
         this.head = head;
         this.like = 0;
     }
+
+    public Document like() {
+        this.like++;
+        return this;
+    }
+
+    public Document unlike() {
+        this.like--;
+        return this;
+    }
+
+    public Document setContent(String content) {
+        this.content = content;
+        return this;
+    }
+
+    public Document setHead(String head) {
+        this.head = head;
+        return this;
+    }
 }

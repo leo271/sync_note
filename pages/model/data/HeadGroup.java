@@ -14,6 +14,9 @@ public class HeadGroup {
         this.headGroups = new HashSet<String>();
     }
 
+    // 以下のメソッドは、HeadGroupのプロパティを操作しながら、自分自身を返すようにしている
+    // これは、メソッドチェーンを可能にするためです
+    // https://magazine.techacademy.jp/magazine/31905
     public HeadGroup addHeads(Head[] head) {
         heads.addAll(List.of(head));
         return this;

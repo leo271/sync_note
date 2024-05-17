@@ -33,4 +33,9 @@ public class DocumentsViewer extends JPanel {
         }
         documentsArea.setText(sb.toString());
     }
+
+    public void showLikes(int like) {
+        titleLabel.setText("♥: " + like);
+    }
+
 }

@@ -1,11 +1,11 @@
-package View;
+package view;
 
 import javax.swing.*;
+import model.data.*;
 import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
-import Model.Data.*;
 
 
 public class MyListView extends JPanel {

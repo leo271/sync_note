@@ -1,7 +1,7 @@
 import javax.swing.JFrame;
-import Model.Data.Head;
-import Model.Data.HeadGroup;
-import View.*;
+import model.data.Head;
+import model.data.HeadGroup;
+import view.*;
 
 public class Main {
     public static void main(String[] args) {

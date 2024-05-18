@@ -1,19 +1,19 @@
 // NetworkClientとVMを繋ぐ緩衝材
 // FIXME: NetworkClientのインターフェースができたらloadの処理を変更
 
-package Model.Controller;
+package model.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import Mocks.MockData;
-import Model.Data.Document;
+import mocks.DefaultMock;
+import model.data.Document;
 
 public class DocumentController {
   private HashMap<String, ArrayList<Document>> documents = new HashMap<>();
 
   // サーバーから、指定されたヘッドに紐ずくドキュメント(配列)を取得
   public void loadDocumentsFromServer(String headName) {
-    var docs = MockData.docs;
+    var docs = DefaultMock.docs;
     documents.put(headName, new ArrayList<>());
     for (var docEntry : docs.entrySet()) {
       if (Math.random() > 0.5) {

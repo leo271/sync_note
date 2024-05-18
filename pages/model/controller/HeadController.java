@@ -1,18 +1,18 @@
 // NetworkClientとVMを繋ぐ緩衝材
 // FIXME: NetworkClientのインターフェースができたらloadの処理を変更
 
-package Model.Controller;
+package model.controller;
 
 import java.util.HashMap;
-import Mocks.MockData;
-import Model.Data.Head;
+import mocks.DefaultMock;
+import model.data.Head;
 
 public class HeadController {
   private HashMap<String, Head> heads = new HashMap<>();
 
   // サーバーから、指定された名前のHeadを取得
   public void loadHeadsFromServer(String headName) {
-    var docs = MockData.heads;
+    var docs = DefaultMock.heads;
     for (var docEntry : docs) {
       if (docEntry.name == headName) {
         heads.put(headName, docEntry);

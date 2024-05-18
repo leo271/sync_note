@@ -1,13 +1,13 @@
 // 仮のモックデータを格納するクラス。
 // FIXME：プロダクト版ではこのファイルへの依存関係を削除
 
-package Mocks;
+package mocks;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import Model.Data.*;
+import model.data.*;
 
-public class MockData {
+public class DefaultMock {
   public static final Head[] heads = {
       new Head("情理実験ソフトウェア制作")
           .addDocIDs(new String[] {"ua-nwenfncdhsp98t7nq4", "a@w[e,f@c/a.lwioj[ern90av]"}),

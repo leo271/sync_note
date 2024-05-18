@@ -1,33 +1,33 @@
 // ローカルのデータベースとプログラムとのインターフェース
 // TODO: 実際にDBと接続する
 
-package Infrastructure;
+package infrastructure;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import Mocks.MockData;
-import Model.Data.Document;
-import Model.Data.Head;
-import Model.Data.HeadGroup;
+import mocks.DefaultMock;
+import model.data.Document;
+import model.data.Head;
+import model.data.HeadGroup;
 
 public class DBController {
   // 自分がマイリストに登録したHeads
   public Head[] fetchHeads() {
-    return MockData.heads;
+    return DefaultMock.heads;
   }
 
   // 自分が書いたDocs
   public HashMap<String, Document> fetchDocs() {
-    return MockData.docs;
+    return DefaultMock.docs;
   }
 
   // 自分がマイリストに登録したHeadGroups
   public HeadGroup[] fetchHeadGroups() {
-    return MockData.headGroups;
+    return DefaultMock.headGroups;
   }
 
   // 自分がライクしたDocIds
   public HashSet<String> fetchLikedDocIds() {
-    return MockData.likedDocIds;
+    return DefaultMock.likedDocIds;
   }
 }

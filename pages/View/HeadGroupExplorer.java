@@ -1,7 +1,9 @@
+package View;
+
 import java.util.List;
 import javax.swing.JPanel;
-import model.data.Head;
-import model.data.HeadGroup;
+import Model.Data.Head;
+import Model.Data.HeadGroup;
 
 public class HeadGroupExplorer extends JPanel {
     public List<HeadGroup> headGroups;

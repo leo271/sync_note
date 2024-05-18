@@ -1,15 +1,14 @@
+package View;
+
 import javax.swing.*;
-
-import model.data.Head;
-import model.data.HeadGroup;
-
 import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
+import Model.Data.*;
+
 
 public class MyListView extends JPanel {
-
   // ダミーデータ
   public static final List<String> testList =
       List.of("Apple", "Banana1", "Banana2", "Dog", "Eagle", "Fahrenheit1", "Fahrenheit2",

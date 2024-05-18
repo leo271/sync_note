@@ -1,5 +1,7 @@
+package View;
+
 import javax.swing.*;
-import model.data.Document;
+import Model.Data.Document;
 import java.awt.*;
 import java.util.List;
 

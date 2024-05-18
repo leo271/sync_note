@@ -1,7 +1,7 @@
 // サーバー側との直接の通信をラップするクラス
 // TODO: サーバー側のインターフェース完成後実装
 
-package infrastructure;
+package Infrastructure;
 
 public class NetworkClient {
 

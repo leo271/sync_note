@@ -7,7 +7,7 @@ public class DocumentEditor extends JPanel {
     public JButton saveButton;
     public JButton deleteButton;
     public JButton viewButton;
-    public JButton likeButton;
+    
 
     public DocumentEditor(Document document, SceneManager sceneManager) {
 
@@ -28,7 +28,6 @@ public class DocumentEditor extends JPanel {
 
         add(buttonPanel, BorderLayout.SOUTH);
 
-        likeButton = new JButton("?");
-        buttonPanel.add(likeButton);
+        
     }
 }

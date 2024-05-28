@@ -1,10 +1,8 @@
 package view;
 
 import javax.swing.*;
-
-import model.data.Head;
-import model.data.HeadGroup;
-
+import model.Head;
+import model.HeadGroup;
 import java.awt.*;
 import java.util.Arrays;
 import java.util.List;

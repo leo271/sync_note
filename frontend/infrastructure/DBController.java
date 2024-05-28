@@ -7,9 +7,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 import mocks.Mocks;
-import model.data.Document;
-import model.data.Head;
-import model.data.HeadGroup;
+import model.Document;
+import model.Head;
+import model.HeadGroup;
 
 public class DBController {
   // 自分がマイリストに登録したHeads

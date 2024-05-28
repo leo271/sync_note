@@ -1,7 +1,7 @@
 import javax.swing.JFrame;
-import model.data.Document;
-import model.data.Head;
-import model.data.HeadGroup;
+import model.Document;
+import model.Head;
+import model.HeadGroup;
 import view.Header;
 import view.MyListView;
 import view.SearchView;

@@ -1,3 +1,5 @@
+package view;
+
 import javax.swing.*;
 import model.data.Document;
 import java.awt.*;
@@ -7,7 +9,7 @@ public class DocumentEditor extends JPanel {
     public JButton saveButton;
     public JButton deleteButton;
     public JButton viewButton;
-    
+
 
     public DocumentEditor(Document document, SceneManager sceneManager) {
 
@@ -28,6 +30,6 @@ public class DocumentEditor extends JPanel {
 
         add(buttonPanel, BorderLayout.SOUTH);
 
-        
+
     }
 }

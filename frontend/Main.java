@@ -1,4 +1,5 @@
 import javax.swing.JFrame;
+import model.data.Document;
 import model.data.Head;
 import model.data.HeadGroup;
 import view.Header;
@@ -17,7 +18,7 @@ public class Main {
     SearchView searchView = new SearchView();
     HeadGroupExplorer headGroupExplorer = new HeadGroupExplorer();
     DocumentsViewer documentsViewer = new DocumentsViewer();
-    DocumentEditor documentEditor = new DocumentEditor();
+    DocumentEditor documentEditor = new DocumentEditor(new Document(null, null));
     JFrame frame = new SceneManager(header, myListView, searchView, headGroupExplorer,
         documentsViewer, documentEditor);
     frame.setSize(800, 600);

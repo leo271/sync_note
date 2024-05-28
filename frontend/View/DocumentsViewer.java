@@ -9,6 +9,7 @@ public class DocumentsViewer extends JPanel {
     public List<Document> documents;
     public JLabel titleLabel;
     public JTextArea documentsArea;
+    public JButton likeButton;
 
     public void setDocuments(List<Document> documents) {
         this.documents = documents;
@@ -19,11 +20,11 @@ public class DocumentsViewer extends JPanel {
         add(titleLabel, BorderLayout.NORTH);
 
         documentsArea = new JTextArea();
-        documentsArea.setEditable(false); // 編集不可
+        documentsArea.setEditable(false); // 編�?不可
         add(new JScrollPane(documentsArea), BorderLayout.CENTER);
     }
 
-    // Head名を受け取り、それに属するドキュメントを表示するメソッド
+    // Head名を受け取り、それに属するドキュメントを表示するメソ�?�?
     public void showDocuments(String headName) {
         titleLabel.setText("Documents for " + headName);
         StringBuilder sb = new StringBuilder();
@@ -34,5 +35,14 @@ public class DocumentsViewer extends JPanel {
             }
         }
         documentsArea.setText(sb.toString());
+
+        JPanel buttonPanel = new JPanel();
+        likeButton = new JButton("♥");
+        buttonPanel.add(likeButton);
     }
+
+    public void showLikes(int like) {
+        titleLabel.setText("♥: " + like);
+    }
+
 }

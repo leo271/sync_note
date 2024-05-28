@@ -1,54 +1,35 @@
 package view;
 
-import javax.swing.JButton;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import java.awt.BorderLayout;
-import java.awt.GridLayout;
+import javax.swing.*;
+import model.data.Document;
+import java.awt.*;
 
 public class DocumentEditor extends JPanel {
-
-  public JTextArea textArea;
-  public JButton deleteButton = new JButton("Delete"); // 自身のドキュメントを削除
-  public JButton quitButton = new JButton("Quit"); // 編集やめるボタン
-
-  // コンストラクタ
-  public DocumentEditor() {
-    // パネルのレイアウト設定
-    this.setLayout(new BorderLayout());
-    built();
-  }
-
-  // GUIの作成
-  private void built() {
-    // JTextAreaの作成
-    textArea = new JTextArea(10, 30); // 10行30列のテキストエリア
-    textArea.setText("ここに入力してください");
-
-    // JTextAreaをスクロールペインでラップ
-    JScrollPane scrollPane = new JScrollPane(textArea);
-
-    // JScrollPaneをパネルに追加
-    this.add(scrollPane, BorderLayout.CENTER);
-
-    // ボタン用のパネルを作成
-    JPanel buttonPanel = new JPanel(new GridLayout(1, 2));
-
-    // ボタンをパネルに追加
-    buttonPanel.add(deleteButton);
-    buttonPanel.add(quitButton);
-
-    // ボタンパネルを下部に追加
-    this.add(buttonPanel, BorderLayout.SOUTH);
-  }
+    public JTextArea contentArea;
+    public JButton saveButton;
+    public JButton deleteButton;
+    public JButton viewButton;
 
 
+    public DocumentEditor(Document document, SceneManager sceneManager) {
 
-  // メインメソッド（テスト用）
-  /*
-   * public static void main(String[] args) { // JFrameを作成してDocumentEditorを表示 JFrame frame = new
-   * JFrame("Document Editor Test"); frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-   * frame.setSize(800, 600); frame.add(new DocumentEditor()); frame.setVisible(true); }
-   */
+        setLayout(new BorderLayout());
+
+        contentArea = new JTextArea(document.content);
+        add(new JScrollPane(contentArea), BorderLayout.CENTER);
+
+        JPanel buttonPanel = new JPanel();
+        saveButton = new JButton("Save");
+        buttonPanel.add(saveButton);
+
+        deleteButton = new JButton("Delete");
+        buttonPanel.add(deleteButton);
+
+        viewButton = new JButton("View");
+        buttonPanel.add(viewButton);
+
+        add(buttonPanel, BorderLayout.SOUTH);
+
+
+    }
 }

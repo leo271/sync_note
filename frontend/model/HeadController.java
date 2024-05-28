@@ -1,11 +1,10 @@
 // NetworkClientとVMを繋ぐ緩衝材
 // FIXME: NetworkClientのインターフェースができたらloadの処理を変更
 
-package model.controller;
+package model;
 
 import java.util.HashMap;
 import mocks.Mocks;
-import model.data.Head;
 
 public class HeadController {
   private HashMap<String, Head> heads = new HashMap<>();

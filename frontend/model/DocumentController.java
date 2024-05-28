@@ -1,13 +1,12 @@
 // NetworkClientとVMを繋ぐ緩衝材
 // FIXME: NetworkClientのインターフェースができたらloadの処理を変更
 
-package model.controller;
+package model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import mocks.Mocks;
-import model.data.Document;
 
 public class DocumentController {
   private HashMap<String, ArrayList<Document>> documents = new HashMap<>();

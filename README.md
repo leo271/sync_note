@@ -8,9 +8,8 @@
 
 ## 実行
 
-vscodeでMain.javaを開いて、Runボタン(クラスの下に出る)を押すか、コマンドラインで以下のコマンドを実行
+vscodeでCmd+Shift+Pでコマンドパレットを開いて、タスクを実行を選択。そこで実行したい'FRONTEND'か'BACKEND'かを選択
 
-`javac pages/Main.java -d classes && java -cp classes Main`
 
 ## プッシュ＆マージ
 

@@ -2,17 +2,34 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "build and run",
+            "label": "build and run FRONTEND",
             "type": "shell",
             "command": "sh",
             "args": [
                 "-c",
-                "javac -d bin src/**/*.java && java -cp bin your.main.Class"
+                "cd frontend && find . -name \"*.class\" -type f -delete && javac Main.java -d classes && java -cp classes Main"
             ],
             "group": {
                 "kind": "build",
-                "isDefault": true
+                "isDefault": false
             },
+            "problemMatcher": [],
+            "detail": "フロントエンドを実行する"
+        },
+        {
+            "label": "build and run BACKEND",
+            "type": "shell",
+            "command": "sh",
+            "args": [
+                "-c",
+                "cd backend && find . -name \"*.class\" -type f -delete && javac Main.java -d classes && java -cp classes Main"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "problemMatcher": [],
+            "detail": "フロントエンドを実行する"
         }
     ]
 }

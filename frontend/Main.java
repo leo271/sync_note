@@ -1,6 +1,13 @@
 import javax.swing.JFrame;
 import model.data.Head;
 import model.data.HeadGroup;
+import view.Header;
+import view.MyListView;
+import view.SearchView;
+import view.HeadGroupExplorer;
+import view.DocumentsViewer;
+import view.DocumentEditor;
+import view.SceneManager;
 
 public class Main {
   public static void main(String[] args) {

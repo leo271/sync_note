@@ -6,8 +6,7 @@
             "type": "shell",
             "command": "sh",
             "args": [
-                "-c",
-                "cd frontend && find . -name \"*.class\" -type f -delete && javac Main.java -d classes && java -cp classes Main"
+                "./.vscode/bin/br_frontend.sh"
             ],
             "group": {
                 "kind": "build",

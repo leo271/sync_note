@@ -1,9 +1,10 @@
 package view;
+
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JPanel;
-import model.data.Head;
-import model.data.HeadGroup;
+import model.Head;
+import model.HeadGroup;
 
 public class SearchView extends JPanel {
     public List<Head> heads;

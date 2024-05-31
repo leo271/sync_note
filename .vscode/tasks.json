@@ -4,11 +4,19 @@
         {
             "label": "build and run FRONTEND",
             "type": "shell",
-            "command": "sh",
-            "args": [
-                "-c",
-                "cd frontend && find . -name \"*.class\" -type f -delete && javac Main.java -d classes && java -cp classes Main"
-            ],
+            "windows": {
+                "command": "powershell.exe",
+                "args": [
+                    "-File",
+                    "./.vscode/bin/br_frontend.ps1"
+                ]
+            },
+            "osx": {
+                "command": "sh",
+                "args": [
+                    "./.vscode/bin/br_frontend.sh"
+                ]
+            },
             "group": {
                 "kind": "build",
                 "isDefault": false

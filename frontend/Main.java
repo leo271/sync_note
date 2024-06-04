@@ -5,6 +5,7 @@ import model.HeadGroup;
 import view.Header;
 import view.MyListView;
 import view.SearchView;
+import viewmodel.SceneTransitionVM;
 import view.HeadGroupExplorer;
 import view.DocumentsViewer;
 import view.DocumentEditor;
@@ -19,9 +20,12 @@ public class Main {
     HeadGroupExplorer headGroupExplorer = new HeadGroupExplorer();
     DocumentsViewer documentsViewer = new DocumentsViewer();
     DocumentEditor documentEditor = new DocumentEditor(new Document(null, null));
-    JFrame frame = new SceneManager(header, myListView, searchView, headGroupExplorer,
+    SceneManager frame = new SceneManager(header, myListView, searchView, headGroupExplorer,
         documentsViewer, documentEditor);
     frame.setSize(800, 600);
+
+    // VM
+    var sceneTransitionVM = new SceneTransitionVM(header, frame);
 
 
     // Display the window.

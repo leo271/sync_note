@@ -3,8 +3,12 @@ import javax.swing.*;
 
 public class Header extends JPanel {
   // public SceneManager sceneManager;
-  public JButton myListButton = new JButton("MyList");
-  public JButton searchButton = new JButton("Search");
+  public JButton myListButton = new JButton("My List");
+  public JButton searchHeadButton = new JButton("Search Head");
+  public JButton searchHeadGroupButton = new JButton("Search Head Group");
+  public JButton documentEditorButton = new JButton("Edit Document");
+  public JButton headGroupButton = new JButton("Head Groups");
+
 
   public Header(/* SceneManager sceneManager */) {
     // this.sceneManager = sceneManager;
@@ -13,7 +17,11 @@ public class Header extends JPanel {
 
     // ヘッダーにボタンを追加
     add(myListButton);
-    add(searchButton);
+    add(searchHeadButton);
+    add(searchHeadGroupButton);
+    add(documentEditorButton);
+    add(headGroupButton);
+
   }
 
 }

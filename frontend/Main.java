@@ -1,4 +1,3 @@
-import javax.swing.JFrame;
 import model.Document;
 import model.Head;
 import model.HeadGroup;
@@ -12,6 +11,7 @@ import view.DocumentEditor;
 import view.SceneManager;
 
 public class Main {
+  @SuppressWarnings("unused") // VMはインスタンスを作るだけなので警告を消す
   public static void main(String[] args) {
     // Create and set up the window.
     Header header = new Header();

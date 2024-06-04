@@ -13,5 +13,4 @@ public class Document {
         this.content = content;
         this.head = head;
     }
-
 }

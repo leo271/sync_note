@@ -1,4 +1,4 @@
-package model;
+package backend.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,12 +6,10 @@ import java.util.List;
 public class Head {
     public String name;
     public ArrayList<String> docIDs;
-    public Document myDoc; // デフォルトではnull
 
     public Head(String title) {
         this.name = title;
         this.docIDs = new ArrayList<String>();
-        this.myDoc = null;
     }
 
     // 以下のメソッドは、Headのプロパティを操作しながら、自分自身を返すようにしている
@@ -24,12 +22,6 @@ public class Head {
 
     public Head addDocID(String docID) {
         docIDs.add(docID);
-        return this;
-    }
-
-    public Head addMyDoc(Document doc) {
-        this.myDoc = doc;
-        this.docIDs.add(doc.docID);
         return this;
     }
 }

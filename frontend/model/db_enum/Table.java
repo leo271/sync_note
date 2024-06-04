@@ -1,4 +1,4 @@
-package backend.model;
+package model.db_enum;
 
 import java.util.HashSet;
 

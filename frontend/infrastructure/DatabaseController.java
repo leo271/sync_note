@@ -1,4 +1,4 @@
-package backend;
+package infrastructure;
 
 import java.sql.*;
 import java.util.ArrayList;

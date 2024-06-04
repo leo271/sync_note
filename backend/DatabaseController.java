@@ -3,17 +3,23 @@ package backend;
 import backend.model.DBCols;
 import backend.model.Table;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class DatabaseController {
+  private static DatabaseController instance;
+  private static final Logger logger = Logger.getLogger(DatabaseController.class.getName());
+
   private DatabaseController() {}
 
-  public static DatabaseController instance = new DatabaseController();
+  public static synchronized DatabaseController getInstance() {
+    if (instance == null) {
+      instance = new DatabaseController();
+    }
+    return instance;
+  }
 
   private Connection connect() throws SQLException {
     return DriverManager.getConnection("jdbc:sqlite:database.db");
@@ -29,7 +35,6 @@ public class DatabaseController {
     try (Connection connection = connect();
         PreparedStatement statement = connection.prepareStatement(query)) {
 
-      // プレースホルダーにクエリの値をセットすることで、適切なエスケープ処理を行い、SQLインジェクションを防ぐことができる
       statement.setString(1, value);
 
       try (ResultSet resultSet = statement.executeQuery()) {
@@ -38,8 +43,7 @@ public class DatabaseController {
         }
       }
     } catch (SQLException e) {
-      System.err.println("Database error.");
-      e.printStackTrace();
+      logger.log(Level.SEVERE, "Database error.", e);
     }
     return null;
   }
@@ -59,21 +63,28 @@ public class DatabaseController {
         }
       }
     } catch (SQLException e) {
-      System.err.println("Database error.");
-      e.printStackTrace();
+      logger.log(Level.SEVERE, "Database error.", e);
     }
     return list;
   }
 
-  public void insert(Table table, DBCols cols, String values) {
-    String query = "INSERT INTO " + table.getName() + " (" + cols.getName() + ") VALUES (?)";
+  public void insert(Table table, DBCols.DBStr values) {
+    String[] valueArray = values.str.split(",");
+    String query =
+        "INSERT INTO " + table.getName() + " VALUES (" + "?,".repeat(valueArray.length - 1) + "?)";
     try (Connection connection = connect();
         PreparedStatement statement = connection.prepareStatement(query)) {
-      statement.setString(1, values);
+      for (int i = 0; i < valueArray.length; i++) {
+        String[] element = valueArray[i].split("\t");
+        if (element[1] == "s")
+          statement.setString(i + 1, element[0]);
+        else if (element[1] == "d")
+          statement.setInt(i + 1, element[0].charAt(0));
+        statement.setString(i + 1, valueArray[i]);
+      }
       statement.executeUpdate();
     } catch (SQLException e) {
-      System.err.println("Database error.");
-      e.printStackTrace();
+      logger.log(Level.SEVERE, "Database error.", e);
     }
   }
 }

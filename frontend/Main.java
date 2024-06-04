@@ -23,6 +23,7 @@ public class Main {
         documentsViewer, documentEditor);
     frame.setSize(800, 600);
 
+
     // Display the window.
     frame.setVisible(true);
   }

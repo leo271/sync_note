@@ -1,52 +1,44 @@
 package view;
 
-import java.util.ArrayList;
-import java.util.List;
-import javax.swing.JPanel;
-import model.Head;
-import model.HeadGroup;
+import javax.swing.*;
+import java.awt.*;
 
 public class SearchView extends JPanel {
-    public List<Head> heads;
-    public List<HeadGroup> headGroups;
-    public List<Head> myList;
 
-    // Headを名前で検索するメソッド
-    public List<Head> searchHeadsByName(String name) {
-        List<Head> results = new ArrayList<>();
-        for (Head head : heads) {
-            if (head.name.equalsIgnoreCase(name)) {
-                results.add(head);
-            }
-        }
-        return results;
-    }
+  public JTextField searchField;
+  public JButton searchButton;
 
-    // HeadGroupを名前で検索するメソッド
-    public List<HeadGroup> searchHeadGroupsByName(String name) {
-        List<HeadGroup> results = new ArrayList<>();
-        for (HeadGroup group : headGroups) {
-            if (group.name.equalsIgnoreCase(name)) {
-                results.add(group);
-            }
-        }
-        return results;
-    }
+  public SearchView() {
+    setLayout(new GridBagLayout());
+    GridBagConstraints gbc = new GridBagConstraints();
 
-    // マイリストにHeadを追加するメソッド
-    public void addToMyList(Head head) {
-        myList.add(head);
-    }
+    JPanel contentPanel = new JPanel();
+    contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
 
-    // HeadGroupExplorerに遷移するメソッド
-    public void goToHeadGroupExplorer(HeadGroup group) {
-        // 何かしらの遷移処理
-        System.out.println("Navigating to HeadGroupExplorer: " + group.name);
-    }
+    JLabel label = new JLabel("検索したいHead/HeadGropuを入力してください");
+    label.setAlignmentX(Component.CENTER_ALIGNMENT);
+    contentPanel.add(label);
 
-    // DocumentViewerに遷移するメソッド
-    public void goToDocumentViewer(Head head) {
-        // 何かしらの遷移処理
-        System.out.println("Navigating to DocumentViewer for: " + head.name);
-    }
+    contentPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+
+    JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+    searchField = new JTextField(20);
+    searchButton = new JButton("検索");
+
+    searchPanel.add(searchField);
+    searchPanel.add(searchButton);
+
+    contentPanel.add(searchPanel);
+
+    gbc.gridx = 0;
+    gbc.gridy = 0;
+    gbc.weightx = 1.0;
+    gbc.weighty = 1.0;
+    gbc.anchor = GridBagConstraints.CENTER;
+    add(contentPanel, gbc);
+
+    // 推奨サイズを設定
+    setPreferredSize(new Dimension(800, 600));
+  }
+
 }

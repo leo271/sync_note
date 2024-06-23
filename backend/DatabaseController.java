@@ -1,17 +1,15 @@
 package backend;
 
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import backend.model.Column;
-import backend.model.ColumnType;
-import backend.model.DB;
-import backend.model.Table;
 
 public class DatabaseController {
   private static DatabaseController instance;
   private static final Logger logger = Logger.getLogger(DatabaseController.class.getName());
+  private static final char US = '\u001f';
+  private static final char RS = '\u001e';
+  private static final String DB_URL = "jdbc:sqlite:database.db";
 
   private DatabaseController() {}
 
@@ -23,27 +21,20 @@ public class DatabaseController {
   }
 
   private Connection connect() throws SQLException {
-    return DriverManager.getConnection("jdbc:sqlite:database.db");
+    return DriverManager.getConnection(DB_URL);
   }
 
-  private String buildQuery(Table table, Column col) {
-    return "SELECT * FROM " + table.name + " WHERE " + col.name + " = ?";
-  }
-
-  public String searchSingle(Table table, Column col, String value) throws SQLException {
-    if (!DB.isValidValue(col, value))
-      throw new SQLException("Invalid value for column " + col.name + ": " + value);
-    String query = buildQuery(table, col);
-
+  public String executeQuery(String query) throws SQLException {
     try (Connection connection = connect();
-        PreparedStatement statement = connection.prepareStatement(query)) {
-
-      statement.setString(1, value);
-
-      try (ResultSet resultSet = statement.executeQuery()) {
-        if (resultSet.next()) {
-          return resultSet.getString(col.name);
+        Statement stmt = connection.createStatement();
+        ResultSet rs = stmt.executeQuery(query);) {
+      var metadata = rs.getMetaData();
+      var result = new StringBuilder();
+      while (rs.next()) {
+        for (int i = 1; i <= metadata.getColumnCount(); i++) {
+          result.append(rs.getString(i)).append(US);
         }
+        result.append(RS);
       }
     } catch (SQLException e) {
       logger.log(Level.SEVERE, "Database error.", e);
@@ -51,43 +42,13 @@ public class DatabaseController {
     return null;
   }
 
-  public ArrayList<String> searchMulti(Table table, Column col, String value) throws SQLException {
-    if (!DB.isValidValue(col, value))
-      throw new SQLException("Invalid value for column " + col.name + ": " + value);
-    ArrayList<String> list = new ArrayList<>();
-    String query = buildQuery(table, col);
-
-    try (Connection connection = connect();
-        PreparedStatement statement = connection.prepareStatement(query)) {
-
-      statement.setString(1, value);
-
-      try (ResultSet resultSet = statement.executeQuery()) {
-        while (resultSet.next()) {
-          list.add(resultSet.getString(col.name));
-        }
-      }
+  public boolean executeUpdate(String query) {
+    try (Connection connection = connect(); Statement stmt = connection.createStatement();) {
+      stmt.executeUpdate(query);
+      return true;
     } catch (SQLException e) {
       logger.log(Level.SEVERE, "Database error.", e);
-    }
-    return list;
-  }
-
-  public void insert(Table table, ArrayList<Column> columns) {
-    String query =
-        "INSERT INTO " + table.name + " VALUES (" + "?,".repeat(columns.size() - 1) + "?)";
-    try (Connection connection = connect();
-        PreparedStatement statement = connection.prepareStatement(query)) {
-      for (int i = 0; i < columns.size(); i++) {
-        Column column = columns.get(i);
-        if (column.type == ColumnType.INT)
-          statement.setInt(i + 1, Integer.parseInt(column.value));
-        else
-          statement.setString(i + 1, column.value);
-      }
-      statement.executeUpdate();
-    } catch (SQLException e) {
-      logger.log(Level.SEVERE, "Database error.", e);
+      return false;
     }
   }
 }

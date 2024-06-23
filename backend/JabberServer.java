@@ -45,7 +45,7 @@ class ClientHandler extends Thread {
         OutputStream out = socket.getOutputStream();
         ByteArrayOutputStream buffer = new ByteArrayOutputStream()) {
 
-      var db = DatabaseController.getInstance();
+      var db = DatabaseClient.getInstance();
       int read;
       while ((read = in.read()) != EOT) {
         if (read == -1) {

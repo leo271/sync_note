@@ -4,18 +4,18 @@ import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class DatabaseController {
-  private static DatabaseController instance;
-  private static final Logger logger = Logger.getLogger(DatabaseController.class.getName());
+public class DatabaseClient {
+  private static DatabaseClient instance;
+  private static final Logger logger = Logger.getLogger(DatabaseClient.class.getName());
   private static final char US = '\u001f';
   private static final char RS = '\u001e';
   private static final String DB_URL = "jdbc:sqlite:database.db";
 
-  private DatabaseController() {}
+  private DatabaseClient() {}
 
-  public static synchronized DatabaseController getInstance() {
+  public static synchronized DatabaseClient getInstance() {
     if (instance == null) {
-      instance = new DatabaseController();
+      instance = new DatabaseClient();
     }
     return instance;
   }

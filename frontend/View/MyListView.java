@@ -1,7 +1,6 @@
 package view;
 
 import javax.swing.*;
-import model.Head;
 import model.HeadGroup;
 import java.awt.*;
 import java.util.Arrays;
@@ -20,7 +19,7 @@ public class MyListView extends JPanel {
   public JButton selectButton = new JButton("View");
   public JButton addButton = new JButton("Add Document");
 
-  public MyListView(Head[] initialHeads, HeadGroup[] initialHeadGroups) {
+  public MyListView(String[] initialHeads, HeadGroup[] initialHeadGroups) {
 
     this.myList = testList;// 適当に初期化
     // this.myList = List.of(initialHeads+initialHeadGroups); //こちらにしたい
@@ -41,13 +40,12 @@ public class MyListView extends JPanel {
   }
 
   // マイリストの更新
-  public void updateMyList(Head[] heads, HeadGroup[] headGroups) {
+  public void updateMyList(String[] heads, HeadGroup[] headGroups) {
     remove(myListScrollPanel);
-    String[] headNames = Arrays.stream(heads).map(head -> head.name).toArray(String[]::new);
     String[] headGroupNames =
         Arrays.stream(headGroups).map(headGroup -> headGroup.name).toArray(String[]::new);
-    JList<String> list = new JList<>(Stream
-        .concat(Arrays.stream(headNames), Arrays.stream(headGroupNames)).toArray(String[]::new));
+    JList<String> list = new JList<>(
+        Stream.concat(Arrays.stream(heads), Arrays.stream(headGroupNames)).toArray(String[]::new));
 
     myListScrollPanel = new JScrollPane(list);
     add(myListScrollPanel, BorderLayout.CENTER);

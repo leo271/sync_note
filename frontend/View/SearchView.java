@@ -3,19 +3,18 @@ package view;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JPanel;
-import model.Head;
 import model.HeadGroup;
 
 public class SearchView extends JPanel {
-    public List<Head> heads;
+    public List<String> heads;
     public List<HeadGroup> headGroups;
-    public List<Head> myList;
+    public List<String> myList;
 
     // Headを名前で検索するメソッド
-    public List<Head> searchHeadsByName(String name) {
-        List<Head> results = new ArrayList<>();
-        for (Head head : heads) {
-            if (head.name.equalsIgnoreCase(name)) {
+    public List<String> searchHeadsByName(String name) {
+        List<String> results = new ArrayList<>();
+        for (String head : heads) {
+            if (head.equalsIgnoreCase(name)) {
                 results.add(head);
             }
         }
@@ -34,7 +33,7 @@ public class SearchView extends JPanel {
     }
 
     // マイリストにHeadを追加するメソッド
-    public void addToMyList(Head head) {
+    public void addToMyList(String head) {
         myList.add(head);
     }
 
@@ -45,8 +44,8 @@ public class SearchView extends JPanel {
     }
 
     // DocumentViewerに遷移するメソッド
-    public void goToDocumentViewer(Head head) {
+    public void goToDocumentViewer(String head) {
         // 何かしらの遷移処理
-        System.out.println("Navigating to DocumentViewer for: " + head.name);
+        System.out.println("Navigating to DocumentViewer for: " + head);
     }
 }

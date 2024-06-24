@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.stream.Stream;
 
 public class HeadGroupExplorer extends JPanel {
-
   // ダミーデータ
   public static final List<String> testListHeads = List.of("Mathematics", "Physics", "Chemistry",
       "Biology", "Computer Science", "Economics", "Psychology", "Internet");
@@ -113,6 +112,4 @@ public class HeadGroupExplorer extends JPanel {
     revalidate();
     repaint();
   }
-
-
 }

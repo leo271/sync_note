@@ -11,11 +11,16 @@ import java.util.stream.Stream;
 public class HeadGroupExplorer extends JPanel {
 
   // ダミーデータ
-  public static final List<String> testList = List.of("Mathematics", "Physics", "Chemistry",
-      "Biology", "Computer Science", "Economics", "Psychology", "Internet", "Java1", "Java2",
-      "Java3", "Sociology", "Political Science", "History", "Philosophy", "zzz");
+  public static final List<String> testListHeads = List.of("Mathematics", "Physics", "Chemistry",
+      "Biology", "Computer Science", "Economics", "Psychology", "Internet");
+  public static final List<String> testListHeadGroups = List.of("Java1", "Java2", "Java3",
+      "Sociology", "Political Science", "History", "Philosophy", "zzz");
+
+
 
   private JLabel titleLabel;
+  public List<String> HeadList;
+  public List<String> HeadScrolPanel;
   public List<String> HeadGroupList;
   public JScrollPane HeadGroupScrolPanel;
   public JButton enterButton = new JButton("Enter");
@@ -25,7 +30,8 @@ public class HeadGroupExplorer extends JPanel {
 
   public HeadGroupExplorer(Head[] initialHeads, HeadGroup[] initialHeadGroups) {
 
-    this.HeadGroupList = testList;// 適当に初期化
+    this.HeadList = testListHeadGroups;
+    this.HeadGroupList = testListHeads;// 適当に初期化
     // this.myList = List.of(initialHeads+initialHeadGroups); //こちらにしたい
 
     setLayout(new BorderLayout());
@@ -35,8 +41,13 @@ public class HeadGroupExplorer extends JPanel {
     add(titleLabel, BorderLayout.NORTH); // パネルの上部に追加
 
 
-    // マイリストをリスト形式で表示
-    JList<String> list = new JList<>(HeadGroupList.toArray(new String[0]));
+    // リスト形式で表示
+    JList<String> list = new JList<>(
+        Stream.concat(HeadList.stream(), HeadGroupList.stream()).toArray(String[]::new));
+
+    list.setCellRenderer(new HeadGroupCellRenderer(HeadGroupList));
+
+    HeadGroupScrolPanel = new JScrollPane(list);
     add(HeadGroupScrolPanel = new JScrollPane(list), BorderLayout.CENTER);
 
     JPanel bottomPanel = new JPanel(new BorderLayout());
@@ -52,6 +63,41 @@ public class HeadGroupExplorer extends JPanel {
     add(bottomPanel, BorderLayout.SOUTH);
 
   }
+
+
+  // カスタムセルレンダラー
+  private class HeadGroupCellRenderer extends DefaultListCellRenderer {
+    private final ImageIcon headGroupIcon =
+        new ImageIcon(getClass().getResource("images/headgroup_icon.png"));
+    private final ImageIcon headIcon =
+        new ImageIcon(getClass().getResource("images/head_icon.png")); // アイコンリソース
+
+
+    private final List<String> headGroups;
+
+    public HeadGroupCellRenderer(List<String> headGroups) {
+      this.headGroups = headGroups;
+    }
+
+    @Override
+    public Component getListCellRendererComponent(JList<?> list, Object value, int index,
+        boolean isSelected, boolean cellHasFocus) {
+      JLabel label =
+          (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+
+      if (testListHeadGroups.contains(value)) {
+        label.setIcon(headGroupIcon);
+        label.setFont(label.getFont().deriveFont(Font.BOLD));
+      } else {
+        label.setIcon(headIcon);
+        label.setFont(label.getFont().deriveFont(Font.PLAIN));
+      }
+
+      return label;
+    }
+  }
+
+
 
   // マイリストの更新
   public void switchHeadGroups(Head[] heads, HeadGroup[] headGroups) {

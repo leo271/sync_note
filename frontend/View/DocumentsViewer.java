@@ -50,6 +50,7 @@ public class DocumentsViewer extends JPanel {
     // Head名を受け取り、それに属するドキュメントを表示するメソッド
     public void setDocuments(List<Document> documents) {
         this.documents = documents;
+        this.head = documents.get(0).head;
         setOffset(0);
     }
 

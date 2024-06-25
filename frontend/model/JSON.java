@@ -8,4 +8,13 @@ public class JSON extends HashMap<String, String> {
     json.put(key, value);
     return json;
   }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (obj instanceof JSON) {
+      var json = (JSON) obj;
+      return this.entrySet().equals(json.entrySet());
+    }
+    return false;
+  }
 }

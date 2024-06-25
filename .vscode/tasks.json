@@ -46,6 +46,22 @@
             },
             "problemMatcher": [],
             "detail": "バックエンドを実行する"
+        },
+        {
+            "label": "build and run TEST",
+            "type": "shell",
+            "osx": {
+                "command": "sh",
+                "args": [
+                    "./.vscode/bin/br_test.sh"
+                ]
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "problemMatcher": [],
+            "detail": "バックエンドを実行する"
         }
     ]
 }

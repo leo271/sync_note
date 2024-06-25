@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 public class HeadGroupExplorer extends JPanel {
+
   // ダミーデータ
   public static final List<String> testListHeads = List.of("Mathematics", "Physics", "Chemistry",
       "Biology", "Computer Science", "Economics", "Psychology", "Internet");
@@ -27,11 +28,13 @@ public class HeadGroupExplorer extends JPanel {
   public JButton deleteButton = new JButton("Delete Element");
 
 
-  public HeadGroupExplorer(Head[] initialHeads, HeadGroup[] initialHeadGroups) {
+  public HeadGroupExplorer(String[] initialHeads, String[] initialHeadGroups) {
 
     this.HeadList = testListHeadGroups;
     this.HeadGroupList = testListHeads;// 適当に初期化
-    // this.myList = List.of(initialHeads+initialHeadGroups); //こちらにしたい
+
+    // this.HeadList = List.of(initialHeads);
+    // this.HeadGroupList = LIst.og(initialHeadGroups);// 適当に初期化
 
     setLayout(new BorderLayout());
 
@@ -44,6 +47,7 @@ public class HeadGroupExplorer extends JPanel {
     JList<String> list = new JList<>(
         Stream.concat(HeadList.stream(), HeadGroupList.stream()).toArray(String[]::new));
 
+    // リストに特徴をつける
     list.setCellRenderer(new HeadGroupCellRenderer(HeadGroupList));
 
     HeadGroupScrolPanel = new JScrollPane(list);
@@ -64,7 +68,8 @@ public class HeadGroupExplorer extends JPanel {
   }
 
 
-  // カスタムセルレンダラー
+  // リストに特徴を付ける
+  // HeadとHeadGroupそれぞれにアイコンを付ける
   private class HeadGroupCellRenderer extends DefaultListCellRenderer {
     private final ImageIcon headGroupIcon =
         new ImageIcon(getClass().getResource("images/headgroup_icon.png"));
@@ -99,13 +104,13 @@ public class HeadGroupExplorer extends JPanel {
 
 
   // マイリストの更新
-  public void switchHeadGroups(Head[] heads, HeadGroup[] headGroups) {
+  public void switchHeadGroups(String[] heads, String[] headGroups) {
     remove(HeadGroupScrolPanel);
-    String[] headNames = Arrays.stream(heads).map(head -> head.name).toArray(String[]::new);
-    String[] headGroupNames =
-        Arrays.stream(headGroups).map(headGroup -> headGroup.name).toArray(String[]::new);
-    JList<String> list = new JList<>(Stream
-        .concat(Arrays.stream(headNames), Arrays.stream(headGroupNames)).toArray(String[]::new));
+    JList<String> list = new JList<>(
+        Stream.concat(Arrays.stream(heads), Arrays.stream(headGroups)).toArray(String[]::new));
+
+    // リストに特徴を付ける
+    list.setCellRenderer(new HeadGroupCellRenderer(List.of(headGroups)));
 
     HeadGroupScrolPanel = new JScrollPane(list);
     add(HeadGroupScrolPanel, BorderLayout.CENTER);

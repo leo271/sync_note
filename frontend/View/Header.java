@@ -8,7 +8,7 @@ public class Header extends JPanel {
   public JButton searchHeadButton = new JButton("Search Head");
   public JButton searchHeadGroupButton = new JButton("Search Head Group");
   public JButton documentEditorButton = new JButton("Edit Document");
-  public JButton headGroupButton = new JButton("Head Groups");
+  public JButton headGroupButton = new JButton("Documents Viewer");
 
 
   public Header(/* SceneManager sceneManager */) {

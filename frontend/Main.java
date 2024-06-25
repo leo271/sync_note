@@ -15,7 +15,7 @@ public class Main {
     MyListView myListView = new MyListView(null, null);
     SearchView searchView = new SearchView();
     HeadGroupExplorer headGroupExplorer = new HeadGroupExplorer();
-    DocumentsViewer documentsViewer = new DocumentsViewer();
+    DocumentsViewer documentsViewer = new DocumentsViewer(null);
     DocumentEditor documentEditor = new DocumentEditor(new Document("example head"));
     SceneManager frame = new SceneManager(header, myListView, searchView, headGroupExplorer,
         documentsViewer, documentEditor);

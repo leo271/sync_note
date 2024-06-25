@@ -1,4 +1,3 @@
-
 package view;
 
 import javax.swing.*;
@@ -10,6 +9,7 @@ import java.util.regex.Pattern;
 import model.Document;
 
 public class DocumentEditor extends JPanel {
+  private JLabel titleLabel;
   private JTextArea editArea;
   private JEditorPane previewArea;
   private JButton editButton;
@@ -21,6 +21,11 @@ public class DocumentEditor extends JPanel {
 
   public DocumentEditor(Document document) {
     setLayout(new BorderLayout());
+
+    titleLabel = new JLabel("Edit Mode", SwingConstants.CENTER);
+    titleLabel.setFont(new Font("Arial", Font.BOLD, 16)); // フォントを設定（オプション）
+
+    add(titleLabel, BorderLayout.NORTH); // パネルの上部に追加
 
     // Create edit area
     editArea = new JTextArea(document.content);
@@ -40,23 +45,32 @@ public class DocumentEditor extends JPanel {
     add(contentPanel, BorderLayout.CENTER);
 
     // Create button panel
-    JPanel buttonPanel = new JPanel();
     editButton = new JButton("Edit");
     previewButton = new JButton("Preview");
     saveButton = new JButton("Save");
     deleteButton = new JButton("Delete");
 
+    JPanel bottomPanel = new JPanel(new BorderLayout());
+    JPanel buttonPanel = new JPanel(new GridLayout(1, 4));
+
+    // deleteButtonのテキストを赤くする
+    deleteButton.setForeground(Color.RED);
+
     buttonPanel.add(editButton);
     buttonPanel.add(previewButton);
     buttonPanel.add(saveButton);
     buttonPanel.add(deleteButton);
-    add(buttonPanel, BorderLayout.SOUTH);
+
+    bottomPanel.add(buttonPanel, BorderLayout.CENTER);
+    add(bottomPanel, BorderLayout.SOUTH);
+
 
     // Add action listeners
     editButton.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
         cardLayout.show(contentPanel, "EDIT");
+        updateTitle("Edit Mode");
       }
     });
 
@@ -65,9 +79,15 @@ public class DocumentEditor extends JPanel {
       public void actionPerformed(ActionEvent e) {
         updatePreview();
         cardLayout.show(contentPanel, "PREVIEW");
+        updateTitle("Preview Mode");
       }
     });
   }
+
+  private void updateTitle(String title) {
+    titleLabel.setText(title);
+  }
+
 
   private void updatePreview() {
     String markdown = editArea.getText();
@@ -75,6 +95,7 @@ public class DocumentEditor extends JPanel {
     previewArea.setText(html);
   }
 
+  // マークダウン記法を受け取り, プレビューを作成
   private String convertMarkdownToHtml(String markdown) {
     StringBuilder html = new StringBuilder();
     String[] lines = markdown.split("\n");

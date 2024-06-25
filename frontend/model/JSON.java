@@ -9,6 +9,17 @@ public class JSON extends HashMap<String, String> {
     return json;
   }
 
+  public Entry<String, String>[] toEntries() {
+    @SuppressWarnings("unchecked")
+    Entry<String, String>[] entries = new Entry[this.size()];
+    var i = 0;
+    for (var entry : this.entrySet()) {
+      entries[i] = entry;
+      i++;
+    }
+    return entries;
+  }
+
   @Override
   public boolean equals(Object obj) {
     if (obj instanceof JSON) {

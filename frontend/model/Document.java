@@ -68,4 +68,13 @@ public class Document {
         this.head = head;
         return this;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Document) {
+            var doc = (Document) obj;
+            return this.docID.equals(doc.docID);
+        }
+        return false;
+    }
 }

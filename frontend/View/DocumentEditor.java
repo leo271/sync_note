@@ -27,24 +27,24 @@ public class DocumentEditor extends JPanel {
 
     add(titleLabel, BorderLayout.NORTH); // パネルの上部に追加
 
-    // Create edit area
+    // 編集画面
     editArea = new JTextArea(document.content);
     JScrollPane editScrollPane = new JScrollPane(editArea);
 
-    // Create preview area
+    // プレビュー画面
     previewArea = new JEditorPane();
     previewArea.setContentType("text/html");
     previewArea.setEditable(false);
     JScrollPane previewScrollPane = new JScrollPane(previewArea);
 
-    // Create card layout for switching between edit and preview
+    // 編集とプレビューの切り替えカードレイアウト
     cardLayout = new CardLayout();
     contentPanel = new JPanel(cardLayout);
     contentPanel.add(editScrollPane, "EDIT");
     contentPanel.add(previewScrollPane, "PREVIEW");
     add(contentPanel, BorderLayout.CENTER);
 
-    // Create button panel
+    // ボタンパネル
     editButton = new JButton("Edit");
     previewButton = new JButton("Preview");
     saveButton = new JButton("Save");
@@ -65,7 +65,7 @@ public class DocumentEditor extends JPanel {
     add(bottomPanel, BorderLayout.SOUTH);
 
 
-    // Add action listeners
+    // アクション
     editButton.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
@@ -84,11 +84,12 @@ public class DocumentEditor extends JPanel {
     });
   }
 
+  // 画面上部のタイトル更新
   private void updateTitle(String title) {
     titleLabel.setText(title);
   }
 
-
+  // プレビュー画面の更新
   private void updatePreview() {
     String markdown = editArea.getText();
     String html = convertMarkdownToHtml(markdown);
@@ -111,7 +112,7 @@ public class DocumentEditor extends JPanel {
         continue;
       }
 
-      // Convert headers
+      // ヘッダー
       if (line.startsWith("# ")) {
         html.append("<h1>").append(line.substring(2)).append("</h1>\n");
       } else if (line.startsWith("## ")) {
@@ -119,7 +120,7 @@ public class DocumentEditor extends JPanel {
       } else if (line.startsWith("### ")) {
         html.append("<h3>").append(line.substring(4)).append("</h3>\n");
       }
-      // Convert unordered lists
+      // リスト
       else if (line.startsWith("- ")) {
         if (!inList) {
           html.append("<ul>\n");
@@ -127,6 +128,7 @@ public class DocumentEditor extends JPanel {
         }
         html.append("<li>").append(line.substring(2)).append("</li>\n");
       }
+
       // Normal paragraph
       else {
         if (inList) {
@@ -143,10 +145,10 @@ public class DocumentEditor extends JPanel {
 
     String result = html.toString();
 
-    // Convert bold
+    // 太字
     result = result.replaceAll("\\*\\*(.+?)\\*\\*", "<strong>$1</strong>");
 
-    // Convert italic
+    // italic
     result = result.replaceAll("\\*(.+?)\\*", "<em>$1</em>");
 
     // Convert links

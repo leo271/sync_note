@@ -1,28 +1,39 @@
 package view;
 
 import javax.swing.*;
-import frontend.model.HeadGroup;
 import model.Document;
 import java.awt.*;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Stream;
 
 public class DocumentsViewer extends JPanel {
+    private static final List<Document> demoDocuments = List.of(
+            new Document("a", "Mathematics",
+                    "Mathematics is the study of numbers, shapes, and patterns.", 10),
+            new Document("b", "Mathematics",
+                    "It is a field of study that is used to understand the world around us.", 5),
+            new Document("c", "Mathematics", "Mathematics is the language of science.", 2));
+
     public List<Document> documents;
-    public JLabel titleLabel = new JLabel("Document", SwingConstants.CENTER);
+    public JLabel titleLabel = new JLabel("", SwingConstants.CENTER);
     public JTextArea documentsArea;
     public JButton likeButton = new JButton("♥");
+    public JButton nextButton = new JButton("Next");
+    public JButton prevButton = new JButton("Prev");
 
-    int like =0; //初期化
-    public JLabel likeLabel = new JLabel("          ♥  :  " + like);
+    private int offset = 0;
+    private int like = 0;
+    private String head = "";
+    public JLabel likeLabel = new JLabel("");
 
     public DocumentsViewer(String[] initialHeads) {
-
         setLayout(new BorderLayout());
 
         titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
         add(titleLabel, BorderLayout.NORTH);
+
+        documentsArea = new JTextArea();
+        documentsArea.setEditable(false); // ユーザーが編集できないようにする
+        add(new JScrollPane(documentsArea), BorderLayout.CENTER); // JTextAreaをスクロールペインに追加して中央に配置
 
         JPanel bottomPanel = new JPanel(new BorderLayout());
         JPanel buttonPanel = new JPanel(new GridLayout(1, 2));
@@ -30,36 +41,49 @@ public class DocumentsViewer extends JPanel {
         buttonPanel.add(likeButton);
         buttonPanel.add(likeLabel); // ライクの数を表示するラベルを追加
         bottomPanel.add(buttonPanel, BorderLayout.CENTER);
+        bottomPanel.add(prevButton, BorderLayout.WEST);
+        bottomPanel.add(nextButton, BorderLayout.EAST);
         add(bottomPanel, BorderLayout.SOUTH);
-    }
-
-    public void setDocuments(List<Document> documents) {
-        this.documents = documents;
-
-        setLayout(new BorderLayout());
-
-        documentsArea = new JTextArea();
-        documentsArea.setEditable(false); // 編集不可
-        add(new JScrollPane(documentsArea), BorderLayout.CENTER);
+        setDemo();
     }
 
     // Head名を受け取り、それに属するドキュメントを表示するメソッド
-    // public void showDocuments(String headName) {
-    //     titleLabel.setText("Documents for " + headName);
-    //     StringBuilder sb = new StringBuilder();
-    //     for (Document doc : documents) {
-    //         if (doc.head.equals(headName)) {
-    //             sb.append(doc.head).append("\n");
-    //             sb.append(doc.content).append("\n\n");
-    //         }
-    //     }
-    //     documentsArea.setText(sb.toString());
+    public void setDocuments(List<Document> documents) {
+        this.documents = documents;
+        setOffset(0);
+    }
 
-    //     JPanel buttonPanel = new JPanel();
-    //     likeButton = new JButton("♥");
-    //     buttonPanel.add(likeButton);
-    // }
+    public void setOffset(int offset) {
+        this.offset = offset;
+        this.like = documents.get(offset).like;
+        documentsArea.setText(documents.get(offset).content);
+        titleLabel.setText(head + "\t No." + (offset + 1));
+        likeLabel.setText("          ♥  :  " + like);
+        revalidate();
+        repaint();
+    }
 
-    
-
+    // TODO: デモ用のドキュメントを表示するメソッド、ここのロジックは将来的にVMに移す
+    private void setDemo() {
+        documents = demoDocuments;
+        setDocuments(documents);
+        prevButton.setAction(new AbstractAction("Prev") {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+                var off = offset - 1;
+                if (off < 0)
+                    off = documents.size() - 1;
+                setOffset(off);
+            }
+        });
+        nextButton.setAction(new AbstractAction("Next") {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+                var off = offset + 1;
+                if (off >= documents.size())
+                    off = 0;
+                setOffset(off);
+            }
+        });
+    }
 }

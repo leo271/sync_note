@@ -1,4 +1,5 @@
 package view;
+
 import javax.swing.*;
 
 public class Header extends JPanel {
@@ -14,14 +15,12 @@ public class Header extends JPanel {
     // this.sceneManager = sceneManager;
 
     this.setSize(getPreferredSize());
-
     // ヘッダーにボタンを追加
     add(myListButton);
     add(searchHeadButton);
     add(searchHeadGroupButton);
     add(documentEditorButton);
     add(headGroupButton);
-
   }
 
 }

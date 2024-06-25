@@ -9,10 +9,10 @@ import model.db_enum.DB;
 public class DocumentController {
   // ヘッド名からドキュメント一覧をソート済みでを取得
   public static Response<ArrayList<Document>> getDocuments(String head) {
-    var remote = DatabaseInterface.getRemote();
+    var remote = RemoteDatabaseInterface.getInstance();
     try {
       var documents =
-          remote.searchMulti(DB.DOCUMENT, JSON.single(DB.HEAD.name, head), Document::fromJSON);
+          remote.search(DB.DOCUMENT, JSON.single(DB.HEAD.name, head), Document::fromString);
       if (documents == null) {
         return Response.error(Response.NOT_FOUND);
       } else {
@@ -26,14 +26,14 @@ public class DocumentController {
 
   // IDからドキュメントを取得
   public static Response<Document> getDocument(String docID) {
-    var remote = DatabaseInterface.getRemote();
+    var remote = RemoteDatabaseInterface.getInstance();
     try {
       var document =
-          remote.searchSingle(DB.DOCUMENT, JSON.single(DB.DOC_ID.name, docID), Document::fromJSON);
+          remote.search(DB.DOCUMENT, JSON.single(DB.DOC_ID.name, docID), Document::fromString);
       if (document == null) {
         return Response.error(Response.NOT_FOUND);
       } else {
-        return Response.success(document);
+        return Response.success(document.get(0));
       }
     } catch (Exception e) {
       return Response.error(Response.INVALID_VALUE);
@@ -42,14 +42,10 @@ public class DocumentController {
 
   // 自分が書いたドキュメントを取得
   public static Response<ArrayList<Document>> getMyDocuments() {
-    var db = DatabaseInterface.getLocal();
+    var local = LocalDatabaseInterface.getInstance();
     try {
-      var query = new JSON() {
-        {
-          put(DB.TYPE_ML.name, "M");
-        }
-      };
-      var document = db.searchMulti(DB.DOCUMENT, query, Document::fromJSON);
+      var document =
+          local.search(DB.DOCUMENT, JSON.single(DB.TYPE_ML.name, "M"), Document::fromJSON);
       if (document == null) {
         return Response.error(Response.NOT_FOUND);
       } else {
@@ -61,15 +57,12 @@ public class DocumentController {
     }
   }
 
+  // ライクしたドキュメントを取得
   public static Response<ArrayList<Document>> getLikedDocuments() {
-    var db = DatabaseInterface.getLocal();
+    var local = LocalDatabaseInterface.getInstance();
     try {
-      var query = new JSON() {
-        {
-          put(DB.TYPE_ML.name, "L");
-        }
-      };
-      var documents = db.searchMulti(DB.DOCUMENT, query, Document::fromJSON);
+      var documents =
+          local.search(DB.DOCUMENT, JSON.single(DB.TYPE_ML.name, "L"), Document::fromJSON);
       if (documents == null) {
         return Response.error(Response.NOT_FOUND);
       } else {
@@ -83,12 +76,12 @@ public class DocumentController {
 
   // ドキュメントをライクする（トグル）
   public static Response<Void> likeDocument(Document document) {
-    var local = DatabaseInterface.getLocal();
-    var remote = DatabaseInterface.getRemote();
+    var local = LocalDatabaseInterface.getInstance();
+    var remote = RemoteDatabaseInterface.getInstance();
     try {
-      var localDoc = local.searchSingle(DB.DOCUMENT, JSON.single(DB.DOC_ID.name, document.docID),
+      var localDoc = local.search(DB.DOCUMENT, JSON.single(DB.DOC_ID.name, document.docID),
           Document::fromJSON);
-      if (localDoc == null) {
+      if (localDoc == null || localDoc.size() == 0) {
         // すでにライクをしたことがない
         document.like();
         local.upsert(DB.DOCUMENT, document.toJSON());
@@ -106,8 +99,8 @@ public class DocumentController {
 
   // ドキュメントを作成
   public static Response<String> createDocument(String head) {
-    var local = DatabaseInterface.getLocal();
-    var remote = DatabaseInterface.getRemote();
+    var local = LocalDatabaseInterface.getInstance();
+    var remote = RemoteDatabaseInterface.getInstance();
     try {
       var newDoc = new Document(head);
       local.upsert(DB.DOCUMENT, newDoc.toJSON());
@@ -120,8 +113,8 @@ public class DocumentController {
 
   // ドキュメントを更新
   public static Response<Void> updateDocument(Document document) {
-    var local = DatabaseInterface.getLocal();
-    var remote = DatabaseInterface.getRemote();
+    var local = LocalDatabaseInterface.getInstance();
+    var remote = RemoteDatabaseInterface.getInstance();
     try {
       local.upsert(DB.DOCUMENT, document.toJSON());
       remote.upsert(DB.DOCUMENT, document.toJSON());
@@ -133,8 +126,8 @@ public class DocumentController {
 
   // ドキュメントを削除
   public static Response<Void> deleteDocument(String docID) {
-    var local = DatabaseInterface.getLocal();
-    var remote = DatabaseInterface.getRemote();
+    var local = LocalDatabaseInterface.getInstance();
+    var remote = RemoteDatabaseInterface.getInstance();
     try {
       local.delete(DB.DOCUMENT, JSON.single(DB.DOC_ID.name, docID));
       remote.delete(DB.DOCUMENT, JSON.single(DB.DOC_ID.name, docID));

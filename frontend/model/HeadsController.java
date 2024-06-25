@@ -6,12 +6,10 @@ import java.util.function.Function;
 import model.db_enum.DB;
 
 public class HeadsController {
-  static private Function<JSON, JSON> id = (x) -> x;
-
   // update
   public static Response<Void> updateHeadGroup(HeadGroup group) {
-    var remote = DatabaseInterface.getRemote();
-    var local = DatabaseInterface.getLocal();
+    var remote = RemoteDatabaseInterface.getInstance();
+    var local = LocalDatabaseInterface.getInstance();
     try {
       var condition = new JSON() {
         {
@@ -31,7 +29,7 @@ public class HeadsController {
 
   // HeadもしくはHeadGroupを作成
   public static Response<Void> createHead(String name, String type) {
-    var remote = DatabaseInterface.getRemote();
+    var remote = RemoteDatabaseInterface.getInstance();
     try {
       var head = new JSON() {
         {
@@ -48,13 +46,14 @@ public class HeadsController {
 
   // get
   public static Response<HeadGroup> getHeadGroup(String name) {
-    var remote = DatabaseInterface.getRemote();
+    var remote = RemoteDatabaseInterface.getInstance();
     try {
-      var headGroup = remote.searchMulti(DB.NAME_SPACE, JSON.single(DB.NAME.name, name), id);
+      Function<String, String> id = (x) -> x;
+      var headGroup = remote.search(DB.HEAD_GROUP, JSON.single(DB.NAME.name, name), id);
       if (headGroup == null) {
         return Response.error(Response.NOT_FOUND);
       }
-      return Response.success(HeadGroup.fromJSONL(headGroup));
+      return Response.success(HeadGroup.fronLines(headGroup));
     } catch (Exception e) {
       return Response.error(Response.INVALID_VALUE);
     }
@@ -62,11 +61,12 @@ public class HeadsController {
 
   // like
   public static Response<Void> likeHeadGroup(HeadGroup group) {
-    var local = DatabaseInterface.getLocal();
-    var remote = DatabaseInterface.getRemote();
+    var local = LocalDatabaseInterface.getInstance();
+    var remote = RemoteDatabaseInterface.getInstance();
     try {
-      var localGroup = local.searchMulti(DB.HEAD_GROUP, JSON.single(DB.NAME.name, group.name), id);
-      if (localGroup == null) {
+      Function<JSON, JSON> id = (x) -> x;
+      var localGroup = local.search(DB.HEAD_GROUP, JSON.single(DB.NAME.name, group.name), id);
+      if (localGroup == null || localGroup.size() == 0) {
         // すでにライクをしたことがない
         group.like();
         local.upsert(DB.DOCUMENT, group.toJSONL());
@@ -90,17 +90,20 @@ public class HeadsController {
       };
       remote.upsert(DB.DOCUMENT, like);
       return Response.SUCCESS;
-    } catch (Exception e) {
+    } catch (
+
+    Exception e) {
       return Response.error(Response.INVALID_VALUE);
     }
   }
 
   // util
   public static Response<Boolean> hasResistered(String name) {
-    var remote = DatabaseInterface.getRemote();
+    var remote = RemoteDatabaseInterface.getInstance();
+    Function<String, Boolean> idb = (x) -> x != null;
     try {
-      var headGroup = remote.searchSingle(DB.NAME_SPACE, JSON.single(DB.NAME.name, name), id);
-      if (headGroup == null) {
+      var headGroup = remote.search(DB.NAME_SPACE, JSON.single(DB.NAME.name, name), idb);
+      if (headGroup == null || headGroup.size() == 0) {
         return Response.success(false);
       } else {
         return Response.success(true);

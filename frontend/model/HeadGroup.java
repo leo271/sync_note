@@ -130,4 +130,14 @@ public class HeadGroup {
         headGroups.add(headGroup);
         return this;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof HeadGroup) {
+            var headGroup = (HeadGroup) obj;
+            return this.name.equals(headGroup.name) && this.heads.equals(headGroup.heads)
+                    && this.headGroups.equals(headGroup.headGroups) && this.like == headGroup.like;
+        }
+        return false;
+    }
 }

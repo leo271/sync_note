@@ -18,10 +18,10 @@ public class HeadGroupExplorerViewModel {
       if (obtainedHeadGroup.headGroups.size() + obtainedHeadGroup.heads.size() == 0) {
         var obtainedDocs = DocumentController.getDocuments(selectedValue).message;
         documentsViewer.setDocuments(obtainedDocs); // ドキュメントをDocViewerにセット
-        sceneManager.switchPanel("documentsViewer"); // 遷移
+        sceneManager.showPanel(SceneManager.Panel.DocumentsViewer); // 遷移
       } else { // Headではなかったとき
         headGroupExplorer.setHeadGroup(obtainedHeadGroup); // HeadGroupをExplorerにセット
-        sceneManager.switchPanel("headGroupExplorer"); // 遷移
+        sceneManager.showPanel(SceneManager.Panel.HeadGroupExplorer); // 遷移
       }
     });
   }

@@ -67,7 +67,7 @@ public class DB {
 
   public static boolean isValidValue(JSON query) {
     if (query == null) {
-      return false;
+      return true;
     }
 
     for (var entry : query) {

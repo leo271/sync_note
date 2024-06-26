@@ -44,6 +44,7 @@ public class Test {
     });
   }
 
+  @SuppressWarnings("unused")
   private static void testDocument() {
     measure(() -> {
       var myDocuments = DocumentController.getMyDocuments();

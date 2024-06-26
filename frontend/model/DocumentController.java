@@ -61,7 +61,8 @@ public class DocumentController {
     var local = LocalDatabaseInterface.getInstance();
     try {
       var document = local.search(DB.DOCUMENT, JSON.single(DB.TYPE_ML, "M"), Document::fromJSON);
-      if (document == null) {
+      System.out.println("Got my documents");
+      if (document == null || document.size() == 0) {
         return Response.error(Response.NOT_FOUND);
       } else {
         document.sort(Comparator.comparing((x) -> x.head, Comparator.reverseOrder()));
@@ -77,7 +78,8 @@ public class DocumentController {
     var local = LocalDatabaseInterface.getInstance();
     try {
       var documents = local.search(DB.DOCUMENT, JSON.single(DB.TYPE_ML, "L"), Document::fromJSON);
-      if (documents == null) {
+      System.out.println("Got liked documents");
+      if (documents == null || documents.size() == 0) {
         return Response.error(Response.NOT_FOUND);
       } else {
         documents.sort(Comparator.comparing((x) -> x.head, Comparator.reverseOrder()));

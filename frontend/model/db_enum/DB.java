@@ -25,11 +25,11 @@ public class DB {
   });
   public static Table HEAD_GROUP = new Table("HeadGroup", new HashSet<Column>() {
     {
+      add(RECORD_ID);
       add(GROUP_NAME);
       add(LIKE);
       add(NAME);
       add(TYPE_HG);
-      add(RECORD_ID);
     }
   });
   public static Table NAME_SPACE = new Table("NameSpace", new HashSet<Column>() {

@@ -12,7 +12,7 @@ public class DocumentController {
     var remote = RemoteDatabaseInterface.getInstance();
     try {
       var documents =
-          remote.search(DB.DOCUMENT, JSON.single(DB.HEAD.name, head), Document::fromString);
+          remote.search(DB.DOCUMENT, JSON.single(DB.HEAD.name, head), Document::fromString, false);
       if (documents == null) {
         return Response.error(Response.NOT_FOUND);
       } else {
@@ -28,13 +28,29 @@ public class DocumentController {
   public static Response<Document> getDocument(String docID) {
     var remote = RemoteDatabaseInterface.getInstance();
     try {
-      var document =
-          remote.search(DB.DOCUMENT, JSON.single(DB.DOC_ID.name, docID), Document::fromString);
+      var document = remote.search(DB.DOCUMENT, JSON.single(DB.DOC_ID.name, docID),
+          Document::fromString, false);
       if (document == null) {
         return Response.error(Response.NOT_FOUND);
       } else {
         return Response.success(document.get(0));
       }
+    } catch (Exception e) {
+      return Response.error(Response.INVALID_VALUE);
+    }
+  }
+
+  public static Response<Boolean> hasWritten(String head) {
+    var local = LocalDatabaseInterface.getInstance();
+    var query = new JSON() {
+      {
+        put(DB.HEAD.name, head);
+        put(DB.TYPE_ML.name, "M");
+      }
+    };
+    try {
+      var document = local.search(DB.DOCUMENT, query, Document::fromJSON);
+      return Response.success(document != null && document.size() > 0);
     } catch (Exception e) {
       return Response.error(Response.INVALID_VALUE);
     }
@@ -84,13 +100,13 @@ public class DocumentController {
       if (localDoc == null || localDoc.size() == 0) {
         // すでにライクをしたことがない
         document.like();
-        local.upsert(DB.DOCUMENT, document.toJSON());
+        local.upsert(DB.DOCUMENT, document.toJSON(false));
       } else {
         // もうライクをしているのでお気に入りから削除
         document.unlike();
         local.delete(DB.DOCUMENT, JSON.single(DB.DOC_ID.name, document.docID));
       }
-      remote.upsert(DB.DOCUMENT, document.toJSON());
+      remote.upsert(DB.DOCUMENT, document.toJSON(false));
       return Response.SUCCESS;
     } catch (Exception e) {
       return Response.error(Response.INVALID_VALUE);
@@ -103,8 +119,8 @@ public class DocumentController {
     var remote = RemoteDatabaseInterface.getInstance();
     try {
       var newDoc = new Document(head);
-      local.upsert(DB.DOCUMENT, newDoc.toJSON());
-      remote.upsert(DB.DOCUMENT, newDoc.toJSON());
+      local.upsert(DB.DOCUMENT, newDoc.toJSON(true));
+      remote.upsert(DB.DOCUMENT, newDoc.toJSON(true));
       return Response.success(newDoc.docID);
     } catch (Exception e) {
       return Response.error(Response.INVALID_VALUE);
@@ -116,8 +132,8 @@ public class DocumentController {
     var local = LocalDatabaseInterface.getInstance();
     var remote = RemoteDatabaseInterface.getInstance();
     try {
-      local.upsert(DB.DOCUMENT, document.toJSON());
-      remote.upsert(DB.DOCUMENT, document.toJSON());
+      local.upsert(DB.DOCUMENT, document.toJSON(true));
+      remote.upsert(DB.DOCUMENT, document.toJSON(true));
       return Response.success(null);
     } catch (Exception e) {
       return Response.error(Response.INVALID_VALUE);

@@ -4,7 +4,7 @@ import java.util.HashSet;
 import model.JSON;
 
 public class DB {
-  public static Column DOC_ID = new Column("DocId", ColumnType.TXT36);
+  public static Column DOC_ID = new Column("DocID", ColumnType.TXT36);
   public static Column CONTENT = new Column("Content", ColumnType.TXT);
   public static Column HEAD = new Column("Head", ColumnType.TXT100);
   public static Column GROUP_NAME = new Column("GroupName", ColumnType.TXT100);
@@ -12,7 +12,7 @@ public class DB {
   public static Column LIKE = new Column("Like", ColumnType.INT);
   public static Column TYPE_HG = new Column("TypeHG", ColumnType.TYPE_HG);
   public static Column TYPE_ML = new Column("TypeML", ColumnType.TYPE_ML);
-  public static Column RECORD_ID = new Column("RecordId", ColumnType.TXT36);
+  public static Column RECORD_ID = new Column("RecordID", ColumnType.TXT36);
 
   public static Table DOCUMENT = new Table("Document", new HashSet<Column>() {
     {

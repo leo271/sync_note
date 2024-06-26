@@ -8,7 +8,10 @@ public class DocumentsViewerViewModel {
 
     // ライク機能
     documentsViewer.likeButton.addActionListener(e -> {
-      DocumentController.likeDocument(documentsViewer.activeDocument);
+      var document = documentsViewer.activeDocument;
+      DocumentController.likeDocument(document);
+      document.like++;
+      documentsViewer.setOffset(documentsViewer.offset);// その場でローカル上のライクを増やす
     });
 
     // 次のDoc見るボタン

@@ -10,14 +10,14 @@ public class MyListViewViewModel {
       SceneManager sceneManager) {
 
 
-
+    // Add Documentが押されたとき
     myListView.addButton.addActionListener(e -> {
 
 
     });
 
 
-    // 対象の項目に対してSelectされたとき
+    // 対象の項目に対してSelectされたとき（View）
     myListView.selectButton.addActionListener(e -> {
       var selects = (JList<?>) myListView.myListScrollPanel.getViewport().getView(); // リストを取得
       String selectedValue = (String) selects.getSelectedValue(); // 選択中の項目取得

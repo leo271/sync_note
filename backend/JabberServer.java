@@ -65,11 +65,15 @@ class ClientHandler extends Thread {
           System.err.println("Invalid query: " + elm);
           continue;
         }
-        System.out.println("Query: " + q[0] + " " + q[1]);
+        System.out.println("Query: " + q[0] + "\t" + q[1]);
         if (q[0].equals("UPDATE")) {
-          ret.append(db.executeUpdate(q[1]));
+          var res = db.executeUpdate(q[1]);
+          System.out.println("res: " + res);
+          ret.append(res);
         } else {
-          ret.append(db.executeQuery(q[1]));
+          var res = db.executeQuery(q[1]);
+          System.out.println("res: " + res);
+          ret.append(res);
         }
       }
       ret.append(EOT);

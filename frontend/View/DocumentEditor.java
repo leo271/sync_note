@@ -9,8 +9,6 @@ import java.util.regex.Pattern;
 import model.Document;
 
 public class DocumentEditor extends JPanel {
-
-
   private JLabel titleLabel;
   public JTextArea editArea; // こちらは一応publicにする
   public JEditorPane previewArea; // プレビューのテキスト参照用
@@ -20,20 +18,17 @@ public class DocumentEditor extends JPanel {
   public JButton deleteButton; // 削除ボタン
   private CardLayout cardLayout;
   private JPanel contentPanel;
-  public Document thisDocument; // 参照用にドキュメント持たせる
+  public Document document; // 参照用にドキュメント持たせる
 
-  public DocumentEditor(Document document) {
+  public DocumentEditor() {
     setLayout(new BorderLayout());
-
-    thisDocument = document;
-
     titleLabel = new JLabel("Edit Mode", SwingConstants.CENTER);
     titleLabel.setFont(new Font("Arial", Font.BOLD, 16)); // フォントを設定（オプション）
 
     add(titleLabel, BorderLayout.NORTH); // パネルの上部に追加
-
+    document = new Document("");
     // 編集画面
-    editArea = new JTextArea(thisDocument.content);
+    editArea = new JTextArea(document.content);
     JScrollPane editScrollPane = new JScrollPane(editArea);
 
     // プレビュー画面
@@ -87,6 +82,13 @@ public class DocumentEditor extends JPanel {
         updateTitle("Preview Mode");
       }
     });
+  }
+
+  public void setDocument(Document document) {
+    this.document = document;
+    editArea.setText(document.content);
+    updateTitle(document.head);
+    updatePreview();
   }
 
   // 画面上部のタイトル更新

@@ -2,7 +2,7 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "build and run FRONTEND",
+            "label": "FRONTEND",
             "type": "shell",
             "windows": {
                 "command": "powershell.exe",
@@ -25,7 +25,7 @@
             "detail": "フロントエンドを実行する"
         },
         {
-            "label": "build and run BACKEND",
+            "label": "BACKEND",
             "type": "shell",
             "windows": {
                 "command": "powershell.exe",
@@ -48,7 +48,7 @@
             "detail": "バックエンドを実行する"
         },
         {
-            "label": "build and run TEST",
+            "label": "TEST",
             "type": "shell",
             "osx": {
                 "command": "sh",

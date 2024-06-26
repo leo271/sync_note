@@ -1,12 +1,11 @@
-import model.Document;
 import view.Header;
 import view.MyListView;
 import view.SearchView;
 import viewmodel.DocumentEditorViewModel;
 import viewmodel.DocumentsViewerViewModel;
 import viewmodel.HeadGroupExplorerViewModel;
-import viewmodel.MyListViewViewModel;
-import viewmodel.SceneTransitionVM;
+import viewmodel.MyListViewVM;
+import viewmodel.HeaderVM;
 import viewmodel.SearchViewViewModel;
 import view.HeadGroupExplorer;
 import view.DocumentsViewer;
@@ -17,23 +16,22 @@ public class Main {
   public static void main(String[] args) {
     // Create and set up the window.
     Header header = new Header();
-    MyListView myListView = new MyListView(null, null);
+    MyListView myListView = new MyListView();
     SearchView searchView = new SearchView();
 
     HeadGroupExplorer headGroupExplorer = new HeadGroupExplorer();
-    DocumentsViewer documentsViewer = new DocumentsViewer(null);
+    DocumentsViewer documentsViewer = new DocumentsViewer();
 
 
-    DocumentEditor documentEditor = new DocumentEditor(new Document("example head"));
+    DocumentEditor documentEditor = new DocumentEditor();
     SceneManager frame = new SceneManager(header, myListView, searchView, headGroupExplorer,
         documentsViewer, documentEditor);
     frame.setSize(800, 600);
 
     // VM
-    new SceneTransitionVM(header, frame);
-    new MyListViewViewModel(myListView, documentsViewer, frame);
+    new HeaderVM(header, frame);
     new SearchViewViewModel(searchView, documentsViewer, headGroupExplorer, frame);
-    new MyListViewViewModel(myListView, documentsViewer, frame);
+    new MyListViewVM(myListView, documentsViewer, documentEditor, headGroupExplorer, frame);
     new HeadGroupExplorerViewModel(headGroupExplorer, documentsViewer, frame);
     new DocumentEditorViewModel(documentEditor);
     new DocumentsViewerViewModel(documentsViewer);

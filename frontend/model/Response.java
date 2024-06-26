@@ -28,6 +28,11 @@ public class Response<T> {
     return error != null;
   }
 
+  public boolean hasError(String err) {
+    var b = (error != null) && (error.equals(err));
+    return b;
+  }
+
   public boolean success() {
     return error == null;
   }

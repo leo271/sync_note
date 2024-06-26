@@ -72,11 +72,13 @@ public class LocalDatabaseInterface {
 
     try (Connection connection = connect();
         PreparedStatement statement = connection.prepareStatement(query)) {
-      for (int i = 0; i < args.size(); i++) {
-        if (args.get(i).getKey().type == ColumnType.INT)
-          statement.setInt(i + 1, Integer.parseInt(args.get(i).getValue()));
-        else
-          statement.setString(i + 1, args.get(i).getValue().toString());
+      if (args != null) {
+        for (int i = 0; i < args.size(); i++) {
+          if (args.get(i).getKey().type == ColumnType.INT)
+            statement.setInt(i + 1, Integer.parseInt(args.get(i).getValue()));
+          else
+            statement.setString(i + 1, args.get(i).getValue().toString());
+        }
       }
 
       try (ResultSet resultSet = statement.executeQuery()) {
@@ -101,7 +103,6 @@ public class LocalDatabaseInterface {
         else
           statement.setString(i + 1, args.get(i).getValue());
       }
-      System.out.println(statement.toString());
       statement.executeUpdate();
       return "Success";
     } catch (SQLException e) {

@@ -1,18 +1,52 @@
 package viewmodel;
 
-import view.*;
-import model.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import view.Header;
+import view.SceneManager;
 
 public class HeaderVM {
+  Header header;
+  SceneManager sceneManager;
 
-  public HeaderVM(SearchView searchView, DocumentsViewer documentsViewer,
-      HeadGroupExplorer headGroupExplorer, SceneManager sceneManager) {
-    // 検索
-    searchView.searchButton.addActionListener(e -> {
-      var inputWords = searchView.searchField.getText();
-      var obtainedHeadGroup = HeadsController.searchHeads(inputWords);
-      sceneManager.showPanel(SceneManager.Panel.HeadGroupExplorer);
-      headGroupExplorer.setHeadGroup(obtainedHeadGroup.message);
+
+  public HeaderVM(Header header, SceneManager sceneManager) {
+    this.header = header;
+    this.sceneManager = sceneManager;
+
+    header.myListButton.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        sceneManager.showPanel(SceneManager.Panel.MyListView);
+      }
+    });
+
+    header.searchButton.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        sceneManager.showPanel(SceneManager.Panel.SearchView);
+      }
+    });
+
+    header.explorerButton.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        sceneManager.showPanel(SceneManager.Panel.HeadGroupExplorer);
+      }
+    });
+
+    header.viewerButton.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        sceneManager.showPanel(SceneManager.Panel.DocumentsViewer);
+      }
+    });
+
+    header.editorButton.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        sceneManager.showPanel(SceneManager.Panel.DocumentEditor);
+      }
     });
   }
 }

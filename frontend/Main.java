@@ -3,8 +3,8 @@ import view.MyListView;
 import view.SearchView;
 import viewmodel.HeadGroupExplorerViewModel;
 import viewmodel.MyListViewVM;
-import viewmodel.SceneTransitionVM;
 import viewmodel.HeaderVM;
+import viewmodel.SearchViewViewModel;
 import view.HeadGroupExplorer;
 import view.DocumentsViewer;
 import view.DocumentEditor;
@@ -27,8 +27,8 @@ public class Main {
     frame.setSize(800, 600);
 
     // VM
-    new SceneTransitionVM(header, frame);
-    new HeaderVM(searchView, documentsViewer, headGroupExplorer, frame);
+    new HeaderVM(header, frame);
+    new SearchViewViewModel(searchView, documentsViewer, headGroupExplorer, frame);
     new MyListViewVM(myListView, documentsViewer, documentEditor, headGroupExplorer, frame);
     new HeadGroupExplorerViewModel(headGroupExplorer, documentsViewer, frame);
     // DocumentEditorVM

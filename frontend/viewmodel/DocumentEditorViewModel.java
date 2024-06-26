@@ -7,7 +7,7 @@ public class DocumentEditorViewModel {
 
   public DocumentEditorViewModel(DocumentEditor documentEditor) {
 
-    var document = documentEditor.thisDocument;
+    var document = documentEditor.document;
 
     // ドキュメント保存
     documentEditor.saveButton.addActionListener(e -> {

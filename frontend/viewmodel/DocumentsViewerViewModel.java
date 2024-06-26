@@ -1,7 +1,7 @@
 package viewmodel;
 
+import model.DocumentController;
 import view.DocumentsViewer;
-import model.*;
 
 public class DocumentsViewerViewModel {
   public DocumentsViewerViewModel(DocumentsViewer documentsViewer) {

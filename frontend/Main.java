@@ -29,7 +29,6 @@ public class Main {
 
     // VM
     new SceneTransitionVM(header, frame);
-    new MyListViewViewModel(myListView, documentsViewer, frame);
     new SearchViewViewModel(searchView, documentsViewer, headGroupExplorer, frame);
     new MyListViewViewModel(myListView, documentsViewer, frame);
     new HeadGroupExplorerViewModel(headGroupExplorer, documentsViewer, frame);

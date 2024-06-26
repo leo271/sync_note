@@ -35,7 +35,7 @@ public class HeadsController {
     try {
       Function<String, String> id = (x) -> x;
       var searchResult = remote.search(DB.NAME_SPACE, JSON.single(DB.NAME, name), id, true);
-      var result = new HeadGroup("result", new HashSet<>(), new HashSet<>(), 0);
+      var result = new HeadGroup("検索結果", new HashSet<>(), new HashSet<>(), 0);
       for (var res : searchResult) {
         var sep = res.split(US + "");
         if (sep[1].equals("G")) {

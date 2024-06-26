@@ -36,12 +36,13 @@ public class Document {
         return new Document(split[0], split[1], split[2], Integer.parseInt(split[3]));
     }
 
-    public JSON toJSON() {
+    public JSON toJSON(boolean isMine) {
         var json = new JSON();
         json.put(DB.DOC_ID.name, docID);
         json.put(DB.HEAD.name, head);
         json.put(DB.CONTENT.name, content);
         json.put(DB.LIKE.name, Integer.toString(like));
+        json.put(DB.TYPE_ML.name, isMine ? "M" : "L");
         return json;
     }
 

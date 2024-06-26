@@ -28,4 +28,15 @@ public class JSON extends HashMap<String, String> {
     }
     return false;
   }
+
+  @Override
+  public String toString() {
+    var result = new StringBuilder();
+    result.append("{\n");
+    for (var key : this.keySet()) {
+      result.append("\t").append(key).append("\t: ").append(this.get(key)).append("\n");
+    }
+    result.append("}\n");
+    return result.toString();
+  }
 }

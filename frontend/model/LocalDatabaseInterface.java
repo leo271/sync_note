@@ -34,7 +34,7 @@ public class LocalDatabaseInterface {
   }
 
   // クエリを構築するメソッド
-  private String buildSearchQuery(String base, Table table, String[] keys) {
+  private String buildSearchQuery(String base, Table table, JSON keys) {
     if (keys == null) {
       return base + table.name;
     }
@@ -44,36 +44,39 @@ public class LocalDatabaseInterface {
       if (queryBuilder.length() > 0) {
         queryBuilder.append(" AND ");
       }
-      queryBuilder.append(key + " = ?");
+      queryBuilder.append(key.getKey().name + " = ?");
     }
     return baseQuery + queryBuilder.toString();
   }
 
   // 挿入クエリを構築するメソッド
-  private String buildUpdateQuery(String base, Table table, String[] keys) {
-    if (keys == null) {
+  private String buildUpdateQuery(String base, Table table, JSON query) {
+    if (query == null) {
       return base + table.name;
     }
     var baseQuery = base + table.name + " (";
     var queryBuilder = new StringBuilder();
-    for (var key : keys) {
+    for (var entry : query) {
       if (queryBuilder.length() > 0) {
         baseQuery += ", ";
         queryBuilder.append(", ");
       }
-      baseQuery += key;
+      baseQuery += entry.getKey().name;
       queryBuilder.append("?");
     }
     return baseQuery + ") VALUES (" + queryBuilder.toString() + ")";
   }
 
-  private <T> ArrayList<T> executeSearch(String query, String[] args, Function<JSON, T> parser) {
+  private <T> ArrayList<T> executeSearch(String query, JSON args, Function<JSON, T> parser) {
     ArrayList<T> list = new ArrayList<>();
 
     try (Connection connection = connect();
         PreparedStatement statement = connection.prepareStatement(query)) {
-      for (int i = 0; i < args.length; i++) {
-        statement.setString(i + 1, args[i]);
+      for (int i = 0; i < args.size(); i++) {
+        if (args.get(i).getKey().type == ColumnType.INT)
+          statement.setInt(i + 1, Integer.parseInt(args.get(i).getValue()));
+        else
+          statement.setString(i + 1, args.get(i).getValue().toString());
       }
 
       try (ResultSet resultSet = statement.executeQuery()) {
@@ -83,21 +86,29 @@ public class LocalDatabaseInterface {
       }
       return list;
     } catch (SQLException e) {
-      logger.log(Level.SEVERE, "Database error.", e);
+      logger.log(Level.SEVERE, "D" + e.getMessage());
+      logger.log(Level.SEVERE, "Database error." + e.getMessage());
       return null;
     }
   }
 
-  private String executeUpdate(String query, String[] args) {
+  private String executeUpdate(String query, JSON args) {
     try (Connection connection = connect();
         PreparedStatement statement = connection.prepareStatement(query)) {
-      for (int i = 0; i < args.length; i++) {
-        statement.setString(i + 1, args[i]);
+      for (int i = 0; i < args.size(); i++) {
+        if (args.get(i).getKey().type == ColumnType.INT)
+          statement.setInt(i + 1, Integer.parseInt(args.get(i).getValue()));
+        else
+          statement.setString(i + 1, args.get(i).getValue());
       }
+      System.out.println(statement.toString());
       statement.executeUpdate();
       return "Success";
     } catch (SQLException e) {
-      logger.log(Level.SEVERE, "Database error.", e);
+      logger.log(Level.SEVERE, "Database error." + e.getMessage());
+      for (var trace : e.getStackTrace()) {
+        logger.log(Level.SEVERE, trace.toString());
+      }
       return "Failed";
     }
   }
@@ -108,7 +119,7 @@ public class LocalDatabaseInterface {
     var columns = metadata.getColumnCount();
     var result = new JSON();
     for (int i = 1; i <= columns; i++) {
-      result.put(metadata.getColumnName(i), resultSet.getString(i));
+      result.put(DB.columnByName(metadata.getColumnName(i)), resultSet.getString(i));
     }
     return result;
   }
@@ -118,13 +129,9 @@ public class LocalDatabaseInterface {
       throws SQLException {
     if (!DB.isValidValue(query))
       throw new SQLException("Invalid value for" + query.toString());
-    var keys = query.keySet().toArray(new String[0]);
-    String[] values = new String[keys.length];
-    for (int i = 0; i < keys.length; i++) {
-      values[i] = query.get(keys[i]).toString();
-    }
-    String qstring = buildSearchQuery("SELECT * FROM ", table, keys);
-    return executeSearch(qstring, values, parser);
+
+    String qstring = buildSearchQuery("SELECT * FROM ", table, query);
+    return executeSearch(qstring, query, parser);
   }
 
   // データベースを更新するメソッド
@@ -132,14 +139,9 @@ public class LocalDatabaseInterface {
     for (var json : data) {
       if (!DB.isValidValue(json))
         return 500;
-      var keys = json.keySet().toArray(String[]::new);
-      var values = new String[keys.length];
-      for (int i = 0; i < keys.length; i++) {
-        values[i] = json.get(keys[i]).toString();
-      }
-
-      String q = buildUpdateQuery(query, table, keys);
-      var update = executeUpdate(q, values);
+      String q = buildUpdateQuery(query, table, json);
+      System.out.println(q);
+      var update = executeUpdate(q, json);
       if (update.equals("Failed")) {
         return 500;
       }

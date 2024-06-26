@@ -3,7 +3,6 @@ package model;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Map.Entry;
 import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -30,8 +29,7 @@ public class RemoteDatabaseInterface {
     return instance;
   }
 
-  private String buildSearchQuery(String base, Table table, Entry<String, String>[] entries,
-      boolean isLike) {
+  private String buildSearchQuery(String base, Table table, JSON entries, boolean isLike) {
     if (entries == null) {
       return base + table.name;
     }
@@ -41,17 +39,26 @@ public class RemoteDatabaseInterface {
       if (queryBuilder.length() > 0) {
         queryBuilder.append(" AND ");
       }
+      queryBuilder.append(entry.getKey().name);
       if (isLike) {
-        queryBuilder.append(entry.getKey() + " LIKE '%" + entry.getValue() + "%'");
+        if (entry.getKey().type == ColumnType.INT) {
+          queryBuilder.append(" = " + entry.getValue());
+        } else {
+          queryBuilder.append(" LIKE '%" + entry.getValue() + "%'");
+        }
       } else {
-        queryBuilder.append(entry.getKey() + " = '" + entry.getValue() + "'");
+        if (entry.getKey().type == ColumnType.INT) {
+          queryBuilder.append(" = " + entry.getValue());
+        } else {
+          queryBuilder.append(" = '" + entry.getValue() + "'");
+        }
       }
     }
     return baseQuery + queryBuilder.toString();
   }
 
   // 挿入クエリを構築するメソッド
-  private String buildUpdateQuery(String base, Table table, Entry<String, String>[] entries) {
+  private String buildUpdateQuery(String base, Table table, JSON entries) {
     if (entries == null) {
       return base + table.name;
     }
@@ -62,8 +69,12 @@ public class RemoteDatabaseInterface {
         baseQuery += ", ";
         queryBuilder.append(", ");
       }
-      baseQuery += entry.getKey();
-      queryBuilder.append(entry.getValue());
+      baseQuery += entry.getKey().name;
+      if (entry.getKey().type == ColumnType.INT) {
+        queryBuilder.append(entry.getValue());
+      } else {
+        queryBuilder.append("'" + entry.getValue() + "'");
+      }
     }
     return baseQuery + ") VALUES (" + queryBuilder.toString() + ")";
   }
@@ -81,7 +92,7 @@ public class RemoteDatabaseInterface {
       }
       return list;
     } else {
-      logger.log(Level.SEVERE, "Database error.", res.message[0]);
+      logger.log(Level.SEVERE, "Database error." + res.message[0]);
       return null;
     }
   }
@@ -91,7 +102,7 @@ public class RemoteDatabaseInterface {
     if (res.success()) {
       return res.message;
     } else {
-      logger.log(Level.SEVERE, "Database error.", res.message[0]);
+      logger.log(Level.SEVERE, "Database error." + res.error);
       return null;
     }
   }
@@ -101,7 +112,7 @@ public class RemoteDatabaseInterface {
       boolean isLike) throws SQLException {
     if (!DB.isValidValue(query))
       throw new SQLException("Invalid value for" + query.toString());
-    String qstring = buildSearchQuery("SELECT * FROM ", table, query.toEntries(), isLike);
+    String qstring = buildSearchQuery("SELECT * FROM ", table, query, isLike);
     var res = executeSearch(new String[] {qstring}, parser);
     if (res == null) {
       logger.log(Level.SEVERE, "Failed to execute search query");
@@ -116,7 +127,7 @@ public class RemoteDatabaseInterface {
     for (int i = 0; i < data.size(); i++) {
       if (!DB.isValidValue(data.get(i)))
         return 500;
-      queries[i] = buildUpdateQuery(query, table, data.get(i).toEntries());
+      queries[i] = buildUpdateQuery(query, table, data.get(i));
     }
     var update = executeUpdate(queries);
     if (update == null) {
@@ -124,8 +135,8 @@ public class RemoteDatabaseInterface {
       return 500;
     }
     for (var u : update) {
-      if (!u.equals("Success")) {
-        logger.log(Level.SEVERE, "Failed to execute update query");
+      if (!u.equals("true")) {
+        logger.log(Level.SEVERE, "Failed to execute update query" + u);
         return 500;
       }
     }

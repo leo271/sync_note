@@ -26,8 +26,8 @@ public class Document {
     }
 
     public static Document fromJSON(JSON json) {
-        var doc = new Document(json.get(DB.DOC_ID.name), json.get(DB.HEAD.name),
-                json.get(DB.CONTENT.name), Integer.parseInt(json.get(DB.LIKE.name)));
+        var doc = new Document(json.get(DB.DOC_ID), json.get(DB.HEAD), json.get(DB.CONTENT),
+                Integer.parseInt(json.get(DB.LIKE)));
         return doc;
     }
 
@@ -38,11 +38,11 @@ public class Document {
 
     public JSON toJSON(boolean isMine) {
         var json = new JSON();
-        json.put(DB.DOC_ID.name, docID);
-        json.put(DB.HEAD.name, head);
-        json.put(DB.CONTENT.name, content);
-        json.put(DB.LIKE.name, Integer.toString(like));
-        json.put(DB.TYPE_ML.name, isMine ? "M" : "L");
+        json.put(DB.DOC_ID, docID);
+        json.put(DB.HEAD, head);
+        json.put(DB.CONTENT, content);
+        json.put(DB.LIKE, Integer.toString(like));
+        json.put(DB.TYPE_ML, isMine ? "M" : "L");
         return json;
     }
 

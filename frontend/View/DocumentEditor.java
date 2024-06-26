@@ -9,13 +9,15 @@ import java.util.regex.Pattern;
 import model.Document;
 
 public class DocumentEditor extends JPanel {
+
+
   private JLabel titleLabel;
-  private JTextArea editArea;
-  private JEditorPane previewArea;
-  private JButton editButton;
-  private JButton previewButton;
-  private JButton saveButton;
-  private JButton deleteButton;
+  public JTextArea editArea; // こちらは一応publicにする
+  public JEditorPane previewArea; // プレビューのテキスト参照用
+  public JButton editButton; // 編集ボタン
+  public JButton previewButton; // プレビューボタン
+  public JButton saveButton; // セーブボタン
+  public JButton deleteButton; // 削除ボタン
   private CardLayout cardLayout;
   private JPanel contentPanel;
 

@@ -3,19 +3,16 @@ package viewmodel;
 import view.*;
 import model.*;
 
-public class SearchViewViewModel {
+public class HeaderVM {
 
-  public SearchViewViewModel(SearchView searchView, DocumentsViewer documentsViewer,
+  public HeaderVM(SearchView searchView, DocumentsViewer documentsViewer,
       HeadGroupExplorer headGroupExplorer, SceneManager sceneManager) {
-
     // 検索
     searchView.searchButton.addActionListener(e -> {
       var inputWords = searchView.searchField.getText();
       var obtainedHeadGroup = HeadsController.searchHeads(inputWords);
-      sceneManager.switchPanel("headGroupExplorer");
+      sceneManager.showPanel(SceneManager.Panel.HeadGroupExplorer);
       headGroupExplorer.setHeadGroup(obtainedHeadGroup.message);
     });
-
-
   }
 }

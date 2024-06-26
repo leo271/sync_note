@@ -17,35 +17,35 @@ public class SceneTransitionVM {
     header.myListButton.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
-        sceneManager.switchPanel("myListView");
+        sceneManager.showPanel(SceneManager.Panel.MyListView);
       }
     });
 
-    header.searchHeadButton.addActionListener(new ActionListener() {
+    header.searchButton.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
-        sceneManager.switchPanel("searchView");
+        sceneManager.showPanel(SceneManager.Panel.SearchView);
       }
     });
 
-    header.searchHeadGroupButton.addActionListener(new ActionListener() {
+    header.explorerButton.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
-        sceneManager.switchPanel("headGroupExplorer");
+        sceneManager.showPanel(SceneManager.Panel.HeadGroupExplorer);
       }
     });
 
-    header.headGroupButton.addActionListener(new ActionListener() {
+    header.viewerButton.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
-        sceneManager.switchPanel("documentsViewer");
+        sceneManager.showPanel(SceneManager.Panel.DocumentsViewer);
       }
     });
 
-    header.documentEditorButton.addActionListener(new ActionListener() {
+    header.editorButton.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
-        sceneManager.switchPanel("documentEditor");
+        sceneManager.showPanel(SceneManager.Panel.DocumentEditor);
       }
     });
   }

@@ -6,13 +6,6 @@ import java.awt.*;
 import java.util.List;
 
 public class DocumentsViewer extends JPanel {
-  private static final List<Document> demoDocuments = List.of(
-      new Document("a", "Mathematics", "Mathematics is the study of numbers, shapes, and patterns.",
-          10),
-      new Document("b", "Mathematics",
-          "It is a field of study that is used to understand the world around us.", 5),
-      new Document("c", "Mathematics", "Mathematics is the language of science.", 2));
-
   public List<Document> documents;
   public JLabel titleLabel = new JLabel("", SwingConstants.CENTER);
   public JTextArea documentsArea;
@@ -27,7 +20,7 @@ public class DocumentsViewer extends JPanel {
 
   public Document activeDocument; // 現在閲覧中のDocument 参照用に持たせる
 
-  public DocumentsViewer(String[] initialHeads) {
+  public DocumentsViewer() {
     setLayout(new BorderLayout());
 
     titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -46,31 +39,6 @@ public class DocumentsViewer extends JPanel {
     bottomPanel.add(prevButton, BorderLayout.WEST);
     bottomPanel.add(nextButton, BorderLayout.EAST);
     add(bottomPanel, BorderLayout.SOUTH);
-    setDemo();
-  }
-
-  // Head名を受け取り、それに属するドキュメントを表示するメソッド
-  public void setDocuments(List<Document> documents) {
-    this.documents = documents;
-    this.head = documents.get(0).head;
-    setOffset(0);
-  }
-
-  public void setOffset(int offset) {
-    this.offset = offset;
-    this.like = documents.get(offset).like;
-    activeDocument = documents.get(offset);
-    documentsArea.setText(documents.get(offset).content);
-    titleLabel.setText(head + "\t No." + (offset + 1));
-    likeLabel.setText("          ♥  :  " + like);
-    revalidate();
-    repaint();
-  }
-
-  // TODO: デモ用のドキュメントを表示するメソッド、ここのロジックは将来的にVMに移す
-  private void setDemo() {
-    documents = demoDocuments;
-    setDocuments(documents);
     prevButton.setAction(new AbstractAction("Prev") {
       @Override
       public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -89,5 +57,23 @@ public class DocumentsViewer extends JPanel {
         setOffset(off);
       }
     });
+  }
+
+  // Head名を受け取り、それに属するドキュメントを表示するメソッド
+  public void setDocuments(List<Document> documents) {
+    this.documents = documents;
+    this.head = documents.get(0).head;
+    setOffset(0);
+  }
+
+  public void setOffset(int offset) {
+    this.offset = offset;
+    this.like = documents.get(offset).like;
+    activeDocument = documents.get(offset);
+    documentsArea.setText(documents.get(offset).content);
+    titleLabel.setText(head + "\t No." + (offset + 1));
+    likeLabel.setText("          ♥  :  " + like);
+    revalidate();
+    repaint();
   }
 }

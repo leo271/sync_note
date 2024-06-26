@@ -60,35 +60,6 @@ public class HeadGroupExplorer extends JPanel {
     add(bottomPanel, BorderLayout.SOUTH);
   }
 
-
-  // リストに特徴を付ける
-  // HeadとHeadGroupそれぞれにアイコンを付ける
-  private class HeadGroupCellRenderer extends DefaultListCellRenderer {
-    private final ImageIcon headGroupIcon =
-        new ImageIcon(getClass().getResource("images/headgroup_icon.png"));
-    private final ImageIcon headIcon =
-        new ImageIcon(getClass().getResource("images/head_icon.png")); // アイコンリソース
-
-    @Override
-    public Component getListCellRendererComponent(JList<?> list, Object value, int index,
-        boolean isSelected, boolean cellHasFocus) {
-      JLabel label =
-          (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-
-      if (headGroup.headGroups.contains(value)) {
-        label.setIcon(headGroupIcon);
-        label.setFont(label.getFont().deriveFont(Font.BOLD));
-      } else {
-        label.setIcon(headIcon);
-        label.setFont(label.getFont().deriveFont(Font.PLAIN));
-      }
-
-      return label;
-    }
-  }
-
-
-
   // マイリストの更新
   private void refreshHeadGroup() {
     if (HeadGroupScrolPanel != null) // 既存のリストがあれば削除
@@ -97,7 +68,9 @@ public class HeadGroupExplorer extends JPanel {
         .concat(headGroup.headGroups.stream(), headGroup.heads.stream()).toArray(String[]::new));
 
     // リストに特徴を付ける
-    list.setCellRenderer(new HeadGroupCellRenderer());
+    list.setCellRenderer(new CellRenderer(
+        (String group) -> headGroup.headGroups.contains(group) ? CellRenderer.CellType.HEAD_GROUP
+            : CellRenderer.CellType.HEAD));
 
     HeadGroupScrolPanel = new JScrollPane(list);
     add(HeadGroupScrolPanel, BorderLayout.CENTER);

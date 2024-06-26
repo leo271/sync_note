@@ -2,6 +2,7 @@
 
 package model;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.function.Function;
 import model.db_enum.DB;
@@ -121,7 +122,6 @@ public class HeadsController {
     }
   }
 
-
   // util
   public static Response<Boolean> hasResistered(String name) {
     var remote = RemoteDatabaseInterface.getInstance();
@@ -134,6 +134,29 @@ public class HeadsController {
         return Response.success(true);
       }
     } catch (Exception e) {
+      return Response.error(Response.INVALID_VALUE);
+    }
+  }
+
+  public static Response<ArrayList<String>> getMyHeadGroups() {
+    var local = LocalDatabaseInterface.getInstance();
+    try {
+      Function<JSON, JSON> id = (x) -> x;
+      var headGroups = local.search(DB.HEAD_GROUP, null, id);
+      System.out.println("Searched");
+      if (headGroups == null || headGroups.size() == 0 || headGroups.get(0).isEmpty()) {
+        return Response.error(Response.NOT_FOUND);
+      }
+      var result = new HashSet<String>();
+      for (var headGroup : headGroups) {
+        result.add(headGroup.get(DB.GROUP_NAME));
+      }
+      return Response.success(new ArrayList<>(result));
+    } catch (Exception e) {
+      System.err.println(e);
+      for (var trace : e.getStackTrace()) {
+        System.err.println(trace);
+      }
       return Response.error(Response.INVALID_VALUE);
     }
   }

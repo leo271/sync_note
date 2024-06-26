@@ -58,17 +58,21 @@ class ClientHandler extends Thread {
       var ret = new StringBuilder();
       for (String elm : received.split(RS + "")) {
         var q = elm.split(US + "");
+        if (ret.length() > 0) {
+          ret.append(GS);
+        }
         if (q.length != 2) {
           System.err.println("Invalid query: " + elm);
           continue;
         }
+        System.out.println("Query: " + q[0] + " " + q[1]);
         if (q[0].equals("UPDATE")) {
           ret.append(db.executeUpdate(q[1]));
         } else {
-          ret.append(db.executeQuery(elm));
+          ret.append(db.executeQuery(q[1]));
         }
-        ret.append(GS);
       }
+      ret.append(EOT);
 
       out.write(ret.toString().getBytes(StandardCharsets.UTF_8));
       out.flush();

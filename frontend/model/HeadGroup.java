@@ -32,16 +32,16 @@ public class HeadGroup {
         var heads = new HashSet<String>();
         var headGroups = new HashSet<String>();
         var like = 0;
-        var name = jsons.get(0).get(DB.GROUP_NAME.name);
+        var name = jsons.get(0).get(DB.GROUP_NAME);
         for (var json : jsons) {
-            var type = json.get(DB.TYPE_HG.name);
-            var child = json.get(DB.NAME.name);
+            var type = json.get(DB.TYPE_HG);
+            var child = json.get(DB.NAME);
             if (type.equals("H")) {
                 heads.add(child);
             } else {
                 headGroups.add(child);
             }
-            like = Math.max(like, Integer.parseInt(json.get(DB.LIKE.name)));
+            like = Math.max(like, Integer.parseInt(json.get(DB.LIKE)));
         }
 
         return new HeadGroup(name, heads, headGroups, like);
@@ -79,20 +79,20 @@ public class HeadGroup {
         }
         for (var head : heads) {
             var json = new JSON();
-            json.put(DB.GROUP_NAME.name, name);
-            json.put(DB.TYPE_HG.name, "H");
-            json.put(DB.LIKE.name, Integer.toString(like));
-            json.put(DB.NAME.name, head);
-            json.put(DB.RECORD_ID.name, md5.digest((head + name).getBytes()).toString());
+            json.put(DB.GROUP_NAME, name);
+            json.put(DB.TYPE_HG, "H");
+            json.put(DB.LIKE, Integer.toString(like));
+            json.put(DB.NAME, head);
+            json.put(DB.RECORD_ID, md5.digest((head + name).getBytes()).toString());
             jsons.add(json);
         }
         for (var headGroup : headGroups) {
             var json = new JSON();
-            json.put(DB.GROUP_NAME.name, name);
-            json.put(DB.TYPE_HG.name, "G");
-            json.put(DB.NAME.name, headGroup);
-            json.put(DB.LIKE.name, Integer.toString(like));
-            json.put(DB.RECORD_ID.name, md5.digest((headGroup + name).getBytes()).toString());
+            json.put(DB.GROUP_NAME, name);
+            json.put(DB.TYPE_HG, "G");
+            json.put(DB.NAME, headGroup);
+            json.put(DB.LIKE, Integer.toString(like));
+            json.put(DB.RECORD_ID, md5.digest((headGroup + name).getBytes()).toString());
             jsons.add(json);
         }
         return jsons;
@@ -135,7 +135,7 @@ public class HeadGroup {
     public boolean equals(Object obj) {
         if (obj instanceof HeadGroup) {
             var headGroup = (HeadGroup) obj;
-            return this.name.equals(headGroup.name) && this.heads.equals(headGroup.heads)
+            return this.equals(headGroup) && this.heads.equals(headGroup.heads)
                     && this.headGroups.equals(headGroup.headGroups) && this.like == headGroup.like;
         }
         return false;

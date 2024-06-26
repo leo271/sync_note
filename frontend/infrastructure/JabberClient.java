@@ -18,15 +18,13 @@ public class JabberClient {
         InputStream in = socket.getInputStream();
         OutputStream out = socket.getOutputStream();
         ByteArrayOutputStream buffer = new ByteArrayOutputStream()) {
-
-      System.out.println("socket = " + socket);
-
       out.write((queries + EOT).getBytes(StandardCharsets.UTF_8));
       out.flush();
 
       int read;
       while ((read = in.read()) != EOT) {
         if (read == -1) {
+          System.err.println("Server closed connection before EOT");
           throw new EOFException("Server closed connection before EOT");
         }
         buffer.write(read);

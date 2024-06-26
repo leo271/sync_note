@@ -11,10 +11,38 @@ public class Test {
   }
 
   private static void testModel() {
-
+    testRemote();
   }
 
-  private static void testRemote
+  private static void testRemote() {
+    measure(() -> {
+      var res = DocumentController.createDocument("Mathematics");
+      if (res.hasError()) {
+        System.out.println("Error: " + res.error);
+        return;
+      } else {
+        System.out.println("Success: " + res.message);
+      }
+    });
+    measure(() -> {
+      var res = DocumentController.createDocument("Mathematics");
+      if (res.hasError()) {
+        System.out.println("Error: " + res.error);
+        return;
+      } else {
+        System.out.println("Success: " + res.message);
+      }
+    });
+    measure(() -> {
+      var res = DocumentController.createDocument("Mathematics");
+      if (res.hasError()) {
+        System.out.println("Error: " + res.error);
+        return;
+      } else {
+        System.out.println("Success: " + res.message);
+      }
+    });
+  }
 
   private static void testDocument() {
     measure(() -> {

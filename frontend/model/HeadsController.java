@@ -16,8 +16,8 @@ public class HeadsController {
     try {
       var condition = new JSON() {
         {
-          put(DB.NAME.name, group.name);
-          put(DB.TYPE_HG.name, "G");
+          put(DB.NAME, group.name);
+          put(DB.TYPE_HG, "G");
         }
       };
       local.delete(DB.DOCUMENT, condition);
@@ -34,7 +34,7 @@ public class HeadsController {
     var remote = RemoteDatabaseInterface.getInstance();
     try {
       Function<String, String> id = (x) -> x;
-      var searchResult = remote.search(DB.NAME_SPACE, JSON.single(DB.NAME.name, name), id, true);
+      var searchResult = remote.search(DB.NAME_SPACE, JSON.single(DB.NAME, name), id, true);
       var result = new HeadGroup("result", new HashSet<>(), new HashSet<>(), 0);
       for (var res : searchResult) {
         var sep = res.split(US + "");
@@ -57,8 +57,8 @@ public class HeadsController {
     try {
       var head = new JSON() {
         {
-          put(DB.NAME.name, name);
-          put(DB.TYPE_HG.name, type);
+          put(DB.NAME, name);
+          put(DB.TYPE_HG, type);
         }
       };
       remote.upsert(DB.NAME_SPACE, head);
@@ -73,7 +73,7 @@ public class HeadsController {
     var remote = RemoteDatabaseInterface.getInstance();
     try {
       Function<String, String> id = (x) -> x;
-      var headGroup = remote.search(DB.HEAD_GROUP, JSON.single(DB.NAME.name, name), id, false);
+      var headGroup = remote.search(DB.HEAD_GROUP, JSON.single(DB.NAME, name), id, false);
       if (headGroup == null) {
         return Response.error(Response.NOT_FOUND);
       }
@@ -89,7 +89,7 @@ public class HeadsController {
     var remote = RemoteDatabaseInterface.getInstance();
     try {
       Function<JSON, JSON> id = (x) -> x;
-      var localGroup = local.search(DB.HEAD_GROUP, JSON.single(DB.NAME.name, group.name), id);
+      var localGroup = local.search(DB.HEAD_GROUP, JSON.single(DB.NAME, group.name), id);
       if (localGroup == null || localGroup.size() == 0) {
         // すでにライクをしたことがない
         group.like();
@@ -99,8 +99,8 @@ public class HeadsController {
         group.unlike();
         var condition = new JSON() {
           {
-            put(DB.NAME.name, group.name);
-            put(DB.TYPE_HG.name, "G");
+            put(DB.NAME, group.name);
+            put(DB.TYPE_HG, "G");
           }
         };
         local.delete(DB.DOCUMENT, condition);
@@ -108,8 +108,8 @@ public class HeadsController {
       // リモートにも反映
       var like = new JSON() {
         {
-          put(DB.GROUP_NAME.name, group.name);
-          put(DB.LIKE.name, Integer.toString(group.like));
+          put(DB.GROUP_NAME, group.name);
+          put(DB.LIKE, Integer.toString(group.like));
         }
       };
       remote.upsert(DB.DOCUMENT, like);
@@ -127,7 +127,7 @@ public class HeadsController {
     var remote = RemoteDatabaseInterface.getInstance();
     Function<String, Boolean> idb = (x) -> x != null;
     try {
-      var headGroup = remote.search(DB.NAME_SPACE, JSON.single(DB.NAME.name, name), idb, false);
+      var headGroup = remote.search(DB.NAME_SPACE, JSON.single(DB.NAME, name), idb, false);
       if (headGroup == null || headGroup.size() == 0) {
         return Response.success(false);
       } else {

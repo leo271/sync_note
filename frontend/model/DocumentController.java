@@ -12,7 +12,7 @@ public class DocumentController {
     var remote = RemoteDatabaseInterface.getInstance();
     try {
       var documents =
-          remote.search(DB.DOCUMENT, JSON.single(DB.HEAD.name, head), Document::fromString, false);
+          remote.search(DB.DOCUMENT, JSON.single(DB.HEAD, head), Document::fromString, false);
       if (documents == null) {
         return Response.error(Response.NOT_FOUND);
       } else {
@@ -28,8 +28,8 @@ public class DocumentController {
   public static Response<Document> getDocument(String docID) {
     var remote = RemoteDatabaseInterface.getInstance();
     try {
-      var document = remote.search(DB.DOCUMENT, JSON.single(DB.DOC_ID.name, docID),
-          Document::fromString, false);
+      var document =
+          remote.search(DB.DOCUMENT, JSON.single(DB.DOC_ID, docID), Document::fromString, false);
       if (document == null) {
         return Response.error(Response.NOT_FOUND);
       } else {
@@ -44,8 +44,8 @@ public class DocumentController {
     var local = LocalDatabaseInterface.getInstance();
     var query = new JSON() {
       {
-        put(DB.HEAD.name, head);
-        put(DB.TYPE_ML.name, "M");
+        put(DB.HEAD, head);
+        put(DB.TYPE_ML, "M");
       }
     };
     try {
@@ -60,8 +60,7 @@ public class DocumentController {
   public static Response<ArrayList<Document>> getMyDocuments() {
     var local = LocalDatabaseInterface.getInstance();
     try {
-      var document =
-          local.search(DB.DOCUMENT, JSON.single(DB.TYPE_ML.name, "M"), Document::fromJSON);
+      var document = local.search(DB.DOCUMENT, JSON.single(DB.TYPE_ML, "M"), Document::fromJSON);
       if (document == null) {
         return Response.error(Response.NOT_FOUND);
       } else {
@@ -77,8 +76,7 @@ public class DocumentController {
   public static Response<ArrayList<Document>> getLikedDocuments() {
     var local = LocalDatabaseInterface.getInstance();
     try {
-      var documents =
-          local.search(DB.DOCUMENT, JSON.single(DB.TYPE_ML.name, "L"), Document::fromJSON);
+      var documents = local.search(DB.DOCUMENT, JSON.single(DB.TYPE_ML, "L"), Document::fromJSON);
       if (documents == null) {
         return Response.error(Response.NOT_FOUND);
       } else {
@@ -95,8 +93,8 @@ public class DocumentController {
     var local = LocalDatabaseInterface.getInstance();
     var remote = RemoteDatabaseInterface.getInstance();
     try {
-      var localDoc = local.search(DB.DOCUMENT, JSON.single(DB.DOC_ID.name, document.docID),
-          Document::fromJSON);
+      var localDoc =
+          local.search(DB.DOCUMENT, JSON.single(DB.DOC_ID, document.docID), Document::fromJSON);
       if (localDoc == null || localDoc.size() == 0) {
         // すでにライクをしたことがない
         document.like();
@@ -104,7 +102,7 @@ public class DocumentController {
       } else {
         // もうライクをしているのでお気に入りから削除
         document.unlike();
-        local.delete(DB.DOCUMENT, JSON.single(DB.DOC_ID.name, document.docID));
+        local.delete(DB.DOCUMENT, JSON.single(DB.DOC_ID, document.docID));
       }
       remote.upsert(DB.DOCUMENT, document.toJSON(false));
       return Response.SUCCESS;
@@ -123,6 +121,10 @@ public class DocumentController {
       remote.upsert(DB.DOCUMENT, newDoc.toJSON(true));
       return Response.success(newDoc.docID);
     } catch (Exception e) {
+      System.err.println(e);
+      for (var el : e.getStackTrace()) {
+        System.err.println(el);
+      }
       return Response.error(Response.INVALID_VALUE);
     }
   }
@@ -145,8 +147,8 @@ public class DocumentController {
     var local = LocalDatabaseInterface.getInstance();
     var remote = RemoteDatabaseInterface.getInstance();
     try {
-      local.delete(DB.DOCUMENT, JSON.single(DB.DOC_ID.name, docID));
-      remote.delete(DB.DOCUMENT, JSON.single(DB.DOC_ID.name, docID));
+      local.delete(DB.DOCUMENT, JSON.single(DB.DOC_ID, docID));
+      remote.delete(DB.DOCUMENT, JSON.single(DB.DOC_ID, docID));
       return Response.success(null);
     } catch (Exception e) {
       return Response.error(Response.INVALID_VALUE);

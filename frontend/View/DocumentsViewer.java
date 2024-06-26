@@ -39,25 +39,6 @@ public class DocumentsViewer extends JPanel {
     bottomPanel.add(prevButton, BorderLayout.WEST);
     bottomPanel.add(nextButton, BorderLayout.EAST);
     add(bottomPanel, BorderLayout.SOUTH);
-
-    // prevButton.setAction(new AbstractAction("Prev") {
-    // @Override
-    // public void actionPerformed(java.awt.event.ActionEvent e) {
-    // var off = offset - 1;
-    // if (off < 0)
-    // off = documents.size() - 1;
-    // setOffset(off);
-    // }
-    // });
-    // nextButton.setAction(new AbstractAction("Next") {
-    // @Override
-    // public void actionPerformed(java.awt.event.ActionEvent e) {
-    // var off = offset + 1;
-    // if (off >= documents.size())
-    // off = 0;
-    // setOffset(off);
-    // }
-    // });
   }
 
   // Head名を受け取り、それに属するドキュメントを表示するメソッド

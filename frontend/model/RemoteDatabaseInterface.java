@@ -30,7 +30,8 @@ public class RemoteDatabaseInterface {
     return instance;
   }
 
-  private String buildSearchQuery(String base, Table table, Entry<String, String>[] entries) {
+  private String buildSearchQuery(String base, Table table, Entry<String, String>[] entries,
+      boolean isLike) {
     if (entries == null) {
       return base + table.name;
     }
@@ -40,7 +41,11 @@ public class RemoteDatabaseInterface {
       if (queryBuilder.length() > 0) {
         queryBuilder.append(" AND ");
       }
-      queryBuilder.append(entry.getKey() + " = " + entry.getValue());
+      if (isLike) {
+        queryBuilder.append(entry.getKey() + " LIKE '%" + entry.getValue() + "%'");
+      } else {
+        queryBuilder.append(entry.getKey() + " = '" + entry.getValue() + "'");
+      }
     }
     return baseQuery + queryBuilder.toString();
   }
@@ -92,11 +97,11 @@ public class RemoteDatabaseInterface {
   }
 
   // 検索するメソッド
-  public <T> ArrayList<T> search(Table table, JSON query, Function<String, T> parser)
-      throws SQLException {
+  public <T> ArrayList<T> search(Table table, JSON query, Function<String, T> parser,
+      boolean isLike) throws SQLException {
     if (!DB.isValidValue(query))
       throw new SQLException("Invalid value for" + query.toString());
-    String qstring = buildSearchQuery("SELECT * FROM ", table, query.toEntries());
+    String qstring = buildSearchQuery("SELECT * FROM ", table, query.toEntries(), isLike);
     var res = executeSearch(new String[] {qstring}, parser);
     if (res == null) {
       logger.log(Level.SEVERE, "Failed to execute search query");

@@ -132,11 +132,12 @@ public class LocalDatabaseInterface {
     for (var json : data) {
       if (!DB.isValidValue(json))
         return 500;
-      var keys = (String[]) json.keySet().toArray();
+      var keys = json.keySet().toArray(String[]::new);
       var values = new String[keys.length];
       for (int i = 0; i < keys.length; i++) {
         values[i] = json.get(keys[i]).toString();
       }
+
       String q = buildUpdateQuery(query, table, keys);
       var update = executeUpdate(q, values);
       if (update.equals("Failed")) {

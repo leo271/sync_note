@@ -7,8 +7,8 @@ public class Document {
     private static final char US = '\u001f';
 
     public String docID;
-    public String content;
     public String head;
+    public String content;
     public int like;
 
     public Document(String head) {

@@ -1,40 +1,37 @@
 package model;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.Map.Entry;
+import model.db_enum.Column;
 
-public class JSON extends HashMap<String, String> {
-  public static JSON single(String key, String value) {
+public class JSON extends ArrayList<Entry<Column, String>> {
+  public static JSON single(Column key, String value) {
     var json = new JSON();
     json.put(key, value);
     return json;
   }
 
-  public Entry<String, String>[] toEntries() {
-    @SuppressWarnings("unchecked")
-    Entry<String, String>[] entries = new Entry[this.size()];
-    var i = 0;
-    for (var entry : this.entrySet()) {
-      entries[i] = entry;
-      i++;
-    }
-    return entries;
+  public void put(Column key, String value) {
+    this.add(Map.entry(key, value));
   }
 
-  @Override
-  public boolean equals(Object obj) {
-    if (obj instanceof JSON) {
-      var json = (JSON) obj;
-      return this.entrySet().equals(json.entrySet());
+  public String get(Column key) {
+    for (var entry : this) {
+      if (entry.getKey().equals(key)) {
+        return entry.getValue();
+      }
     }
-    return false;
+    return null;
   }
 
   @Override
   public String toString() {
     var result = new StringBuilder();
     result.append("{\n");
-    for (var key : this.keySet()) {
-      result.append("\t").append(key).append("\t: ").append(this.get(key)).append("\n");
+    for (var entry : this) {
+      result.append("\t").append(entry.getKey()).append("\t: ").append(entry.getValue())
+          .append("\n");
     }
     result.append("}\n");
     return result.toString();

@@ -20,9 +20,12 @@ public class DocumentEditor extends JPanel {
   public JButton deleteButton; // 削除ボタン
   private CardLayout cardLayout;
   private JPanel contentPanel;
+  public Document thisDocument; // 参照用にドキュメント持たせる
 
   public DocumentEditor(Document document) {
     setLayout(new BorderLayout());
+
+    thisDocument = document;
 
     titleLabel = new JLabel("Edit Mode", SwingConstants.CENTER);
     titleLabel.setFont(new Font("Arial", Font.BOLD, 16)); // フォントを設定（オプション）
@@ -30,7 +33,7 @@ public class DocumentEditor extends JPanel {
     add(titleLabel, BorderLayout.NORTH); // パネルの上部に追加
 
     // 編集画面
-    editArea = new JTextArea(document.content);
+    editArea = new JTextArea(thisDocument.content);
     JScrollPane editScrollPane = new JScrollPane(editArea);
 
     // プレビュー画面

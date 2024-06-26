@@ -52,6 +52,15 @@ public class DB {
     }
   };
 
+  public static Column columnByName(String name) {
+    for (var column : COLUMNS) {
+      if (column.name.equals(name)) {
+        return column;
+      }
+    }
+    return null;
+  }
+
   public static boolean hasColumn(Table table, Column column) {
     return table.columns.contains(column);
   }
@@ -61,17 +70,8 @@ public class DB {
       return false;
     }
 
-    for (var entry : query.entrySet()) {
-      ColumnType type = null;
-      for (var col : COLUMNS) {
-        if (col.name.equals(entry.getKey())) {
-          type = col.type;
-          break;
-        }
-      }
-      if (type == null) {
-        return false;
-      }
+    for (var entry : query) {
+      ColumnType type = entry.getKey().type;
       final var value = entry.getValue();
       switch (type) {
         case ColumnType.INT:

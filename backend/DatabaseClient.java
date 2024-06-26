@@ -36,8 +36,9 @@ public class DatabaseClient {
         }
         result.append(RS);
       }
+      return result.toString();
     } catch (SQLException e) {
-      logger.log(Level.SEVERE, "Database error.", e);
+      logger.log(Level.SEVERE, "Database error." + e.getMessage());
     }
     return null;
   }
@@ -47,7 +48,7 @@ public class DatabaseClient {
       stmt.executeUpdate(query);
       return true;
     } catch (SQLException e) {
-      logger.log(Level.SEVERE, "Database error.", e);
+      logger.log(Level.SEVERE, "Database error." + e.getMessage());
       return false;
     }
   }

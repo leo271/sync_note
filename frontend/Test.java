@@ -13,7 +13,7 @@ public class Test {
 
   private static void creatRoot() {
     var res = HeadsController.create("root", "G");
-    if(res.hasError()){
+    if (res.hasError()) {
       System.out.println("error");
     } else {
       System.out.println("success");
@@ -32,13 +32,14 @@ public class Test {
     }
   }
 
+  @SuppressWarnings("unused")
   private static void testModel() {
     testRemote();
   }
 
   private static void testRemote() {
     measure(() -> {
-      var res = HeadsController.createHead("root", "G");
+      var res = HeadsController.create("root", "G");
       if (res.hasError()) {
         System.out.println("Error: " + res.error);
         return;

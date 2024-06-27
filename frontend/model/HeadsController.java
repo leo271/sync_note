@@ -15,13 +15,8 @@ public class HeadsController {
     var remote = RemoteDatabaseInterface.getInstance();
     var local = LocalDatabaseInterface.getInstance();
     try {
-       var condition = new JSON() {
-        {
-          put(DB.GROUP_NAME, group.name);
-        }
-      };
-      local.delete(DB.HEAD_GROUP, JSON.single(Column.GROUP_NAME,group.name));
-      remote.delete(DB.HEAD_GROUP, JSON.single(Column.GROUP_NAME,group.name));
+      local.delete(DB.HEAD_GROUP, JSON.single(DB.GROUP_NAME, group.name));
+      remote.delete(DB.HEAD_GROUP, JSON.single(DB.GROUP_NAME, group.name));
       local.upsert(DB.HEAD_GROUP, group.toJSONL());
       remote.upsert(DB.HEAD_GROUP, group.toJSONL());
       return Response.SUCCESS;

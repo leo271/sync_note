@@ -8,7 +8,7 @@ import java.util.List;
 public class DocumentsViewer extends JPanel {
   public List<Document> documents;
   public JLabel titleLabel = new JLabel("", SwingConstants.CENTER);
-  public JTextArea documentsArea;
+  public JEditorPane documentsPane;
   public JButton likeButton = new JButton("♥");
   public JButton nextButton = new JButton("Next");
   public JButton prevButton = new JButton("Prev");
@@ -26,12 +26,14 @@ public class DocumentsViewer extends JPanel {
     titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
     add(titleLabel, BorderLayout.NORTH);
 
-    documentsArea = new JTextArea();
-    documentsArea.setEditable(false); // ユーザーが編集できないようにする
-    add(new JScrollPane(documentsArea), BorderLayout.CENTER); // JTextAreaをスクロールペインに追加して中央に配置
+    documentsPane = new JEditorPane();
+    documentsPane.setContentType("text/html");
+    documentsPane.setEditable(false); // ユーザーが編集できないようにする
+    add(new JScrollPane(documentsPane), BorderLayout.CENTER); // JEditorPaneをスクロールペインに追加して中央に配置
 
     JPanel bottomPanel = new JPanel(new BorderLayout());
     JPanel buttonPanel = new JPanel(new GridLayout(1, 2));
+    likeLabel.setForeground(Color.RED);
 
     buttonPanel.add(likeButton);
     buttonPanel.add(likeLabel); // ライクの数を表示するラベルを追加
@@ -53,11 +55,11 @@ public class DocumentsViewer extends JPanel {
     try {
       this.like = documents.get(offset).like;
       activeDocument = documents.get(offset);
-      documentsArea.setText(activeDocument.content);
+      documentsPane.setText(activeDocument.content);
     } catch (Exception e) {
       this.like = 0;
       activeDocument = new Document("");
-      documentsArea.setText("");
+      documentsPane.setText("");
     }
     titleLabel.setText(head + "\t No." + (offset + 1));
     likeLabel.setText("          ♥  :  " + like);

@@ -4,6 +4,8 @@ import javax.swing.JList;
 import view.*;
 import view.CellRenderer.CellType;
 import model.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 public class MyListViewVM {
@@ -50,13 +52,9 @@ public class MyListViewVM {
 
     // 対象の項目に対してSelectされたとき（View）
     myListView.selectButton.addActionListener(e -> {
-      JList<?> selectedList;
-      if (myListView.myDocumentsScrollPanel.getViewport().getView().hasFocus()) {
-        selectedList = (JList<?>) myListView.myDocumentsScrollPanel.getViewport().getView();
-      } else {
-        selectedList = (JList<?>) myListView.likedDocumentsScrollPanel.getViewport().getView();
-      }
-      String selectedValue = (String) selectedList.getSelectedValue();
+      String selectedValue = myListView.getSelectedValue();
+      if (selectedValue == null)
+        return;
       var liked = getLiked();
       var myDocument = getMyDocuments();
       var myGroups = getMyGroups();
@@ -87,7 +85,30 @@ public class MyListViewVM {
         sceneManager.showPanel(SceneManager.Panel.HeadGroupExplorer);
       }
     });
+
+    // パネル内のクリックイベントを処理
+    myListView.addMouseListener(new MouseAdapter() {
+      @Override
+      public void mouseClicked(MouseEvent e) {
+        updateButtonPanel(myListView, null);
+      }
+    });
+
   }
+
+  private void updateButtonPanel(MyListView myListView, CellType type) {
+    myListView.buttonPanel.removeAll();
+    myListView.buttonPanel.add(myListView.selectButton);
+    if (type == CellType.HEAD_GROUP || type == CellType.LIKED_DOCUMENT) {
+      myListView.buttonPanel.add(myListView.unlikeButton);
+    } else if (type == CellType.DOCUMENT) {
+      myListView.buttonPanel.add(myListView.deleteButton);
+    }
+    myListView.buttonPanel.add(myListView.refreshButton);
+    myListView.buttonPanel.revalidate();
+    myListView.buttonPanel.repaint();
+  }
+
 
   private ArrayList<Document> getLiked() {
     var likedRes = DocumentController.getLiked();
@@ -138,16 +159,7 @@ public class MyListViewVM {
             return CellRenderer.CellType.HEAD_GROUP;
           }
         }, (CellType type) -> {
-          myListView.buttonPanel.removeAll();
-          myListView.buttonPanel.add(myListView.selectButton);
-          if (type == CellType.HEAD_GROUP || type == CellType.LIKED_DOCUMENT) {
-            myListView.buttonPanel.add(myListView.unlikeButton);
-          } else {
-            myListView.buttonPanel.add(myListView.deleteButton);
-          }
-          myListView.buttonPanel.add(myListView.refreshButton);
-          myListView.buttonPanel.revalidate();
-          myListView.buttonPanel.repaint();
+          updateButtonPanel(myListView, type);
           return null;
         });
   }

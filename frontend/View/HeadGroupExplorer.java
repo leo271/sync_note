@@ -14,12 +14,12 @@ public class HeadGroupExplorer extends JPanel {
   public HeadGroup headGroup = new HeadGroup("root");
   public Stack<String> prevHeadGroups = new Stack<>();
   public JScrollPane HeadGroupScrolPanel;
-  public JButton backButton = new JButton("Back");
-  public JButton enterButton = new JButton("Enter");
-  public JButton addDocumentButton = new JButton("Add Document");
-  public JButton addHeadButton = new JButton("Add Head");
-  public JButton addGroupButton = new JButton("Add Group");
-  public JButton deleteButton = new JButton("Delete");
+  public JButton backButton = new JButton("戻る");
+  public JButton enterButton = new JButton("進む");
+  public JButton addDocumentButton = new JButton("ドキュメントを追加");
+  public JButton addHeadButton = new JButton("ヘッドを追加");
+  public JButton addGroupButton = new JButton("グループを追加");
+  public JButton deleteButton = new JButton("選択項目を削除");
   public JPanel buttonPanel = new JPanel(new GridLayout(1, 6, 10, 0));
 
   public HeadGroupExplorer() {

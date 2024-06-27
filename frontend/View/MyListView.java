@@ -20,6 +20,8 @@ public class MyListView extends JPanel {
   public JButton deleteButton = new JButton("Delete");
   public JButton unlikeButton = new JButton("Unlike");
   public JPanel buttonPanel = new JPanel(new GridLayout(1, 4, 10, 0));
+  private JList<String> myDocumentsList;
+  private JList<String> likedDocumentsList;
 
   public MyListView() {
     setLayout(new BorderLayout());
@@ -81,9 +83,25 @@ public class MyListView extends JPanel {
         button.setBackground(Colors.pale);
       }
     });
-
-  
+    // リスト選択のリスナーを追加
+    addMouseListener(new MouseAdapter() {
+      @Override
+      public void mouseClicked(MouseEvent e) {
+        // パネル内の空白部分をクリックした場合、選択を解除
+        if (e.getSource() == MyListView.this) {
+          clearSelection();
+        }
+      }
+    });
   }
+
+  public void clearSelection() {
+    if (myDocumentsList != null)
+      myDocumentsList.clearSelection();
+    if (likedDocumentsList != null)
+      likedDocumentsList.clearSelection();
+  }
+
 
   public void updateLists(String[] myDocs, String[] likedDocs,
       Function<String, CellRenderer.CellType> cellType,
@@ -91,11 +109,41 @@ public class MyListView extends JPanel {
     this.myDocuments = Arrays.asList(myDocs);
     this.likedDocuments = Arrays.asList(likedDocs);
 
+    myDocumentsList = new JList<>(myDocs);
+    likedDocumentsList = new JList<>(likedDocs);
+
+    myDocumentsList.addListSelectionListener(
+        e -> handleListSelection(myDocumentsList, likedDocumentsList, cellType, listener));
+    likedDocumentsList.addListSelectionListener(
+        e -> handleListSelection(likedDocumentsList, myDocumentsList, cellType, listener));
+
+    myDocuments = myDocuments.stream().filter(x -> !x.contains("オペ")).toList();
     updateList(myDocuments, cellType, listener, "マイドキュメント", myDocumentsScrollPanel);
     updateList(likedDocuments, cellType, listener, "ライク済み", likedDocumentsScrollPanel);
 
     revalidate();
     repaint();
+  }
+
+  private void handleListSelection(JList<String> selectedList, JList<String> otherList,
+      Function<String, CellRenderer.CellType> cellType,
+      Function<CellRenderer.CellType, Void> listener) {
+    if (!selectedList.getValueIsAdjusting()) {
+      otherList.clearSelection();
+      if (selectedList.getSelectedValue() != null) {
+        listener.apply(cellType.apply(selectedList.getSelectedValue()));
+      }
+    }
+  }
+
+  public String getSelectedValue() {
+    if (myDocumentsList != null && myDocumentsList.getSelectedValue() != null) {
+      return myDocumentsList.getSelectedValue();
+    }
+    if (likedDocumentsList != null && likedDocumentsList.getSelectedValue() != null) {
+      return likedDocumentsList.getSelectedValue();
+    }
+    return null;
   }
 
   private void updateList(List<String> items, Function<String, CellRenderer.CellType> cellType,

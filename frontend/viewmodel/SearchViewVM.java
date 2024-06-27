@@ -6,7 +6,7 @@ import model.*;
 
 public class SearchViewVM {
 
-  public SearchViewVM(SearchView searchView, DocumentsViewer documentsViewer,
+  public SearchViewVM(SearchView searchView, Header header, DocumentsViewer documentsViewer,
       HeadGroupExplorer headGroupExplorer, SceneManager sceneManager) {
     // 検索
     searchView.searchButton.addActionListener(e -> {
@@ -22,8 +22,8 @@ public class SearchViewVM {
               JOptionPane.ERROR_MESSAGE);
         return;
       }
-      sceneManager.showPanel(SceneManager.Panel.HeadGroupExplorer);
       headGroupExplorer.setHeadGroup(obtainedHeadGroup.message);
+      header.explorerButton.doClick();
     });
   }
 }

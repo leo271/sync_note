@@ -2,6 +2,7 @@
 
 import model.Document;
 import model.DocumentController;
+import model.HeadsController;
 import model.LocalDatabaseInterface;
 import model.db_enum.DB;
 
@@ -16,25 +17,7 @@ public class Test {
 
   private static void testRemote() {
     measure(() -> {
-      var res = DocumentController.createDocument("Mathematics");
-      if (res.hasError()) {
-        System.out.println("Error: " + res.error);
-        return;
-      } else {
-        System.out.println("Success: " + res.message);
-      }
-    });
-    measure(() -> {
-      var res = DocumentController.createDocument("Mathematics");
-      if (res.hasError()) {
-        System.out.println("Error: " + res.error);
-        return;
-      } else {
-        System.out.println("Success: " + res.message);
-      }
-    });
-    measure(() -> {
-      var res = DocumentController.createDocument("Mathematics");
+      var res = HeadsController.createHead("root", "G");
       if (res.hasError()) {
         System.out.println("Error: " + res.error);
         return;

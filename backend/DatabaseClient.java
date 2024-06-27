@@ -20,27 +20,57 @@ public class DatabaseClient {
     return instance;
   }
 
+  public boolean testConnection() {
+    try (Connection connection = connect()) {
+      if (connection != null && !connection.isClosed()) {
+        System.out.println("Connection successful!");
+        return true;
+      } else {
+        System.out.println("Connection failed.");
+        return false;
+      }
+    } catch (SQLException e) {
+      System.out.println("Error: " + e.getMessage());
+      e.printStackTrace();
+      return false;
+    }
+  }
+
   private Connection connect() throws SQLException {
     return DriverManager.getConnection(DB_URL);
   }
 
   public String executeQuery(String query) throws SQLException {
-    try (Connection connection = connect();
-        Statement stmt = connection.createStatement();
-        ResultSet rs = stmt.executeQuery(query);) {
+    if (!testConnection()) {
+      System.out.println("Connection test failed.");
+      return null;
+    }
+    query = query.trim() + ";";
+
+    try (Connection connection = connect(); Statement stmt = connection.createStatement();) {
+      ResultSet rs = stmt.executeQuery(query);
       var metadata = rs.getMetaData();
+      int columnCount = metadata.getColumnCount();
       var result = new StringBuilder();
+
       while (rs.next()) {
-        for (int i = 1; i <= metadata.getColumnCount(); i++) {
-          result.append(rs.getString(i)).append(US);
+        for (int i = 1; i <= columnCount; i++) {
+          String columnValue = rs.getString(i);
+          result.append(columnValue).append(US);
         }
         result.append(RS);
       }
-      return result.toString();
+
+      // 取得した結果をデバッグ出力
+      String resultString = result.toString();
+
+      return resultString;
+
     } catch (SQLException e) {
-      logger.log(Level.SEVERE, "Database error." + e.getMessage());
+      System.out.println("Error executing query: " + e.getMessage());
+      e.printStackTrace();
+      return null;
     }
-    return null;
   }
 
   public boolean executeUpdate(String query) {

@@ -17,11 +17,18 @@ public class JabberServer {
     System.out.println("Started: " + serverSocket);
 
     try {
+      DatabaseClient.getInstance().executeQuery("SELECT * FROM NameSpace");
       while (true) {
         Socket clientSocket = serverSocket.accept(); // コネクション設定要求を待つ
         System.out.println("Connection accepted: " + clientSocket);
         new ClientHandler(clientSocket).start(); // 新しいスレッドでクライアントを処理
       }
+    } catch (Exception e) {
+      System.err.println("Error: " + e);
+      for (var elm : e.getStackTrace()) {
+        System.out.println(elm);
+      }
+
     } finally {
       serverSocket.close();
     }
@@ -65,12 +72,12 @@ class ClientHandler extends Thread {
           System.err.println("Invalid query: " + elm);
           continue;
         }
-        System.out.println("Query: " + q[0] + "\t" + q[1]);
+        System.out.println("Query: " + q[0] + "\t===" + q[1] + "===");
         if (q[0].equals("UPDATE")) {
           var res = db.executeUpdate(q[1]);
           System.out.println("res: " + res);
           ret.append(res);
-        } else {
+        } else if (q[0].equals("QUERY")) {
           var res = db.executeQuery(q[1]);
           System.out.println("res: " + res);
           ret.append(res);

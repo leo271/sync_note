@@ -38,6 +38,8 @@ public class HeadsController {
       var searchResult = remote.search(DB.NAME_SPACE, JSON.single(DB.NAME, name), id, true);
       var result = new HeadGroup("検索結果", new HashSet<>(), new HashSet<>(), 0);
       for (var res : searchResult) {
+        if (res.isEmpty())
+          continue;
         var sep = res.split(US + "");
         if (sep[1].equals("G")) {
           result.addHeadGroup(sep[0]);
@@ -45,9 +47,15 @@ public class HeadsController {
           result.addHead(sep[0]);
         }
       }
+      if (result.heads.size() == 0 && result.headGroups.size() == 0)
+        return Response.error(Response.NOT_FOUND);
 
       return Response.success(result);
     } catch (Exception e) {
+      System.err.println(e);
+      for (var trace : e.getStackTrace()) {
+        System.err.println(trace);
+      }
       return Response.error(Response.INVALID_VALUE);
     }
   }

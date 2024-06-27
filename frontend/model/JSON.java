@@ -30,7 +30,7 @@ public class JSON extends ArrayList<Entry<Column, String>> {
     var result = new StringBuilder();
     result.append("{\n");
     for (var entry : this) {
-      result.append("\t").append(entry.getKey()).append("\t: ").append(entry.getValue())
+      result.append("\t").append(entry.getKey().name).append("\t: ").append(entry.getValue())
           .append("\n");
     }
     result.append("}\n");

@@ -152,6 +152,7 @@ public class LocalDatabaseInterface {
 
   // 単一のJSONデータをアップサートするメソッド
   public int upsert(Table table, JSON json) {
+    System.out.println("upsert" + " " + table + " " + json.toString());
     return update(UPSERT, table, new ArrayList<JSON>(Arrays.asList(json)));
   }
 

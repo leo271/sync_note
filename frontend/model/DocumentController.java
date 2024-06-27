@@ -8,7 +8,7 @@ import model.db_enum.DB;
 
 public class DocumentController {
   // ヘッド名からドキュメント一覧をソート済みでを取得
-  public static Response<ArrayList<Document>> getDocuments(String head) {
+  public static Response<ArrayList<Document>> getFromHead(String head) {
     var remote = RemoteDatabaseInterface.getInstance();
     try {
       var documents =
@@ -25,7 +25,7 @@ public class DocumentController {
   }
 
   // IDからドキュメントを取得
-  public static Response<Document> getDocument(String docID) {
+  public static Response<Document> getFromID(String docID) {
     var remote = RemoteDatabaseInterface.getInstance();
     try {
       var document =
@@ -74,7 +74,7 @@ public class DocumentController {
   }
 
   // ライクしたドキュメントを取得
-  public static Response<ArrayList<Document>> getLikedDocuments() {
+  public static Response<ArrayList<Document>> getLiked() {
     var local = LocalDatabaseInterface.getInstance();
     try {
       var documents = local.search(DB.DOCUMENT, JSON.single(DB.TYPE_ML, "L"), Document::fromJSON);
@@ -114,14 +114,14 @@ public class DocumentController {
   }
 
   // ドキュメントを作成
-  public static Response<String> createDocument(String head) {
+  public static Response<Document> create(String head) {
     var local = LocalDatabaseInterface.getInstance();
     var remote = RemoteDatabaseInterface.getInstance();
     try {
       var newDoc = new Document(head);
       local.upsert(DB.DOCUMENT, newDoc.toJSON(true));
       remote.upsert(DB.DOCUMENT, newDoc.toJSON(true));
-      return Response.success(newDoc.docID);
+      return Response.success(newDoc);
     } catch (Exception e) {
       System.err.println(e);
       for (var el : e.getStackTrace()) {
@@ -132,10 +132,12 @@ public class DocumentController {
   }
 
   // ドキュメントを更新
-  public static Response<Void> updateDocument(Document document) {
+  public static Response<Void> updateContent(Document document) {
     var local = LocalDatabaseInterface.getInstance();
     var remote = RemoteDatabaseInterface.getInstance();
     try {
+      var likes = getFromID(document.docID).message.like;
+      document.like = likes;
       local.upsert(DB.DOCUMENT, document.toJSON(true));
       remote.upsert(DB.DOCUMENT, document.toJSON(true));
       return Response.success(null);
@@ -145,7 +147,7 @@ public class DocumentController {
   }
 
   // ドキュメントを削除
-  public static Response<Void> deleteDocument(String docID) {
+  public static Response<Void> delete(String docID) {
     var local = LocalDatabaseInterface.getInstance();
     var remote = RemoteDatabaseInterface.getInstance();
     try {

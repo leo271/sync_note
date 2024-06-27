@@ -3,15 +3,20 @@ package view;
 import javax.swing.*;
 import model.HeadGroup;
 import java.awt.*;
+import java.util.Stack;
 import java.util.stream.Stream;
 
 public class HeadGroupExplorer extends JPanel {
   private JLabel titleLabel;
   public HeadGroup headGroup = new HeadGroup("root");
+  public Stack<String> prevHeadGroups = new Stack<>();
   public JScrollPane HeadGroupScrolPanel;
+  public JButton backButton = new JButton("Back");
   public JButton enterButton = new JButton("Enter");
+  public JButton addDocumentButton = new JButton("Add Document");
   public JButton addHeadButton = new JButton("Add Head");
   public JButton addGroupButton = new JButton("Add Group");
+  public JButton deleteButton = new JButton("Delete");
 
   public HeadGroupExplorer() {
     setLayout(new BorderLayout());
@@ -20,9 +25,12 @@ public class HeadGroupExplorer extends JPanel {
     JPanel bottomPanel = new JPanel(new BorderLayout());
     JPanel buttonPanel = new JPanel(new GridLayout(1, 3));
 
+    buttonPanel.add(backButton);
     buttonPanel.add(enterButton);
+    buttonPanel.add(addDocumentButton);
     buttonPanel.add(addHeadButton);
     buttonPanel.add(addGroupButton);
+    buttonPanel.add(deleteButton);
     bottomPanel.add(buttonPanel, BorderLayout.CENTER);
     add(bottomPanel, BorderLayout.SOUTH);
   }

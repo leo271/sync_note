@@ -27,7 +27,7 @@ public class MyListViewVM {
       String selectedValue = (String) selects.getSelectedValue(); // 選択中の項目取得
 
       if (liked.stream().map(d -> d.head).toList().contains(selectedValue)) {
-        var documents = DocumentController.getDocuments(selectedValue);
+        var documents = DocumentController.getFromHead(selectedValue);
         if (documents.hasError()) {
           return;
         }
@@ -39,8 +39,8 @@ public class MyListViewVM {
         sceneManager.showPanel(SceneManager.Panel.DocumentsViewer);
       } else if (myDocument.stream().map(d -> d.head).toList()
           .contains(selectedValue.split("\t")[0])) {
-        var doc = myDocument.stream().filter(d -> d.head.equals(
-            selectedValue.split("\t")[0])).findFirst().get();
+        var doc = myDocument.stream().filter(d -> d.head.equals(selectedValue.split("\t")[0]))
+            .findFirst().get();
         documentEditor.setDocument(doc);
         sceneManager.showPanel(SceneManager.Panel.DocumentEditor);
       } else if (myGroups.contains(selectedValue)) {
@@ -56,7 +56,7 @@ public class MyListViewVM {
   }
 
   private void refresh(MyListView myListView) {
-    var likedRes = DocumentController.getLikedDocuments();
+    var likedRes = DocumentController.getLiked();
     var myDocumentRes = DocumentController.getMyDocuments();
     var myGroupsRes = HeadsController.getMyHeadGroups();
     if (likedRes.hasError(Response.INVALID_VALUE) || myDocumentRes.hasError(Response.INVALID_VALUE)

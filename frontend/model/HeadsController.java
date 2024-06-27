@@ -76,12 +76,17 @@ public class HeadsController {
     var remote = RemoteDatabaseInterface.getInstance();
     try {
       Function<String, String> id = (x) -> x;
-      var headGroup = remote.search(DB.HEAD_GROUP, JSON.single(DB.NAME, name), id, false);
-      if (headGroup == null) {
+      var headGroup = remote.search(DB.HEAD_GROUP, JSON.single(DB.GROUP_NAME, name), id, false);
+      if (headGroup == null || headGroup.size() == 0 || headGroup.get(0).isEmpty()) {
         return Response.error(Response.NOT_FOUND);
       }
       return Response.success(HeadGroup.fronLines(headGroup));
     } catch (Exception e) {
+      System.out.println(e);
+      for (var elm : e.getStackTrace()) {
+        System.out.println(elm);
+      }
+
       return Response.error(Response.INVALID_VALUE);
     }
   }

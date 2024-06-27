@@ -32,7 +32,7 @@ public class Main {
     new HeaderVM(header, frame);
     new SearchViewViewModel(searchView, documentsViewer, headGroupExplorer, frame);
     new MyListViewVM(myListView, documentsViewer, documentEditor, headGroupExplorer, frame);
-    new HeadGroupExplorerVM(headGroupExplorer, documentsViewer, frame);
+    new HeadGroupExplorerVM(headGroupExplorer, documentsViewer, documentEditor, frame);
     new DocumentEditorViewModel(documentEditor);
     new DocumentsViewerViewModel(documentsViewer);
 

@@ -82,7 +82,7 @@ public class Test {
       }
     });
     measure(() -> {
-      var myDocuments = DocumentController.getLikedDocuments();
+      var myDocuments = DocumentController.getLiked();
       if (myDocuments.hasError()) {
         System.out.println("Error: " + myDocuments.error);
         return;
@@ -92,7 +92,7 @@ public class Test {
       }
     });
     measure(() -> {
-      var response = DocumentController.createDocument("Mathematics");
+      var response = DocumentController.create("Mathematics");
       if (response.hasError()) {
         System.out.println("Error: " + response.error);
         return;
@@ -105,10 +105,10 @@ public class Test {
       for (var document : myDocuments.message) {
         System.out.println(document.toJSON(true).toString());
       }
-      var doc =
-          new Document(response.message, "Mathematics", "Mathematics is the study of numbers", 0);
+      var doc = new Document(response.message.docID, "Mathematics",
+          "Mathematics is the study of numbers", 0);
       doc.like();
-      var res = DocumentController.updateDocument(doc);
+      var res = DocumentController.updateContent(doc);
       if (res.hasError()) {
         System.out.println("Error: " + res.error);
         return;
@@ -121,12 +121,12 @@ public class Test {
       for (var document : myDocuments.message) {
         System.out.println(document.toJSON(true).toString());
       }
-      res = DocumentController.deleteDocument("be837244-6835-4102-9ae7-7785ec1fe1ee");
+      res = DocumentController.delete("be837244-6835-4102-9ae7-7785ec1fe1ee");
       if (res.hasError()) {
         System.out.println("Error: " + res.error);
         return;
       }
-      res = DocumentController.deleteDocument("leohagi3");
+      res = DocumentController.delete("leohagi3");
       if (res.hasError()) {
         System.out.println("Error: " + res.error);
         return;

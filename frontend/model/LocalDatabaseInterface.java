@@ -120,6 +120,10 @@ public class LocalDatabaseInterface {
     var columns = metadata.getColumnCount();
     var result = new JSON();
     for (int i = 1; i <= columns; i++) {
+      System.out
+          .println(metadata.getColumnName(i).toString() + " " + resultSet.getString(i).toString());
+      if (DB.columnByName(metadata.getColumnName(i)) == null || resultSet.getString(i) == null)
+        continue;
       result.put(DB.columnByName(metadata.getColumnName(i)), resultSet.getString(i));
     }
     return result;

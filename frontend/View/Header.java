@@ -5,9 +5,9 @@ import java.awt.*;
 import utility.Colors;
 
 public class Header extends JPanel {
-  public JButton myListButton = new JButton("My List");
-  public JButton searchButton = new JButton("Search Head");
-  public JButton explorerButton = new JButton("Head Group Explorer");
+  public JButton myListButton = new JButton("マイリスト");
+  public JButton searchButton = new JButton("検索");
+  public JButton explorerButton = new JButton("エクスプローラー");
 
   public Header() {
     // Set background color using Colors class
@@ -48,7 +48,7 @@ public class Header extends JPanel {
     selectedButton.setBackground(Colors.lightRed);
     selectedButton.setForeground(Color.WHITE);
     // Increase the thickness of the underline and move it up slightly
-    selectedButton.setBorder(BorderFactory.createMatteBorder(0, 0, 3, 0, Color.WHITE));
+    selectedButton.setBorder(BorderFactory.createMatteBorder(0, 0, 3, 0, Colors.blurRed));
   }
 
   public void resetButtonStyles() {

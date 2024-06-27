@@ -4,24 +4,20 @@ import javax.swing.JList;
 import view.*;
 import view.CellRenderer.CellType;
 import model.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 public class MyListViewVM {
-  public MyListViewVM(MyListView myListView, DocumentsViewer documentsViewer,
-      DocumentEditor documentEditor, HeadGroupExplorer headGroupExplorer,
-      SceneManager sceneManager) {
+  public MyListViewVM() {
     // リフレッシュボタンで再読み込み
-    myListView.refreshButton.addActionListener(e -> {
-      refresh(myListView);
+    Scenes.myListView.refreshButton.addActionListener(e -> {
+      refresh();
     });
-    refresh(myListView);
+    refresh();
 
     // Deleteボタンが押されたとき
-    myListView.deleteButton.addActionListener(e -> {
-      var selects = (JList<?>) myListView.myDocumentsScrollPanel.getViewport().getView();
-      var selectedValue = ((String) selects.getSelectedValue()).split("\t")[0];
+    Scenes.myListView.deleteButton.addActionListener(e -> {
+      var selects = (JList<?>) Scenes.myListView.myDocumentsScrollPanel.getViewport().getView();
+      var selectedValue = ((String) selects.getSelectedValue());
       var myDocs = getMyDocuments();
       if (myDocs == null)
         return;
@@ -29,12 +25,12 @@ public class MyListViewVM {
         var doc = myDocs.stream().filter(d -> d.head.equals(selectedValue)).findFirst().get();
         DocumentController.delete(doc.docID);
       }
-      refresh(myListView);
+      refresh();
     });
 
     // Unlikeボタンが押されたとき
-    myListView.unlikeButton.addActionListener(e -> {
-      var selects = (JList<?>) myListView.likedDocumentsScrollPanel.getViewport().getView();
+    Scenes.myListView.unlikeButton.addActionListener(e -> {
+      var selects = (JList<?>) Scenes.myListView.likedDocumentsScrollPanel.getViewport().getView();
       String selectedValue = (String) selects.getSelectedValue();
       var liked = getLiked();
       var myGroups = getMyGroups();
@@ -47,53 +43,47 @@ public class MyListViewVM {
           return;
         }
       }
-      refresh(myListView);
+      refresh();
     });
 
     // 対象の項目に対してSelectされたとき（View）
-    myListView.selectButton.addActionListener(e -> {
-      String selectedValue = myListView.getSelectedValue();
+    Scenes.myListView.selectButton.addActionListener(e -> {
+      var selectedValue = Scenes.myListView.selectedValue();
       if (selectedValue == null)
         return;
       var liked = getLiked();
       var myDocument = getMyDocuments();
       var myGroups = getMyGroups();
       if (liked != null && liked.stream().map(d -> d.head).toList().contains(selectedValue)) {
+        // ライク済みのドキュメントの場合
         var documents = DocumentController.getFromHead(selectedValue);
         if (documents.hasError()) {
           return;
         }
         var docs = documents.message;
         var my = liked.stream().filter(d -> d.head.equals(selectedValue)).findFirst().get();
-        var idx = docs.stream().map((d) -> d.docID).toList().indexOf(my.docID);
-        documentsViewer.setDocuments(selectedValue, docs);
-        documentsViewer.setOffset(idx);
-        sceneManager.showPanel(SceneManager.Panel.DocumentsViewer);
+        Scenes.documentsViewer.setDocuments(selectedValue, docs, my.docID);
+        Scenes.sceneManager.showPanel(SceneManager.Panel.DocumentsViewer);
       } else if (myDocument != null
           && myDocument.stream().map(d -> d.head).toList().contains(selectedValue.split("\t")[0])) {
+        // 自分が書いたドキュメントの場合
         var doc = myDocument.stream().filter(d -> d.head.equals(selectedValue.split("\t")[0]))
             .findFirst().get();
-        documentEditor.setDocument(doc);
-        sceneManager.showPanel(SceneManager.Panel.DocumentEditor);
+        Scenes.documentEditor.setDocument(doc);
+        Scenes.sceneManager.showPanel(SceneManager.Panel.DocumentEditor);
+        Scenes.documentEditor.setEdit(true);
+        Scenes.header.resetButtonStyles();;
       } else if (myGroups != null && myGroups.contains(selectedValue)) {
+        // ライクしたHeadGroupの場合
         var groups = HeadsController.getHeadGroup(selectedValue);
         if (groups.hasError()) {
           return;
         }
         var group = groups.message;
-        headGroupExplorer.setHeadGroup(group);
-        sceneManager.showPanel(SceneManager.Panel.HeadGroupExplorer);
+        Scenes.headGroupExplorer.setHeadGroup(group);
+        Scenes.header.explorerButton.doClick();
       }
     });
-
-    // パネル内のクリックイベントを処理
-    myListView.addMouseListener(new MouseAdapter() {
-      @Override
-      public void mouseClicked(MouseEvent e) {
-        updateButtonPanel(myListView, null);
-      }
-    });
-
   }
 
   private void updateButtonPanel(MyListView myListView, CellType type) {
@@ -107,6 +97,17 @@ public class MyListViewVM {
     myListView.buttonPanel.add(myListView.refreshButton);
     myListView.buttonPanel.revalidate();
     myListView.buttonPanel.repaint();
+  }
+
+  private void focusChange(MyListView view, String type) {
+    // print stack trace
+    if (type.equals("liked")) {
+      view.myDocumentsList.clearSelection();
+      updateButtonPanel(view, CellType.LIKED_DOCUMENT);
+    } else {
+      view.likedDocumentsList.clearSelection();
+      updateButtonPanel(view, CellType.DOCUMENT);
+    }
   }
 
 
@@ -137,7 +138,8 @@ public class MyListViewVM {
     return myGroupsRes.message;
   }
 
-  private void refresh(MyListView myListView) {
+  public void refresh() {
+    System.out.println("refresh mylist");
     var likedN = getLiked();
     var myDocumentN = getMyDocuments();
     var myGroupsN = getMyGroups();
@@ -149,18 +151,19 @@ public class MyListViewVM {
     likedItems.addAll(liked.stream().map(d -> d.head).toList());
     likedItems.addAll(myGroups);
 
-    myListView.updateLists(myDocument.stream().map(d -> d.head).toArray(String[]::new),
+    Scenes.myListView.updateLists(myDocument.stream().map(d -> d.head).toArray(String[]::new),
         likedItems.toArray(new String[0]), (String s) -> {
-          if (s.contains("\t")) {
+          if (myDocument.stream().map(d -> d.head).toList().contains(s)) {
             return CellRenderer.CellType.DOCUMENT;
           } else if (liked.stream().map(d -> d.head).toList().contains(s)) {
             return CellRenderer.CellType.LIKED_DOCUMENT;
           } else {
             return CellRenderer.CellType.HEAD_GROUP;
           }
-        }, (CellType type) -> {
-          updateButtonPanel(myListView, type);
-          return null;
+        }, () -> {
+          focusChange(Scenes.myListView, "liked");
+        }, () -> {
+          focusChange(Scenes.myListView, "my");
         });
   }
 }

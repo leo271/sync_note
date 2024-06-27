@@ -5,9 +5,10 @@ import java.awt.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import model.Document;
+import utility.Colors;
 
 public class DocumentEditor extends JPanel {
-  private JLabel titleLabel = new JLabel("Title", SwingConstants.CENTER);
+  private JLabel titleLabel = new JLabel("タイトル", SwingConstants.CENTER);
   public JTextArea editArea; // こちらは一応publicにする
   public JEditorPane previewArea; // プレビューのテキスト参照用
   public JButton editButton = new JButton("編集"); // 編集ボタン
@@ -20,8 +21,10 @@ public class DocumentEditor extends JPanel {
   public DocumentEditor() {
     setLayout(new BorderLayout());
     titleLabel.setFont(new Font("Arial", Font.BOLD, 16)); // フォントを設定（オプション）
+    titleLabel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0)); // 上下にパディングを追加
 
     add(titleLabel, BorderLayout.NORTH); // パネルの上部に追加
+
     // 編集画面
     editArea = new JTextArea(document.content);
     JScrollPane editScrollPane = new JScrollPane(editArea);
@@ -40,10 +43,15 @@ public class DocumentEditor extends JPanel {
     add(contentPanel, BorderLayout.CENTER);
 
     JPanel bottomPanel = new JPanel(new BorderLayout());
-    JPanel buttonPanel = new JPanel(new GridLayout(1, 4));
+    JPanel buttonPanel = new JPanel(new GridLayout(1, 4, 10, 0));
+
+    // Customize buttons
+    customizeButton(editButton);
+    customizeButton(previewButton);
+    customizeButton(deleteButton);
 
     // deleteButtonのテキストを赤くする
-    deleteButton.setForeground(Color.RED);
+    deleteButton.setForeground(Colors.red);
 
     buttonPanel.add(editButton);
     buttonPanel.add(previewButton);
@@ -52,29 +60,59 @@ public class DocumentEditor extends JPanel {
     bottomPanel.add(buttonPanel, BorderLayout.CENTER);
     add(bottomPanel, BorderLayout.SOUTH);
 
+    // Set background colors
+    setBackground(Colors.lightGray); // Main background
+    bottomPanel.setBackground(Colors.lightGray);
+    buttonPanel.setBackground(Colors.pale); // Button panel background
+
     setEdit(true);
+  }
+
+  private void customizeButton(JButton button) {
+    button.setBackground(Colors.pale);
+    button.setForeground(Colors.white);
+    button.setFont(new Font("Arial", Font.BOLD, 14));
+    button.setFocusPainted(false);
+    button.setOpaque(true);
+    button.setBorderPainted(false);
+    button.setBorder(
+        BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Colors.pale, 1, true),
+            BorderFactory.createEmptyBorder(5, 15, 5, 15)));
+    button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+    // Add hover effect
+    button.addMouseListener(new java.awt.event.MouseAdapter() {
+      @Override
+      public void mouseEntered(java.awt.event.MouseEvent e) {
+        button.setBackground(Colors.lightRed);
+      }
+
+      @Override
+      public void mouseExited(java.awt.event.MouseEvent e) {
+        button.setBackground(Colors.pale);
+      }
+    });
   }
 
   public void setDocument(Document document) {
     this.document = document;
     editArea.setText(document.content);
-    updateTitle(document.head + " - " + "Edit Mode");
-
+    updateTitle(document.head + " - Edit Mode");
     updatePreview();
   }
 
   public void setEdit(boolean isEdit) {
     if (isEdit) {
-      editButton.setForeground(Color.BLUE);
-      previewButton.setForeground(Color.BLACK);
+      editButton.setForeground(Colors.blue);
+      previewButton.setForeground(Colors.white);
       cardLayout.show(contentPanel, "EDIT");
-      updateTitle((document.head.isEmpty() ? "TEMP" : document.head) + " - Edit Mode");
+      updateTitle((document.head.isEmpty() ? "TEMP" : document.head) + " - Editモード");
     } else {
       updatePreview();
-      previewButton.setForeground(Color.BLUE);
-      editButton.setForeground(Color.BLACK);
+      previewButton.setForeground(Colors.blue);
+      editButton.setForeground(Colors.white);
       cardLayout.show(contentPanel, "PREVIEW");
-      updateTitle(document.head + " - Preview Mode");
+      updateTitle(document.head + " - Previewモード");
     }
   }
 
@@ -91,7 +129,7 @@ public class DocumentEditor extends JPanel {
   }
 
   // マークダウン記法を受け取り, プレビューを作成
-  private String convertMarkdownToHtml(String markdown) {
+  public static String convertMarkdownToHtml(String markdown) {
     StringBuilder html = new StringBuilder();
     String[] lines = markdown.split("\n");
     boolean inList = false;

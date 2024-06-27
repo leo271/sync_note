@@ -1,7 +1,7 @@
 package viewmodel;
 
-import view.DocumentEditor;
 import view.SceneManager;
+import view.Scenes;
 import javax.swing.text.BadLocationException;
 import model.*;
 import java.awt.Color;
@@ -10,10 +10,9 @@ import java.awt.event.ActionListener;
 import javax.swing.event.*;
 
 public class DocumentEditorVM {
-
-  public DocumentEditorVM(DocumentEditor documentEditor, SceneManager sceneManager) {
+  public DocumentEditorVM() {
     // ドキュメント保存
-    documentEditor.editArea.getDocument().addDocumentListener(new DocumentListener() {
+    Scenes.documentEditor.editArea.getDocument().addDocumentListener(new DocumentListener() {
       @Override
       public void insertUpdate(DocumentEvent e) {
         updateLog(e);
@@ -25,12 +24,12 @@ public class DocumentEditorVM {
       }
 
       private void updateLog(DocumentEvent e) {
-        if (documentEditor.document == null || documentEditor.document.head.isEmpty())
+        if (Scenes.documentEditor.document == null || Scenes.documentEditor.document.head.isEmpty())
           return;
         try {
           var content = e.getDocument().getText(0, e.getDocument().getLength());
-          var newDocument = documentEditor.document.setContent(content);
-          var res = DocumentController.updateContent(newDocument);
+          var newDocument = Scenes.documentEditor.document.setContent(content);
+          var res = DocumentController.updateContent(newDocument, true);
           if (res.hasError())
             return;
         } catch (BadLocationException badLocationException) {
@@ -43,26 +42,26 @@ public class DocumentEditorVM {
     });
 
     // ドキュメント削除
-    documentEditor.deleteButton.addActionListener(e -> {
-      if (documentEditor.document == null || documentEditor.document.head.isEmpty())
+    Scenes.documentEditor.deleteButton.addActionListener(e -> {
+      if (Scenes.documentEditor.document == null || Scenes.documentEditor.document.head.isEmpty())
         return;
-      DocumentController.delete(documentEditor.document.docID);
-      sceneManager.showPanel(SceneManager.Panel.MyListView);
+      DocumentController.delete(Scenes.documentEditor.document.docID);
+      Scenes.sceneManager.showPanel(SceneManager.Panel.MyListView);
     });
 
     // アクション
-    documentEditor.editButton.addActionListener(new ActionListener() {
+    Scenes.documentEditor.editButton.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
-        documentEditor.setEdit(true);
+        Scenes.documentEditor.setEdit(true);
       }
     });
-    documentEditor.previewButton.setForeground(Color.BLACK);
-    documentEditor.editButton.setForeground(Color.BLUE);
-    documentEditor.previewButton.addActionListener(new ActionListener() {
+    Scenes.documentEditor.previewButton.setForeground(Color.BLACK);
+    Scenes.documentEditor.editButton.setForeground(Color.BLUE);
+    Scenes.documentEditor.previewButton.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
-        documentEditor.setEdit(false);
+        Scenes.documentEditor.setEdit(false);
       }
     });
   }

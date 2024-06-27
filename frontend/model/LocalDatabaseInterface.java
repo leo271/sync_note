@@ -69,6 +69,7 @@ public class LocalDatabaseInterface {
   }
 
   private <T> ArrayList<T> executeSearch(String query, JSON args, Function<JSON, T> parser) {
+    System.out.println("LOCAL:\t" + query + "\tquery:\t" + (args == null ? null : args.toString()));
     ArrayList<T> list = new ArrayList<>();
 
     try (Connection connection = connect();
@@ -96,6 +97,7 @@ public class LocalDatabaseInterface {
   }
 
   private String executeUpdate(String query, JSON args) {
+    System.out.println("LOCAL:\t" + query + "\tquery:\t" + (args == null ? null : args.toString()));
     try (Connection connection = connect();
         PreparedStatement statement = connection.prepareStatement(query)) {
       for (int i = 0; i < args.size(); i++) {

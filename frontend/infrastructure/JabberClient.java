@@ -29,10 +29,9 @@ public class JabberClient {
         }
         buffer.write(read);
       }
-      
+
       return buffer.toString(StandardCharsets.UTF_8);
     } finally {
-      System.out.println("closing...");
     }
   }
 }

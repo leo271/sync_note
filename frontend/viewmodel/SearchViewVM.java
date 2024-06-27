@@ -1,29 +1,25 @@
 package viewmodel;
 
 import view.*;
-import javax.swing.JOptionPane;
 import model.*;
+import utility.Dialog;
 
 public class SearchViewVM {
-
-  public SearchViewVM(SearchView searchView, Header header, DocumentsViewer documentsViewer,
-      HeadGroupExplorer headGroupExplorer, SceneManager sceneManager) {
+  public SearchViewVM() {
     // 検索
-    searchView.searchButton.addActionListener(e -> {
-      var inputWords = searchView.searchField.getText();
+    Scenes.searchView.searchButton.addActionListener(e -> {
+      var inputWords = Scenes.searchView.searchField.getText();
       var obtainedHeadGroup = HeadsController.searchHeads(inputWords);
       if (obtainedHeadGroup.hasError()) {
         System.out.println("Error: " + obtainedHeadGroup.message);
         if (obtainedHeadGroup.hasError(Response.NOT_FOUND))
-          JOptionPane.showMessageDialog(null, "'" + inputWords + "'に一致する結果は0件でした", "Not found",
-              JOptionPane.INFORMATION_MESSAGE);
+          Dialog.show(Scenes.searchView, "何も、、なかった、、", "'" + inputWords + "'に一致する結果は0件でした");
         else
-          JOptionPane.showMessageDialog(null, "Error: " + obtainedHeadGroup.error, "Error",
-              JOptionPane.ERROR_MESSAGE);
+          Dialog.show(Scenes.searchView, "エラー", "Error: " + obtainedHeadGroup.error);
         return;
       }
-      headGroupExplorer.setHeadGroup(obtainedHeadGroup.message);
-      header.explorerButton.doClick();
+      Scenes.headGroupExplorer.setHeadGroup(obtainedHeadGroup.message);
+      Scenes.header.explorerButton.doClick();
     });
   }
 }

@@ -43,6 +43,7 @@ public class Document {
         json.put(DB.CONTENT, content);
         json.put(DB.LIKE, Integer.toString(like));
         json.put(DB.TYPE_ML, isMine ? "M" : "L");
+        System.out.println(json.toString() + "mine: " + isMine);
         return json;
     }
 

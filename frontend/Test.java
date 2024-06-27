@@ -12,71 +12,40 @@ public class Test {
   }
 
   private static void createDemoDocuments() {
-    var res = DocumentController.create("３春オペレーティングシステム");
+    var res = DocumentController.createFromOther("メロンパンの情報求ム");
     if (res.hasError()) {
       System.out.println("Error: " + res.error);
       return;
     }
-    var doc = new Document(res.message.docID, res.message.head, "<!DOCTYPE html>\n" + //
-        "<html lang=\"ja\">\n" + //
-        "<head>\n" + //
-        "    <meta charset=\"UTF-8\">\n" + //
-        "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n" + //
-        "    <title>オペレーティングシステムについて</title>\n" + //
-        "</head>\n" + //
-        "<body>\n" + //
-        "    <h1>オペレーティングシステムについて</h1>\n" + //
-        "    <p>オペレーティングシステム（Operating System, OS）は、コンピュータのハードウェアとソフトウェアの間で仲介役を果たすソフトウェアです。OSは、ユーザーがコンピュータを効率的かつ簡単に使用できるようにし、プログラムの実行やハードウェアリソースの管理を行います。</p>\n"
+    var doc = new Document(res.message.docID, res.message.head, "# LLama3\nMelon pan! 🍞️💕\n" + //
+        "Melon pan is a popular Japanese sweet bread that is loved by many. Here are some key facts about it:\n"
         + //
-        "\n" + //
-        "    <h2>主な機能</h2>\n" + //
-        "    <ul>\n" + //
-        "        <li><strong>プロセス管理:</strong> OSは、プログラムの実行を管理し、複数のプログラムが同時に実行される場合にリソースを適切に配分します。</li>\n"
+        "**What is Melon Pan?**\n" + //
+        "Melon pan is a type of Japanese bread that is characterized by its crispy cookie-like topping and soft, fluffy interior. The name \"melon pan\" literally translates to \"melon bread,\" but it doesn't actually contain any melon.\n"
         + //
-        "        <li><strong>メモリ管理:</strong> OSは、プログラムが利用するメモリを管理し、効率的なメモリの使用を確保します。</li>\n" + //
-        "        <li><strong>ファイルシステム管理:</strong> OSは、データの保存とアクセスを管理し、ファイルとディレクトリの構造を提供します。</li>\n"
+        "**History**\n" + //
+        "Melon pan originated in Japan in the 1960s and quickly gained popularity. It is believed to have been created by a Japanese baker who was inspired by the French baguette.\n"
         + //
-        "        <li><strong>入出力管理:</strong> OSは、キーボード、マウス、ディスクドライブ、ネットワークインターフェースなどのハードウェアデバイスとのやり取りを管理します。</li>\n"
+        "**Ingredients**\n" + //
+        "The dough typically consists of flour, yeast, sugar, eggs, and milk. The cookie-like topping is made from a mixture of flour, sugar, and butter.\n"
         + //
-        "        <li><strong>ユーザーインターフェース:</strong> OSは、ユーザーがコンピュータとやり取りするためのインターフェースを提供します。これには、グラフィカルユーザーインターフェース（GUI）やコマンドラインインターフェース（CLI）が含まれます。</li>\n"
+        "**Taste and Texture**\n" + //
+        "Melon pan has a crispy, crunchy exterior and a soft, fluffy interior. The cookie topping adds a sweet and slightly crunchy texture to the bread.\n"
         + //
-        "    </ul>\n" + //
-        "\n" + //
-        "    <h2>代表的なオペレーティングシステム</h2>\n" + //
-        "    <ul>\n" + //
-        "        <li><strong>Windows:</strong> マイクロソフト社が開発したOSで、デスクトップおよびラップトップコンピュータで広く使用されています。</li>\n"
+        "**Variations**\n" + //
+        "There are many variations of melon pan, including flavors such as matcha, chocolate, and strawberry. Some bakeries also add nuts, seeds, or dried fruit to the dough for added texture and flavor.\n"
         + //
-        "        <li><strong>macOS:</strong> Apple社が開発したOSで、Macコンピュータに搭載されています。使いやすさとデザインが特徴です。</li>\n"
+        "**How to Eat**\n" + //
+        "Melon pan is often eaten as a snack or dessert, and it's commonly paired with a cup of coffee or tea. It's also a popular ingredient in Japanese-style sandwiches and toast.\n"
         + //
-        "        <li><strong>Linux:</strong> オープンソースのOSで、様々なディストリビューションがあります。サーバーやエンタープライズ環境でよく使われます。</li>\n"
+        "**Fun Facts**\n" + //
+        "* Melon pan is a popular souvenir among tourists visiting Japan.\n" + //
+        "* The crispy cookie topping is made by applying a special type of sugar to the bread before baking.\n"
         + //
-        "        <li><strong>Android:</strong> Googleが開発したモバイルOSで、スマートフォンやタブレットに広く普及しています。</li>\n" + //
-        "        <li><strong>iOS:</strong> Apple社のモバイルOSで、iPhoneやiPadに搭載されています。</li>\n" + //
-        "    </ul>\n" + //
-        "\n" + //
-        "    <h2>まとめ</h2>\n" + //
-        "    <p>オペレーティングシステムは、コンピュータの効率的な動作とユーザーの利便性を支える重要なソフトウェアです。異なるOSは、それぞれ異なる特性と利点を持ち、様々な用途に応じて選ばれます。</p>\n"
+        "* Melon pan is often served at Japanese cafes and bakeries, and it's a popular item on menus.\n"
         + //
-        "</body>\n" + //
-        "</html>\n" + //
-        "", 30);
-    DocumentController.updateContent(doc);
-    res = DocumentController.create("３春オペレーティングシステム");
-    if (res.hasError()) {
-      System.out.println("Error: " + res.error);
-      return;
-    }
-    doc = new Document(res.message.docID, res.message.head,
-        "オペレーティングシステムは、コンピュータの基本ソフトウェアの一つであり、ハードウェアとソフトウェアの間に立って、ユーザーがコンピュータを利用するためのインタフェースを提供する。",
-        20);
-    DocumentController.updateContent(doc);
-    res = DocumentController.create("３春オペレーティングシステム");
-    if (res.hasError()) {
-      System.out.println("Error: " + res.error);
-      return;
-    }
-    doc = new Document(res.message.docID, res.message.head, "コンピュータの基本ソフトウェアの一つである。", 3);
-    DocumentController.updateContent(doc);
+        "I hope you enjoyed learning more about melon pan! 😊", 20);
+    DocumentController.updateContent(doc, false);
   }
 
   @SuppressWarnings("unused")
@@ -155,7 +124,7 @@ public class Test {
       var doc = new Document(response.message.docID, "Mathematics",
           "Mathematics is the study of numbers", 0);
       doc.like();
-      var res = DocumentController.updateContent(doc);
+      var res = DocumentController.updateContent(doc, false);
       if (res.hasError()) {
         System.out.println("Error: " + res.error);
         return;

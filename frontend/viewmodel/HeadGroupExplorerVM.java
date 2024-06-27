@@ -2,97 +2,106 @@ package viewmodel;
 
 import java.util.ArrayList;
 import javax.swing.JList;
-import javax.swing.JOptionPane;
 import model.*;
+import utility.Dialog;
 import view.*;
 import view.SceneManager.Panel;
 
 public class HeadGroupExplorerVM {
-  public HeadGroupExplorerVM(HeadGroupExplorer headGroupExplorer, DocumentsViewer documentsViewer,
-      DocumentEditor documentEditor, SceneManager sceneManager) {
-    setHeadGroup("root", headGroupExplorer, "REPLACE");
+  public HeadGroupExplorerVM() {
+    setHeadGroup("root", "REPLACE");
     // 対象の項目に対してSelectされたとき（View）
-    headGroupExplorer.enterButton.addActionListener(e -> {
-      var selects = (JList<?>) headGroupExplorer.HeadGroupScrolPanel.getViewport().getView(); // リストを取得
+    Scenes.headGroupExplorer.enterButton.addActionListener(e -> {
+      var selects = (JList<?>) Scenes.headGroupExplorer.HeadGroupScrolPanel.getViewport().getView(); // リストを取得
       String selectedValue = (String) selects.getSelectedValue(); // 選択中の項目取得
-      var isHeadGroup = headGroupExplorer.headGroup.headGroups.contains(selectedValue);
+      var isHeadGroup = Scenes.headGroupExplorer.headGroup.headGroups.contains(selectedValue);
       System.out.println("isHeadGroup: " + isHeadGroup + " selectedValue: " + selectedValue);
       // HeadGroupの時
       if (isHeadGroup) {
-        setHeadGroup(selectedValue, headGroupExplorer, "TRACE");// ドキュメントをDocViewerにセット
+        setHeadGroup(selectedValue, "TRACE");// ドキュメントをDocViewerにセット
       } else { // Headの時
         var documentsRes = DocumentController.getFromHead(selectedValue);
         if (documentsRes.hasError(Response.INVALID_VALUE)) {
-          JOptionPane.showMessageDialog(null, "不正な値です", "Error", JOptionPane.ERROR_MESSAGE);
+          Dialog.show(Scenes.headGroupExplorer, "エラー", "不正な値です");
           return;
         } else if (documentsRes.hasError(Response.NOT_FOUND)) {
-          JOptionPane.showMessageDialog(null, "ドキュメントが見つかりません", "Error", JOptionPane.ERROR_MESSAGE);
+          Dialog.show(Scenes.headGroupExplorer, "エラー", "ドキュメントが見つかりません");
           return;
         }
         ArrayList<Document> documents = documentsRes.message;
         if (documents.isEmpty()) {
-          JOptionPane.showMessageDialog(null, "まだ一つもノートが書かれたことがないヘッドです。\nあなたが最初のノートを書いてみましょう！", "Info", JOptionPane.INFORMATION_MESSAGE);
+          Dialog.show(Scenes.headGroupExplorer, "探検者",
+              "まだ一つもノートが書かれたことがないヘッドです。\nあなたが最初のノートを書いてみましょう！");
           return;
         }
-        documentsViewer.setDocuments(selectedValue, documents);
-        sceneManager.showPanel(Panel.DocumentsViewer);
+        Scenes.header.resetButtonStyles();
+        Scenes.documentsViewer.setDocuments(selectedValue, documents);
+        Scenes.sceneManager.showPanel(Panel.DocumentsViewer);
       }
     });
 
     // 対象の項目に対してSelectされたとき（View）
-    headGroupExplorer.backButton.addActionListener(e -> {
-      if (headGroupExplorer.prevHeadGroups.isEmpty()) {
-        JOptionPane.showMessageDialog(null, "これ以上戻れません", "Error", JOptionPane.ERROR_MESSAGE);
+    Scenes.headGroupExplorer.backButton.addActionListener(e -> {
+      if (Scenes.headGroupExplorer.prevHeadGroups.isEmpty()) {
+        Dialog.show(Scenes.headGroupExplorer, "注意", "これ以上戻れません");
+        return;
       }
-      var prev = headGroupExplorer.prevHeadGroups.pop();
-      setHeadGroup(prev, headGroupExplorer, "BACK");// ドキュメントをDocViewerにセット
+      var prev = Scenes.headGroupExplorer.prevHeadGroups.pop();
+      setHeadGroup(prev, "BACK");// ドキュメントをDocViewerにセット
     });
 
-    headGroupExplorer.addHeadButton.addActionListener(e -> {
-      var newHeadName = JOptionPane.showInputDialog("ヘッド名を入力してください");
+    Scenes.headGroupExplorer.addHeadButton.addActionListener(e -> {
+      var newHeadName = Dialog.input(Scenes.headGroupExplorer,
+          Scenes.headGroupExplorer.headGroup.name + "にヘッドを追加します", "名前を入力してください");
       if (newHeadName == null || newHeadName.isEmpty())
         return;
       var res = HeadsController.create(newHeadName, "H");
       if (res.hasError())
         return;
-      var headGroup = headGroupExplorer.headGroup;
+      var headGroup = Scenes.headGroupExplorer.headGroup;
       headGroup.heads.add(newHeadName);
       res = HeadsController.updateHeadGroup(headGroup);
-      headGroupExplorer.setHeadGroup(headGroup);
+      Scenes.headGroupExplorer.setHeadGroup(headGroup);
     });
 
-    headGroupExplorer.addGroupButton.addActionListener(e -> {
-      var newHeadName = JOptionPane.showInputDialog("グループ名を入力してください");
+    Scenes.headGroupExplorer.addGroupButton.addActionListener(e -> {
+      var newHeadName = Dialog.input(Scenes.headGroupExplorer,
+          Scenes.headGroupExplorer.headGroup.name + "にヘッドグループを追加します", "名前を入力してください");
       if (newHeadName == null || newHeadName.isEmpty())
         return;
       var res = HeadsController.create(newHeadName, "G");
       if (res.hasError())
         return;
-      var headGroup = headGroupExplorer.headGroup;
+      var headGroup = Scenes.headGroupExplorer.headGroup;
       headGroup.headGroups.add(newHeadName);
       res = HeadsController.updateHeadGroup(headGroup);
-      headGroupExplorer.setHeadGroup(headGroup);
+      Scenes.headGroupExplorer.setHeadGroup(headGroup);
     });
 
-    headGroupExplorer.addDocumentButton.addActionListener(e -> {
-      var selects = (JList<?>) headGroupExplorer.HeadGroupScrolPanel.getViewport().getView(); // リストを取得
+    Scenes.headGroupExplorer.addDocumentButton.addActionListener(e -> {
+      var selects = (JList<?>) Scenes.headGroupExplorer.HeadGroupScrolPanel.getViewport().getView(); // リストを取得
       String selectedValue = (String) selects.getSelectedValue(); // 選択中の項目取得
-      var isHead = headGroupExplorer.headGroup.heads.contains(selectedValue);
+      var isHead = Scenes.headGroupExplorer.headGroup.heads.contains(selectedValue);
       if (!isHead)
-        JOptionPane.showMessageDialog(null, "Headを選択してください", "Error", JOptionPane.ERROR_MESSAGE);
+        Dialog.show(Scenes.headGroupExplorer, "エラー", "Headを選択してください");
       var res = DocumentController.create(selectedValue);
       if (res.hasError())
         return;
 
-      documentEditor.setDocument(res.message);
-      sceneManager.showPanel(Panel.DocumentEditor);
+      Scenes.documentEditor.setDocument(res.message);
+      Scenes.sceneManager.showPanel(Panel.DocumentEditor);
     });
 
-    headGroupExplorer.deleteButton.addActionListener(e -> {
-      var selects = (JList<?>) headGroupExplorer.HeadGroupScrolPanel.getViewport().getView(); // リストを取得
+    Scenes.headGroupExplorer.deleteButton.addActionListener(e -> {
+      var selects = (JList<?>) Scenes.headGroupExplorer.HeadGroupScrolPanel.getViewport().getView(); // リストを取得
       String selectedValue = (String) selects.getSelectedValue(); // 選択中の項目取得
-      var isHead = headGroupExplorer.headGroup.heads.contains(selectedValue);
+      var isHead = Scenes.headGroupExplorer.headGroup.heads.contains(selectedValue);
       if (isHead) {
+        var docs = DocumentController.getFromHead(selectedValue);
+        if (docs.hasError(Response.INVALID_VALUE)) {
+          Dialog.show(Scenes.headGroupExplorer, "エラー", "ドキュメントが見つかりません");
+          return;
+        } // TODO
 
       } else {
 
@@ -100,7 +109,7 @@ public class HeadGroupExplorerVM {
     });
   }
 
-  public void setHeadGroup(String name, HeadGroupExplorer headGroupExplorer, String mode) {
+  public void setHeadGroup(String name, String mode) {
     var headGroupRes = HeadsController.getHeadGroup(name);
     if (headGroupRes.hasError(Response.INVALID_VALUE)) {
       System.out.println("Error: " + headGroupRes.error);
@@ -111,16 +120,16 @@ public class HeadGroupExplorerVM {
 
     switch (mode) {
       case "REPLACE":
-        headGroupExplorer.prevHeadGroups.clear();
+        Scenes.headGroupExplorer.prevHeadGroups.clear();
         break;
       case "TRACE":
-        headGroupExplorer.prevHeadGroups.push(headGroupExplorer.headGroup.name);
+        Scenes.headGroupExplorer.prevHeadGroups.push(Scenes.headGroupExplorer.headGroup.name);
         break;
       case "BACK":
         break;
       default:
         break;
     }
-    headGroupExplorer.setHeadGroup(headGroup);// ドキュメントをDocViewerにセット
+    Scenes.headGroupExplorer.setHeadGroup(headGroup);// ドキュメントをDocViewerにセット
   }
 }

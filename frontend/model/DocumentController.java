@@ -4,6 +4,7 @@ package model;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.function.Function;
 import model.db_enum.DB;
 
 public class DocumentController {
@@ -130,15 +131,32 @@ public class DocumentController {
     }
   }
 
+  // ドキュメントを作成
+  public static Response<Document> createFromOther(String head) {
+    var remote = RemoteDatabaseInterface.getInstance();
+    try {
+      var newDoc = new Document(head);
+      remote.upsert(DB.DOCUMENT, newDoc.toJSON(false));
+      return Response.success(newDoc);
+    } catch (Exception e) {
+      System.err.println(e);
+      for (var el : e.getStackTrace()) {
+        System.err.println(el);
+      }
+      return Response.error(Response.INVALID_VALUE);
+    }
+  }
+
   // ドキュメントを更新
-  public static Response<Void> updateContent(Document document) {
+  public static Response<Void> updateContent(Document document, boolean isMine) {
     var local = LocalDatabaseInterface.getInstance();
     var remote = RemoteDatabaseInterface.getInstance();
     try {
       var likes = getFromID(document.docID).message.like;
       document.like = likes;
-      local.upsert(DB.DOCUMENT, document.toJSON(true));
-      remote.upsert(DB.DOCUMENT, document.toJSON(true));
+      if (isMine)
+        local.upsert(DB.DOCUMENT, document.toJSON(isMine));
+      remote.upsert(DB.DOCUMENT, document.toJSON(isMine));
       return Response.success(null);
     } catch (Exception e) {
       return Response.error(Response.INVALID_VALUE);
@@ -163,6 +181,21 @@ public class DocumentController {
     try {
       local.delete(DB.DOCUMENT, JSON.single(DB.DOC_ID, docID));
       return Response.success(null);
+    } catch (Exception e) {
+      return Response.error(Response.INVALID_VALUE);
+    }
+  }
+
+  public static Response<String> inLocal(String docID) {
+    var local = LocalDatabaseInterface.getInstance();
+    try {
+      Function<JSON, JSON> id = x -> x;
+      var my = local.search(DB.DOCUMENT, JSON.single(DB.DOC_ID, docID), id);
+      if (my == null || my.size() == 0) {
+        return Response.error(Response.NOT_FOUND);
+      } else {
+        return Response.success(my.get(0).get(DB.TYPE_ML).toString());
+      }
     } catch (Exception e) {
       return Response.error(Response.INVALID_VALUE);
     }

@@ -73,13 +73,26 @@ public class RemoteDatabaseInterface {
       if (entry.getKey().type == ColumnType.INT) {
         queryBuilder.append(entry.getValue());
       } else {
-        queryBuilder.append("'" + entry.getValue() + "'");
+        queryBuilder.append("'" + escapeSpecialChars(entry.getValue()) + "'");
       }
     }
     return baseQuery + ") VALUES (" + queryBuilder.toString() + ")";
   }
 
+  // 特殊文字をエスケープする関数
+  public static String escapeSpecialChars(String input) {
+    if (input == null) {
+      return null;
+    }
+    // 既にエスケープされていないシングルクォートをエスケープする
+    String escapedString = input.replaceAll("'", "''");
+    return escapedString;
+  }
+
   private <T> ArrayList<ArrayList<T>> executeSearch(String[] queries, Function<String, T> parser) {
+    for (var elm : queries) {
+      System.out.println("REMOTE:\t" + elm);
+    }
     var res = NetworkClient.excuteQueries(queries, "QUERY");
     if (res.success()) {
       var list = new ArrayList<ArrayList<T>>();
@@ -100,6 +113,10 @@ public class RemoteDatabaseInterface {
   }
 
   private String[] executeUpdate(String[] queries) {
+    for (var elm : queries) {
+      System.out.println("REMOTE:" + elm);
+    }
+
     var res = NetworkClient.excuteQueries(queries, "UPDATE");
     if (res.success()) {
       return res.message;

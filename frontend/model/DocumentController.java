@@ -42,7 +42,7 @@ public class DocumentController {
     }
   }
 
-  public static Response<Boolean> hasWritten(String head) {
+  public static Response<Document> hasWritten(String head) {
     var local = LocalDatabaseInterface.getInstance();
     var query = new JSON() {
       {
@@ -52,7 +52,12 @@ public class DocumentController {
     };
     try {
       var document = local.search(DB.DOCUMENT, query, Document::fromJSON);
-      return Response.success(document != null && document.size() > 0);
+      System.out.println(document);
+      if (document == null || document.size() == 0) {
+        return Response.error(Response.NOT_FOUND);
+      } else {
+        return Response.success(document.get(0));
+      }
     } catch (Exception e) {
       return Response.error(Response.INVALID_VALUE);
     }

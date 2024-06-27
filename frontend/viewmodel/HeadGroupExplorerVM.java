@@ -55,6 +55,10 @@ public class HeadGroupExplorerVM {
           Scenes.headGroupExplorer.headGroup.name + "にヘッドを追加します", "名前を入力してください");
       if (newHeadName == null || newHeadName.isEmpty())
         return;
+      if (HeadsController.hasResistered(newHeadName).message != false) {
+        Dialog.show(Scenes.headGroupExplorer, "エラー", "すでに登録されている名前です");
+        return;
+      }
       var res = HeadsController.create(newHeadName, "H");
       if (res.hasError())
         return;
@@ -69,6 +73,10 @@ public class HeadGroupExplorerVM {
           Scenes.headGroupExplorer.headGroup.name + "にヘッドグループを追加します", "名前を入力してください");
       if (newHeadName == null || newHeadName.isEmpty())
         return;
+      if (HeadsController.hasResistered(newHeadName).message != false) {
+        Dialog.show(Scenes.headGroupExplorer, "エラー", "すでに登録されている名前です");
+        return;
+      }
       var res = HeadsController.create(newHeadName, "G");
       if (res.hasError())
         return;
@@ -82,8 +90,18 @@ public class HeadGroupExplorerVM {
       var selects = (JList<?>) Scenes.headGroupExplorer.HeadGroupScrolPanel.getViewport().getView(); // リストを取得
       String selectedValue = (String) selects.getSelectedValue(); // 選択中の項目取得
       var isHead = Scenes.headGroupExplorer.headGroup.heads.contains(selectedValue);
-      if (!isHead)
+      if (!isHead) {
         Dialog.show(Scenes.headGroupExplorer, "エラー", "Headを選択してください");
+        return;
+      }
+      var written = DocumentController.hasWritten(selectedValue);
+      if (written.message != null) {
+        Dialog.show(Scenes.headGroupExplorer, "おや？", "すでに書かれたドキュメントがあるので編集します。");
+        Scenes.documentEditor.setDocument(written.message);
+        Scenes.header.resetButtonStyles();
+        Scenes.sceneManager.showPanel(Panel.DocumentEditor);
+        return;
+      }
       var res = DocumentController.create(selectedValue);
       if (res.hasError())
         return;

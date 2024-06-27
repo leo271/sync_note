@@ -15,16 +15,15 @@ public class HeadsController {
     var remote = RemoteDatabaseInterface.getInstance();
     var local = LocalDatabaseInterface.getInstance();
     try {
-      var condition = new JSON() {
+       var condition = new JSON() {
         {
-          put(DB.NAME, group.name);
-          put(DB.TYPE_HG, "G");
+          put(DB.GROUP_NAME, group.name);
         }
       };
-      local.delete(DB.DOCUMENT, condition);
-      remote.delete(DB.NAME_SPACE, condition);
+      local.delete(DB.HEAD_GROUP, JSON.single(Column.GROUP_NAME,group.name));
+      remote.delete(DB.HEAD_GROUP, JSON.single(Column.GROUP_NAME,group.name));
       local.upsert(DB.HEAD_GROUP, group.toJSONL());
-      remote.upsert(DB.NAME_SPACE, group.toJSONL());
+      remote.upsert(DB.HEAD_GROUP, group.toJSONL());
       return Response.SUCCESS;
     } catch (Exception e) {
       return Response.error(Response.INVALID_VALUE);
@@ -61,7 +60,7 @@ public class HeadsController {
   }
 
   // HeadもしくはHeadGroupを作成
-  public static Response<Void> createHead(String name, String type) {
+  public static Response<Void> create(String name, String type) {
     var remote = RemoteDatabaseInterface.getInstance();
     try {
       var head = new JSON() {

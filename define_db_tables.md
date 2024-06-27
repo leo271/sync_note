@@ -31,3 +31,7 @@ CREATE TABLE NameSpace(
 Name VARCHAR(100) NOT NULL PRIMARY KEY,
 TypeHG CHAR(1) NOT NULL CHECK(TypeHG IN ('H', 'G')));;
 `
+
+`
+INSERT OR REPLACE INTO NameSpace(Name,TypeHG) VALUES ('root','G');
+`

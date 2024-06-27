@@ -8,7 +8,28 @@ import model.db_enum.DB;
 
 public class Test {
   public static void main(String[] args) {
-    testModel();
+    creatRoot();
+  }
+
+  private static void creatRoot() {
+    var res = HeadsController.create("root", "G");
+    if(res.hasError()){
+      System.out.println("error");
+    } else {
+      System.out.println("success");
+    }
+    res = HeadsController.create("Mathematics", "G");
+    if (res.hasError()) {
+      System.out.println("error");
+    } else {
+      System.out.println("success");
+    }
+    res = HeadsController.create("Science", "G");
+    if (res.hasError()) {
+      System.out.println("error");
+    } else {
+      System.out.println("success");
+    }
   }
 
   private static void testModel() {

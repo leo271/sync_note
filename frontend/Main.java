@@ -1,9 +1,9 @@
 import view.Header;
 import view.MyListView;
 import view.SearchView;
+import viewmodel.HeadGroupExplorerVM;
 import viewmodel.DocumentEditorViewModel;
 import viewmodel.DocumentsViewerViewModel;
-import viewmodel.HeadGroupExplorerViewModel;
 import viewmodel.MyListViewVM;
 import viewmodel.HeaderVM;
 import viewmodel.SearchViewViewModel;
@@ -32,7 +32,7 @@ public class Main {
     new HeaderVM(header, frame);
     new SearchViewViewModel(searchView, documentsViewer, headGroupExplorer, frame);
     new MyListViewVM(myListView, documentsViewer, documentEditor, headGroupExplorer, frame);
-    new HeadGroupExplorerViewModel(headGroupExplorer, documentsViewer, frame);
+    new HeadGroupExplorerVM(headGroupExplorer, documentsViewer, frame);
     new DocumentEditorViewModel(documentEditor);
     new DocumentsViewerViewModel(documentsViewer);
 

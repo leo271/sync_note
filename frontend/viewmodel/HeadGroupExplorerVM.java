@@ -101,11 +101,36 @@ public class HeadGroupExplorerVM {
         if (docs.hasError(Response.INVALID_VALUE)) {
           Dialog.show(Scenes.headGroupExplorer, "エラー", "ドキュメントが見つかりません");
           return;
-        } // TODO
-
+        }
+        if (docs.message.size() > 0) {
+          Dialog.show(Scenes.headGroupExplorer, "エラー", "ドキュメントが存在するHeadは削除できません");
+          return;
+        }
+        var res = HeadsController.removeHead(selectedValue);
+        if (res.hasError()) {
+          System.out.println("Error: " + res.error);
+          return;
+        }
       } else {
-
+        var group = HeadsController.getHeadGroup(selectedValue);
+        if (group.hasError(Response.INVALID_VALUE)) {
+          System.out.println("Error: " + group.error);
+          return;
+        }
+        if (!group.hasError(Response.NOT_FOUND)
+            && ((group.message.heads != null && group.message.heads.size() > 0)
+                || (group.message.headGroups != null && group.message.headGroups.size() > 0))) {
+          Dialog.show(Scenes.headGroupExplorer, "エラー", "HeadGroupに属するHeadが存在するため削除できません");
+          return;
+        }
+        var res = HeadsController.removeHeadGroup(selectedValue);
+        if (res.hasError()) {
+          System.out.println("Error: " + res.error);
+          return;
+        }
       }
+      var headGroup = HeadsController.getHeadGroup(Scenes.headGroupExplorer.headGroup.name).message;
+      Scenes.headGroupExplorer.setHeadGroup(headGroup);
     });
   }
 

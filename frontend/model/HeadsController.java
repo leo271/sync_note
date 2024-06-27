@@ -35,6 +35,33 @@ public class HeadsController {
     }
   }
 
+  public static Response<Void> removeHead(String name) {
+    var remote = RemoteDatabaseInterface.getInstance();
+    try {
+      remote.delete(DB.NAME_SPACE, JSON.single(DB.NAME, name));
+      remote.delete(DB.HEAD_GROUP, JSON.single(DB.NAME, name));
+      return Response.SUCCESS;
+    } catch (Exception e) {
+      return Response.error(Response.INVALID_VALUE);
+    }
+  }
+
+  public static Response<Void> removeHeadGroup(String name) {
+    var remote = RemoteDatabaseInterface.getInstance();
+    var local = LocalDatabaseInterface.getInstance();
+    try {
+      remote.delete(DB.HEAD_GROUP, JSON.single(DB.GROUP_NAME, name));
+      local.delete(DB.HEAD_GROUP, JSON.single(DB.GROUP_NAME, name));
+      remote.delete(DB.HEAD_GROUP, JSON.single(DB.NAME, name));
+      local.delete(DB.HEAD_GROUP, JSON.single(DB.NAME, name));
+      remote.delete(DB.NAME_SPACE, JSON.single(DB.NAME, name));
+      local.delete(DB.NAME_SPACE, JSON.single(DB.NAME, name));
+      return Response.SUCCESS;
+    } catch (Exception e) {
+      return Response.error(Response.INVALID_VALUE);
+    }
+  }
+
   public static Response<HeadGroup> searchHeads(String name) {
     var remote = RemoteDatabaseInterface.getInstance();
     try {

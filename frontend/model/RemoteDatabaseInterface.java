@@ -84,6 +84,8 @@ public class RemoteDatabaseInterface {
     if (res.success()) {
       var list = new ArrayList<ArrayList<T>>();
       for (var json : res.message) {
+        if (json.isEmpty())
+          break;
         var ilist = new ArrayList<T>();
         for (var j : json.split(RS + "")) {
           ilist.add(parser.apply(j));
@@ -118,7 +120,7 @@ public class RemoteDatabaseInterface {
       logger.log(Level.SEVERE, "Failed to execute search query");
       throw new SQLException("Failed to execute search query");
     }
-    return res.get(0);
+    return res.size() == 0 ? new ArrayList<T>() : res.get(0);
   }
 
   // データベースを更新するメソッド
@@ -155,12 +157,31 @@ public class RemoteDatabaseInterface {
 
   // 単一のJSONデータを削除するメソッド
   public int delete(Table table, JSON json) {
-    return update(DELETE, table, new ArrayList<JSON>(Arrays.asList(json)));
+    if (!DB.isValidValue(json))
+      return 500;
+    String q = buildSearchQuery(DELETE, table, json, false);
+    System.out.println(q);
+    var update = executeUpdate(new String[] {q});
+    if (update == null) {
+      logger.log(Level.SEVERE, "Failed to execute delete query");
+      return 500;
+    }
+    if (!update[0].equals("true")) {
+      logger.log(Level.SEVERE, "Failed to execute delete query" + update[0]);
+      return 500;
+    }
+    return 200;
   }
 
   // 複数のJSONデータを削除するメソッド
   public int delete(Table table, ArrayList<JSON> data) {
-    return update(DELETE, table, data);
+    for (var json : data) {
+      var res = delete(table, json);
+      if (res != 200) {
+        return res;
+      }
+    }
+    return 200;
   }
 }
 

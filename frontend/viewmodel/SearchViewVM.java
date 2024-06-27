@@ -4,9 +4,9 @@ import view.*;
 import javax.swing.JOptionPane;
 import model.*;
 
-public class SearchViewViewModel {
+public class SearchViewVM {
 
-  public SearchViewViewModel(SearchView searchView, DocumentsViewer documentsViewer,
+  public SearchViewVM(SearchView searchView, DocumentsViewer documentsViewer,
       HeadGroupExplorer headGroupExplorer, SceneManager sceneManager) {
     // 検索
     searchView.searchButton.addActionListener(e -> {

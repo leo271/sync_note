@@ -42,17 +42,23 @@ public class DocumentsViewer extends JPanel {
   }
 
   // Head名を受け取り、それに属するドキュメントを表示するメソッド
-  public void setDocuments(List<Document> documents) {
+  public void setDocuments(String head, List<Document> documents) {
     this.documents = documents;
-    this.head = documents.get(0).head;
+    this.head = head;
     setOffset(0);
   }
 
   public void setOffset(int offset) {
     this.offset = offset;
-    this.like = documents.get(offset).like;
-    activeDocument = documents.get(offset);
-    documentsArea.setText(documents.get(offset).content);
+    try {
+      this.like = documents.get(offset).like;
+      activeDocument = documents.get(offset);
+      documentsArea.setText(activeDocument.content);
+    } catch (Exception e) {
+      this.like = 0;
+      activeDocument = new Document("");
+      documentsArea.setText("");
+    }
     titleLabel.setText(head + "\t No." + (offset + 1));
     likeLabel.setText("          ♥  :  " + like);
     revalidate();

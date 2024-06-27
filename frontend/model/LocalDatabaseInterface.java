@@ -16,6 +16,7 @@ public class LocalDatabaseInterface {
   private static final String DB_DRIVER = "jdbc:sqlite:database.db";
   private static final String UPSERT = "INSERT OR REPLACE INTO ";
   private static final String DELETE = "DELETE FROM ";
+  private static final String SELECT = "SELECT * FROM ";
 
   // プライベートコンストラクタ
   private LocalDatabaseInterface() {}
@@ -120,8 +121,6 @@ public class LocalDatabaseInterface {
     var columns = metadata.getColumnCount();
     var result = new JSON();
     for (int i = 1; i <= columns; i++) {
-      System.out
-          .println(metadata.getColumnName(i).toString() + " " + resultSet.getString(i).toString());
       if (DB.columnByName(metadata.getColumnName(i)) == null || resultSet.getString(i) == null)
         continue;
       result.put(DB.columnByName(metadata.getColumnName(i)), resultSet.getString(i));
@@ -135,7 +134,7 @@ public class LocalDatabaseInterface {
     if (!DB.isValidValue(query))
       throw new SQLException("Invalid value for" + query.toString());
 
-    String qstring = buildSearchQuery("SELECT * FROM ", table, query);
+    String qstring = buildSearchQuery(SELECT, table, query);
     return executeSearch(qstring, query, parser);
   }
 
@@ -145,7 +144,6 @@ public class LocalDatabaseInterface {
       if (!DB.isValidValue(json))
         return 500;
       String q = buildUpdateQuery(query, table, json);
-      System.out.println(q);
       var update = executeUpdate(q, json);
       if (update.equals("Failed")) {
         return 500;
@@ -156,7 +154,6 @@ public class LocalDatabaseInterface {
 
   // 単一のJSONデータをアップサートするメソッド
   public int upsert(Table table, JSON json) {
-    System.out.println("upsert" + " " + table + " " + json.toString());
     return update(UPSERT, table, new ArrayList<JSON>(Arrays.asList(json)));
   }
 
@@ -167,11 +164,24 @@ public class LocalDatabaseInterface {
 
   // 単一のJSONデータを削除するメソッド
   public int delete(Table table, JSON json) {
-    return update(DELETE, table, new ArrayList<JSON>(Arrays.asList(json)));
+    if (!DB.isValidValue(json))
+      return 500;
+    String q = buildSearchQuery(DELETE, table, json);
+    var update = executeUpdate(q, json);
+    if (update.equals("Failed")) {
+      return 500;
+    }
+    return 200;
   }
 
   // 複数のJSONデータを削除するメソッド
   public int delete(Table table, ArrayList<JSON> data) {
-    return update(DELETE, table, data);
+    for (var json : data) {
+      var res = delete(table, json);
+      if (res != 200) {
+        return res;
+      }
+    }
+    return 200;
   }
 }

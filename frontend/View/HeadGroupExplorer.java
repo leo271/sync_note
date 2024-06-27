@@ -3,8 +3,11 @@ package view;
 import javax.swing.*;
 import model.HeadGroup;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Stack;
 import java.util.stream.Stream;
+import utility.Colors;
 
 public class HeadGroupExplorer extends JPanel {
   private JLabel titleLabel;
@@ -17,47 +20,94 @@ public class HeadGroupExplorer extends JPanel {
   public JButton addHeadButton = new JButton("Add Head");
   public JButton addGroupButton = new JButton("Add Group");
   public JButton deleteButton = new JButton("Delete");
+  public JPanel buttonPanel = new JPanel(new GridLayout(1, 6, 10, 0));
 
   public HeadGroupExplorer() {
     setLayout(new BorderLayout());
     refreshHeadGroup();
 
     JPanel bottomPanel = new JPanel(new BorderLayout());
-    JPanel buttonPanel = new JPanel(new GridLayout(1, 3));
+    bottomPanel.add(buttonPanel, BorderLayout.CENTER);
+    add(bottomPanel, BorderLayout.SOUTH);
 
+    // Customize buttons
+    customizeButton(backButton);
+    customizeButton(enterButton);
+    customizeButton(addDocumentButton);
+    customizeButton(addHeadButton);
+    customizeButton(addGroupButton);
+    customizeButton(deleteButton);
+
+    // Add buttons to button panel
     buttonPanel.add(backButton);
     buttonPanel.add(enterButton);
     buttonPanel.add(addDocumentButton);
     buttonPanel.add(addHeadButton);
     buttonPanel.add(addGroupButton);
     buttonPanel.add(deleteButton);
-    bottomPanel.add(buttonPanel, BorderLayout.CENTER);
-    add(bottomPanel, BorderLayout.SOUTH);
+
+    // Set background colors
+    setBackground(Colors.lightGray); // Main background
+    bottomPanel.setBackground(Colors.lightGray);
+    buttonPanel.setBackground(Colors.pale); // Button panel background
   }
 
-  // マイリストの更新
+  // Customize buttons with a modern style
+  private void customizeButton(JButton button) {
+    button.setBackground(Colors.pale);
+    button.setForeground(Color.WHITE);
+    button.setFont(new Font("Arial", Font.PLAIN, 14));
+    button.setFocusPainted(false);
+    button.setOpaque(true);
+    button.setBorderPainted(false);
+    button.setBorder(
+        BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Colors.pale, 1, true),
+            BorderFactory.createEmptyBorder(5, 15, 5, 15)));
+    button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+    // Add hover effect
+    button.addMouseListener(new MouseAdapter() {
+      @Override
+      public void mouseEntered(MouseEvent e) {
+        button.setBackground(Colors.lightRed);
+      }
+
+      @Override
+      public void mouseExited(MouseEvent e) {
+        button.setBackground(Colors.pale);
+      }
+    });
+  }
+
+  // Update the HeadGroup
   private void refreshHeadGroup() {
-    if (HeadGroupScrolPanel != null) // 既存のリストがあれば削除
+    if (HeadGroupScrolPanel != null) // Remove existing list if present
       remove(HeadGroupScrolPanel);
+
     JList<String> list = new JList<>(Stream
         .concat(headGroup.headGroups.stream(), headGroup.heads.stream()).toArray(String[]::new));
 
-    // リストに特徴を付ける
+    // Customize the list
     list.setCellRenderer(new CellRenderer(
         (String group) -> headGroup.headGroups.contains(group) ? CellRenderer.CellType.HEAD_GROUP
             : CellRenderer.CellType.HEAD));
+    list.setFixedCellHeight(50); // Increase the height of each tile
+    list.setBackground(Colors.lightGray);
+    list.setForeground(Color.BLACK);
+    list.setBorder(BorderFactory.createEmptyBorder()); // Remove the border
 
     HeadGroupScrolPanel = new JScrollPane(list);
+    HeadGroupScrolPanel.setBorder(BorderFactory.createEmptyBorder()); // Remove the border
     add(HeadGroupScrolPanel, BorderLayout.CENTER);
 
     if (titleLabel != null)
-      remove(titleLabel); // 既存のタイトルラベルを削除（オプション）
+      remove(titleLabel); // Remove existing title label if present
     titleLabel = new JLabel(headGroup.name, SwingConstants.CENTER);
-    titleLabel.setFont(new Font("Arial", Font.BOLD, 16)); // フォントを設定（オプション）
-    add(titleLabel, BorderLayout.NORTH); // パネルの上部に追加
+    titleLabel.setFont(new Font("Arial", Font.BOLD, 24)); // Increase font size
+    add(titleLabel, BorderLayout.NORTH); // Add title label at the top
   }
 
-  // セットして再描画
+  // Set and redraw
   public void setHeadGroup(HeadGroup headGroup) {
     this.headGroup = headGroup;
     refreshHeadGroup();

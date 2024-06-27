@@ -13,6 +13,7 @@ public class SceneManager extends JFrame {
 
   public CardLayout cardLayout;
   public JPanel cardPanel;
+  public Panel current;
   private Header header;
 
   public SceneManager(Header header, MyListView myListView, SearchView searchView,
@@ -33,35 +34,31 @@ public class SceneManager extends JFrame {
     showPanel(Panel.MyListView);
     mainPanel.add(cardPanel, BorderLayout.CENTER);
 
-
     this.add(mainPanel);
   }
 
   public void showPanel(Panel panel) {
+    current = panel;
     cardLayout.show(cardPanel, panel.name());
-    header.editorButton.setForeground(Color.BLACK);
     header.explorerButton.setForeground(Color.BLACK);
     header.myListButton.setForeground(Color.BLACK);
     header.searchButton.setForeground(Color.BLACK);
-    header.viewerButton.setForeground(Color.BLACK);
     switch (panel) {
-      case Panel.MyListView:
+      case MyListView:
         header.myListButton.setForeground(Color.BLUE);
         break;
-      case Panel.SearchView:
+      case SearchView:
         header.searchButton.setForeground(Color.BLUE);
         break;
-      case Panel.HeadGroupExplorer:
+      case HeadGroupExplorer:
         header.explorerButton.setForeground(Color.BLUE);
-        break;
-      case Panel.DocumentsViewer:
-        header.viewerButton.setForeground(Color.BLUE);
-        break;
-      case Panel.DocumentEditor:
-        header.editorButton.setForeground(Color.BLUE);
         break;
       default:
         break;
     }
+  }
+
+  public boolean is(Panel panel) {
+    return current == panel;
   }
 }

@@ -25,6 +25,16 @@ public class HeadsController {
     }
   }
 
+  public static Response<Void> removeLocal(String name) {
+    var local = LocalDatabaseInterface.getInstance();
+    try {
+      local.delete(DB.DOCUMENT, JSON.single(DB.NAME, name));
+      return Response.SUCCESS;
+    } catch (Exception e) {
+      return Response.error(Response.INVALID_VALUE);
+    }
+  }
+
   public static Response<HeadGroup> searchHeads(String name) {
     var remote = RemoteDatabaseInterface.getInstance();
     try {
@@ -92,39 +102,30 @@ public class HeadsController {
   }
 
   // like
-  public static Response<Void> likeHeadGroup(HeadGroup group) {
+  public static Response<Void> toggleLike(String headGroup) {
     var local = LocalDatabaseInterface.getInstance();
     var remote = RemoteDatabaseInterface.getInstance();
     try {
       Function<JSON, JSON> id = (x) -> x;
-      var localGroup = local.search(DB.HEAD_GROUP, JSON.single(DB.NAME, group.name), id);
+      var localGroup = local.search(DB.HEAD_GROUP, JSON.single(DB.NAME, headGroup), id);
+      var remoteGroup = getHeadGroup(headGroup);
+      if (remoteGroup.hasError()) {
+        return Response.error(Response.NOT_FOUND);
+      }
+      var group = remoteGroup.message;
       if (localGroup == null || localGroup.size() == 0) {
         // すでにライクをしたことがない
         group.like();
-        local.upsert(DB.DOCUMENT, group.toJSONL());
+        local.upsert(DB.HEAD_GROUP, group.toJSONL());
       } else {
         // もうライクをしているのでお気に入りから削除
         group.unlike();
-        var condition = new JSON() {
-          {
-            put(DB.NAME, group.name);
-            put(DB.TYPE_HG, "G");
-          }
-        };
-        local.delete(DB.DOCUMENT, condition);
+        local.delete(DB.HEAD_GROUP, JSON.single(DB.GROUP_NAME, headGroup));
       }
       // リモートにも反映
-      var like = new JSON() {
-        {
-          put(DB.GROUP_NAME, group.name);
-          put(DB.LIKE, Integer.toString(group.like));
-        }
-      };
-      remote.upsert(DB.DOCUMENT, like);
+      remote.upsert(DB.HEAD_GROUP, group.toJSONL());
       return Response.SUCCESS;
-    } catch (
-
-    Exception e) {
+    } catch (Exception e) {
       return Response.error(Response.INVALID_VALUE);
     }
   }
@@ -150,7 +151,6 @@ public class HeadsController {
     try {
       Function<JSON, JSON> id = (x) -> x;
       var headGroups = local.search(DB.HEAD_GROUP, null, id);
-      System.out.println("Searched");
       if (headGroups == null || headGroups.size() == 0 || headGroups.get(0).isEmpty()) {
         return Response.error(Response.NOT_FOUND);
       }

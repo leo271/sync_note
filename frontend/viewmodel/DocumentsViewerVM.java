@@ -3,13 +3,13 @@ package viewmodel;
 import model.DocumentController;
 import view.DocumentsViewer;
 
-public class DocumentsViewerViewModel {
-  public DocumentsViewerViewModel(DocumentsViewer documentsViewer) {
+public class DocumentsViewerVM {
+  public DocumentsViewerVM(DocumentsViewer documentsViewer) {
 
     // ライク機能
     documentsViewer.likeButton.addActionListener(e -> {
       var document = documentsViewer.activeDocument;
-      DocumentController.likeDocument(document);
+      DocumentController.toggleLike(document);
       document.like++;
       documentsViewer.setOffset(documentsViewer.offset);// その場でローカル上のライクを増やす
     });

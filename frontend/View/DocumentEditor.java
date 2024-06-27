@@ -2,31 +2,26 @@ package view;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import model.Document;
 
 public class DocumentEditor extends JPanel {
-  private JLabel titleLabel;
+  private JLabel titleLabel = new JLabel("Title", SwingConstants.CENTER);
   public JTextArea editArea; // こちらは一応publicにする
   public JEditorPane previewArea; // プレビューのテキスト参照用
-  public JButton editButton; // 編集ボタン
-  public JButton previewButton; // プレビューボタン
-  public JButton saveButton; // セーブボタン
-  public JButton deleteButton; // 削除ボタン
-  private CardLayout cardLayout;
-  private JPanel contentPanel;
-  public Document document; // 参照用にドキュメント持たせる
+  public JButton editButton = new JButton("編集"); // 編集ボタン
+  public JButton previewButton = new JButton("プレビュー"); // プレビューボタン
+  public JButton deleteButton = new JButton("このドキュメントを削除"); // 削除ボタン
+  public CardLayout cardLayout;
+  public JPanel contentPanel;
+  public Document document = new Document(""); // 参照用にドキュメント持たせる
 
   public DocumentEditor() {
     setLayout(new BorderLayout());
-    titleLabel = new JLabel("Edit Mode", SwingConstants.CENTER);
     titleLabel.setFont(new Font("Arial", Font.BOLD, 16)); // フォントを設定（オプション）
 
     add(titleLabel, BorderLayout.NORTH); // パネルの上部に追加
-    document = new Document("");
     // 編集画面
     editArea = new JTextArea(document.content);
     JScrollPane editScrollPane = new JScrollPane(editArea);
@@ -44,12 +39,6 @@ public class DocumentEditor extends JPanel {
     contentPanel.add(previewScrollPane, "PREVIEW");
     add(contentPanel, BorderLayout.CENTER);
 
-    // ボタンパネル
-    editButton = new JButton("Edit");
-    previewButton = new JButton("Preview");
-    saveButton = new JButton("Save");
-    deleteButton = new JButton("Delete");
-
     JPanel bottomPanel = new JPanel(new BorderLayout());
     JPanel buttonPanel = new JPanel(new GridLayout(1, 4));
 
@@ -58,46 +47,44 @@ public class DocumentEditor extends JPanel {
 
     buttonPanel.add(editButton);
     buttonPanel.add(previewButton);
-    buttonPanel.add(saveButton);
     buttonPanel.add(deleteButton);
 
     bottomPanel.add(buttonPanel, BorderLayout.CENTER);
     add(bottomPanel, BorderLayout.SOUTH);
 
-
-    // アクション
-    editButton.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        cardLayout.show(contentPanel, "EDIT");
-        updateTitle("Edit Mode");
-      }
-    });
-
-    previewButton.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        updatePreview();
-        cardLayout.show(contentPanel, "PREVIEW");
-        updateTitle("Preview Mode");
-      }
-    });
+    setEdit(true);
   }
 
   public void setDocument(Document document) {
     this.document = document;
     editArea.setText(document.content);
-    updateTitle(document.head);
+    updateTitle(document.head + " - " + "Edit Mode");
+
     updatePreview();
   }
 
+  public void setEdit(boolean isEdit) {
+    if (isEdit) {
+      editButton.setForeground(Color.BLUE);
+      previewButton.setForeground(Color.BLACK);
+      cardLayout.show(contentPanel, "EDIT");
+      updateTitle((document.head.isEmpty() ? "TEMP" : document.head) + " - Edit Mode");
+    } else {
+      updatePreview();
+      previewButton.setForeground(Color.BLUE);
+      editButton.setForeground(Color.BLACK);
+      cardLayout.show(contentPanel, "PREVIEW");
+      updateTitle(document.head + " - Preview Mode");
+    }
+  }
+
   // 画面上部のタイトル更新
-  private void updateTitle(String title) {
+  public void updateTitle(String title) {
     titleLabel.setText(title);
   }
 
   // プレビュー画面の更新
-  private void updatePreview() {
+  public void updatePreview() {
     String markdown = editArea.getText();
     String html = convertMarkdownToHtml(markdown);
     previewArea.setText(html);

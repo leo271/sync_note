@@ -20,6 +20,7 @@ public class DocumentController {
         return Response.success(documents);
       }
     } catch (Exception e) {
+      e.printStackTrace();
       return Response.error(Response.INVALID_VALUE);
     }
   }
@@ -61,7 +62,6 @@ public class DocumentController {
     var local = LocalDatabaseInterface.getInstance();
     try {
       var document = local.search(DB.DOCUMENT, JSON.single(DB.TYPE_ML, "M"), Document::fromJSON);
-      System.out.println("Got my documents");
       if (document == null || document.size() == 0) {
         return Response.error(Response.NOT_FOUND);
       } else {
@@ -78,7 +78,6 @@ public class DocumentController {
     var local = LocalDatabaseInterface.getInstance();
     try {
       var documents = local.search(DB.DOCUMENT, JSON.single(DB.TYPE_ML, "L"), Document::fromJSON);
-      System.out.println("Got liked documents");
       if (documents == null || documents.size() == 0) {
         return Response.error(Response.NOT_FOUND);
       } else {
@@ -91,7 +90,7 @@ public class DocumentController {
   }
 
   // ドキュメントをライクする（トグル）
-  public static Response<Void> likeDocument(Document document) {
+  public static Response<Void> toggleLike(Document document) {
     var local = LocalDatabaseInterface.getInstance();
     var remote = RemoteDatabaseInterface.getInstance();
     try {
@@ -153,6 +152,16 @@ public class DocumentController {
     try {
       local.delete(DB.DOCUMENT, JSON.single(DB.DOC_ID, docID));
       remote.delete(DB.DOCUMENT, JSON.single(DB.DOC_ID, docID));
+      return Response.success(null);
+    } catch (Exception e) {
+      return Response.error(Response.INVALID_VALUE);
+    }
+  }
+
+  public static Response<Void> deleteLocal(String docID) {
+    var local = LocalDatabaseInterface.getInstance();
+    try {
+      local.delete(DB.DOCUMENT, JSON.single(DB.DOC_ID, docID));
       return Response.success(null);
     } catch (Exception e) {
       return Response.error(Response.INVALID_VALUE);

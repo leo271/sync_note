@@ -22,11 +22,19 @@ public class HeadGroupExplorerVM {
         setHeadGroup(selectedValue, headGroupExplorer, "TRACE");// ドキュメントをDocViewerにセット
       } else { // Headの時
         var documentsRes = DocumentController.getFromHead(selectedValue);
-        if (documentsRes.hasError(Response.INVALID_VALUE))
+        if (documentsRes.hasError(Response.INVALID_VALUE)) {
+          JOptionPane.showMessageDialog(null, "不正な値です", "Error", JOptionPane.ERROR_MESSAGE);
           return;
-        ArrayList<Document> documents =
-            documentsRes.hasError(Response.NOT_FOUND) ? new ArrayList<>() : documentsRes.message;
-        documentsViewer.setDocuments(documents);
+        } else if (documentsRes.hasError(Response.NOT_FOUND)) {
+          JOptionPane.showMessageDialog(null, "ドキュメントが見つかりません", "Error", JOptionPane.ERROR_MESSAGE);
+          return;
+        }
+        ArrayList<Document> documents = documentsRes.message;
+        if (documents.isEmpty()) {
+          JOptionPane.showMessageDialog(null, "まだ一つもノートが書かれたことがないヘッドです。\nあなたが最初のノートを書いてみましょう！", "Info", JOptionPane.INFORMATION_MESSAGE);
+          return;
+        }
+        documentsViewer.setDocuments(selectedValue, documents);
         sceneManager.showPanel(Panel.DocumentsViewer);
       }
     });

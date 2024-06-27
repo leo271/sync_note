@@ -1,6 +1,8 @@
 import view.Header;
 import view.MyListView;
 import view.SearchView;
+import viewmodel.DocumentEditorViewModel;
+import viewmodel.DocumentsViewerViewModel;
 import viewmodel.HeadGroupExplorerViewModel;
 import viewmodel.MyListViewVM;
 import viewmodel.HeaderVM;
@@ -31,8 +33,8 @@ public class Main {
     new SearchViewViewModel(searchView, documentsViewer, headGroupExplorer, frame);
     new MyListViewVM(myListView, documentsViewer, documentEditor, headGroupExplorer, frame);
     new HeadGroupExplorerViewModel(headGroupExplorer, documentsViewer, frame);
-    // DocumentEditorVM
-    // DocumentsViewerVM
+    new DocumentEditorViewModel(documentEditor);
+    new DocumentsViewerViewModel(documentsViewer);
 
     // Display the window.
     frame.setVisible(true);
